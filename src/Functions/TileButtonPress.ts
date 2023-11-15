@@ -64,7 +64,7 @@ export function TileButtonPress(
   const newGrid = (thirdIndex === 0) ? (forthIndex === 0) ? 1:(forthIndex === 1) ? 2:3: (thirdIndex === 1) ?  (forthIndex === 0) ? 4:(forthIndex === 1) ? 5:6: (forthIndex === 0) ? 7:(forthIndex === 1) ? 8:9
   const bigTileIndex = (firstIndex === 0) ? (secondIndex === 0) ? 1:(secondIndex === 1) ? 4:7:(firstIndex === 1) ? (secondIndex === 0) ? 2:(secondIndex === 1) ? 5:8:(secondIndex === 0) ? 3:(secondIndex=== 1) ? 6:9
 
-  let newGridState: DimentionalType = Object.create({...store.getState().gridState});
+  let newGridState: DimentionalType = JSON.parse(JSON.stringify(store.getState().gridState));
   const isNewGridPositionFull = store.getState().gridState.value[forthIndex][thirdIndex] === gridStateMode.O || store.getState().gridState.value[forthIndex][thirdIndex] === gridStateMode.X || store.getState().gridState.value[forthIndex][thirdIndex] === gridStateMode.Full
   if (playerMode === gridStateMode.X){
     newGridState.inner[firstIndex][secondIndex].value[thirdIndex][forthIndex] = gridStateMode.X
@@ -99,6 +99,7 @@ export function TileButtonPress(
                 yTwo: thirdIndex
               }
             } else {
+              console.log(newInner, firstIndex, secondIndex)
               newInner[firstIndex][secondIndex].active = {
                 xOne: 2,
                 xTwo: 0,
@@ -117,23 +118,21 @@ export function TileButtonPress(
         if (index === 2){
           change = true
 
-          let newInner = JSON.parse(JSON.stringify(newGridState.inner));
           if (thirdIndex > 1){
-            newInner[firstIndex][secondIndex].active = {
+            newGridState.inner[firstIndex][secondIndex].active = {
               xOne: forthIndex,
               xTwo: forthIndex,
               yOne: 2,
               yTwo: 0
             }
           } else {
-            newInner[firstIndex][secondIndex].active = {
+            newGridState.inner[firstIndex][secondIndex].active = {
               xOne: forthIndex,
               xTwo: forthIndex,
               yOne: 0,
               yTwo: 2
             }
           }
-          newGridState = {...newGridState, inner: newInner}
         } 
       } else {
         break
@@ -141,26 +140,26 @@ export function TileButtonPress(
     }
     for(var index = 0; index < 3; index++){//Check Diagnal Left Right
       if (newGridState.inner[firstIndex][secondIndex].value[index][index] === playerMode) {
+        console.log("something works", index)
         if (index === 2){
           change = true
-          let newInner = JSON.parse(JSON.stringify(newGridState.inner));
           if (forthIndex > 1){
-            newInner[firstIndex][secondIndex].active = {
+            newGridState.inner[firstIndex][secondIndex].active = {
               xOne: 0,
               xTwo: 2,
               yOne: 2,
               yTwo: 0
             }
           } else {
-            newInner[firstIndex][secondIndex].active = {
+            newGridState.inner[firstIndex][secondIndex].active = {
               xOne: 2,
               xTwo: 0,
               yOne: 0,
               yTwo: 2
             }
           }
-          newGridState = {...newGridState, inner: newInner}
         } else {
+          
           break
         }
       }
@@ -168,24 +167,22 @@ export function TileButtonPress(
     for(var index = 0; index < 3; index++){//Check Diagnal Right Left
       if (newGridState.inner[firstIndex][secondIndex].value[2-index][index] === playerMode) {
         if (index === 2){
-          let newInner = JSON.parse(JSON.stringify(newGridState.inner));
           change = true
           if (forthIndex > 1){
-            newInner[firstIndex][secondIndex].active = {
+            newGridState.inner[firstIndex][secondIndex].active = {
               xOne: 2,
               xTwo: 0,
               yOne: 0,
               yTwo: 2
             }
           } else {
-            newInner[firstIndex][secondIndex].active = {
+            newGridState.inner[firstIndex][secondIndex].active = {
               xOne: 0,
               xTwo: 2,
               yOne: 0,
               yTwo: 2
             }
           }
-          newGridState = {...newGridState, inner: newInner}
         }
       } else {
         break
@@ -194,10 +191,9 @@ export function TileButtonPress(
     if (!change){
       //Checks if the sqaure is full meaning the tic tac toe has ended in a draw
       for(var indexOne = 0; index < 3; index++){
-        let newInner = JSON.parse(JSON.stringify(newGridState.inner));
         var complete = true
         for(var index = 0; index < 3; index++){
-          if (newInner[firstIndex][secondIndex].value[indexOne][index] === gridStateMode.Open){
+          if (newGridState.inner[firstIndex][secondIndex].value[indexOne][index] === gridStateMode.Open){
             complete = false
             break              
           }
@@ -206,12 +202,11 @@ export function TileButtonPress(
           break
         } else if (index === 2){
           change = true
-          newInner[firstIndex][secondIndex] = gridStateMode.Full
+          newGridState.value[firstIndex][secondIndex] = gridStateMode.Full
           if (newGrid === bigTileIndex){
             store.dispatch(selectedGridSlice.actions.setSelectedGrid(0)) //TO DO fix this
           }
         }
-        newGridState = {...newGridState, inner: newInner}
       }
       store.dispatch(gridStateSlice.actions.setGridState(newGridState))
     } else {

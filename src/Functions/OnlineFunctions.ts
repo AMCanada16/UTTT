@@ -74,11 +74,11 @@ export async function createNewGame(gameSate: DimentionalType, playerMode: gridS
 export function updateGame(gameId: string, gameSate: DimentionalType, playerMode: gridStateMode){
   const firebaseData = getDatafromDimentionalGrid(gameSate)
   updateDoc(doc(db, "Games", gameId), {
-      gameStateActive: (gameSate.active === undefined) ? null: gameSate.active,
-      gameStateValue: firebaseData.activeValues,
-      gameStateInner: firebaseData.innerValues,
-      currentTurn: playerMode,
-    })
+    gameStateActive: (gameSate.active === undefined) ? null: gameSate.active,
+    gameStateValue: firebaseData.activeValues,
+    gameStateInner: firebaseData.innerValues,
+    currentTurn: playerMode,
+  })
 }
 
 export function getDimentionalFromData(gameStateInner: number[], gameStateValueData: number[]): DimentionalType{
@@ -116,7 +116,6 @@ export function getDimentionalFromData(gameStateInner: number[], gameStateValueD
     inner: rootTypeFirst,
     value: gameStateValue
   }
-  console.log(gameSate)
   return gameSate
 }
 
@@ -131,7 +130,7 @@ export async function loadGame(inputID: string): Promise<DimentionalType | undef
           gameSate = getDimentionalFromData(data["gameStateInner"], data["gameStateValue"])
         }
       } else {
-          console.log("This document", inputID, "does not exist")
+        console.log("This document", inputID, "does not exist")
       }
     })
   } catch (error: any) {

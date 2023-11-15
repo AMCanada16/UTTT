@@ -7,8 +7,8 @@ export const playerModeSlice = createSlice({
   name: "playerMode",
   initialState: initalState,
   reducers: {
-    setPlayerMode: (state, action: PayloadAction<gridStateMode>) => {
-      state = action.payload
+    setPlayerMode: (state, action: PayloadAction<number>) => {
+      return action.payload
     }
   }
 })

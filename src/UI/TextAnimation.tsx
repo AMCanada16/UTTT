@@ -51,7 +51,7 @@ export default function TextAnimation({length, mode, colored}:{length: number, m
         />
       </Svg>
       { (mode === "X") ?
-         <Image style={{width: length * 2.3, height: length * 2.3, position: "absolute", overlayColor: "red", tintColor: colored ? "#a0f4f7":"black", shadowColor: "#5CE1E6", shadowRadius: 25, }} source={require('../../assets/Mediamodifier-Design.svg')} />: <Image style={{width: length * 0.8, height: length * 0.8, position: "absolute"}} source={require('../../assets/circle-svgrepo-com.svg')} />
+        <Image style={{width: length * 2.3, height: length * 2.3, position: "absolute", overlayColor: "red", tintColor: colored ? "#a0f4f7":"black", shadowColor: "#5CE1E6", shadowRadius: 25, }} source={require('../../assets/Mediamodifier-Design.svg')} />: <Image style={{width: length * 0.8, height: length * 0.8, position: "absolute"}} source={require('../../assets/circle-svgrepo-com.svg')} />
       }
       {/* <TextAnimationSVGUri /> */}
     </View>
