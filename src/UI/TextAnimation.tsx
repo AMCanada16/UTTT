@@ -14,8 +14,6 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 import { Svg, Circle, Rect, Path} from "react-native-svg";
-import generateUUID from "../Functions/generateUUID";
-import TextAnimationSVGUri from "./TextAnimationSVGuri";
 
 const svg = require('../../assets/Mediamodifier-Design.svg');
 
@@ -55,7 +53,7 @@ export default function TextAnimation({length, mode, colored}:{length: number, m
       { (mode === "X") ?
          <Image style={{width: length * 2.3, height: length * 2.3, position: "absolute", overlayColor: "red", tintColor: colored ? "#a0f4f7":"black", shadowColor: "#5CE1E6", shadowRadius: 25, }} source={require('../../assets/Mediamodifier-Design.svg')} />: <Image style={{width: length * 0.8, height: length * 0.8, position: "absolute"}} source={require('../../assets/circle-svgrepo-com.svg')} />
       }
-      <TextAnimationSVGUri />
+      {/* <TextAnimationSVGUri /> */}
     </View>
   );
 }

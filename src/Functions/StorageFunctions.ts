@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { emptyGame } from '../../App';
+import { emptyGame } from '../Types';
+import store from '../Redux/store';
 
 declare global{
   type gameStorageType = {
@@ -59,7 +60,7 @@ export async function addGame(gameType: "Friend" | "AI", gameState?: Dimentional
   }
 }
 
-export async function updateStorageGame(id: string, newState: DimentionalType, isGameOver: boolean) {
+export async function updateStorageGame(id: string, newState: DimentionalType) {
   try{
     const value = await AsyncStorage.getItem('UTTT_Saves');
     if (value !== null){
@@ -69,7 +70,7 @@ export async function updateStorageGame(id: string, newState: DimentionalType, i
         var jsonResult: gameStorageType  = JSON.parse(resultData)
         jsonResult.gameState = JSON.stringify(newState)
         jsonResult.lastPlayed = Date.now()
-        jsonResult.gameOver = isGameOver
+        jsonResult.gameOver = store.getState().isGameOver
         data.set(id, JSON.stringify(jsonResult))
         var obj = Object.fromEntries(data);
         var jsonString = JSON.stringify(obj);

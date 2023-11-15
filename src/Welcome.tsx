@@ -3,44 +3,37 @@ import { View, Text, TouchableOpacity, Dimensions, Button, TextInput } from "rea
 import { useNavigate } from "react-router-native";
 import GlitchComponent from './UI/GlitchComponent';
 import { createNewGame } from './Functions/OnlineFunctions';
-import {emptyGame} from "../App"
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from "expo-font";
 import { addGame, deleteGame, getGames } from "./Functions/StorageFunctions";
 import TextAnimation from "./UI/TextAnimation";
-
-enum gridStateMode{
-    Open,
-    X,
-    O,
-    Full
-}
+import { emptyGame, gridStateMode } from "./Types";
 
 const windowDimensions = Dimensions.get('window');
 const screenDimensions = Dimensions.get('screen');
 
 function Online(){
-    const navigation = useNavigate();
-    const [gameId, setGameID] = useState<string>("")
-    return(
-        <View style={{width: "80%"}}>
-            <Text>Load Game</Text>
-            <TextInput onChangeText={(e) => {setGameID(e)}} value={gameId}/>
-            <Button title='load' onPress={() => {
-              if (/^\d{7}$/.test(gameId)){
-                navigation("/UTTT/online/"+gameId)
-              } else {
-                console.log("")
-              }
-            }}/>
-            <Button title='Create New' onPress={async () => {
-              const result = await createNewGame(emptyGame, gridStateMode.O)
-              if (result !== null){
-                navigation("/UTTT/online/"+result)
-              }
-            }}/>
-        </View>
-    )
+  const navigation = useNavigate();
+  const [gameId, setGameID] = useState<string>("")
+  return(
+    <View style={{width: "80%"}}>
+      <Text>Load Game</Text>
+      <TextInput onChangeText={(e) => {setGameID(e)}} value={gameId}/>
+      <Button title='load' onPress={() => {
+        if (/^\d{7}$/.test(gameId)){
+          navigation("/UTTT/online/"+gameId)
+        } else {
+          console.log("")
+        }
+      }}/>
+      <Button title='Create New' onPress={async () => {
+        const result = await createNewGame(emptyGame, gridStateMode.O)
+        if (result !== null){
+          navigation("/UTTT/online/"+result)
+        }
+      }}/>
+    </View>
+  )
 }
 
 function StorageGames({isFriend, onClose}:{isFriend: boolean, onClose: () => void}) {
