@@ -11,20 +11,34 @@ enum gridStateMode{
   Full
 }
 
+function checkIfFilled(firstIndex: number, secondIndex: number, thirdIndex: number, forthIndex: number) {
+  const buttonGridLocation = (secondIndex === 0) ? (firstIndex === 0) ? 1:(firstIndex === 1) ? 2:3:(secondIndex === 1) ? (firstIndex === 0) ? 4:(firstIndex === 1) ? 5:6:(firstIndex === 0) ? 7:(firstIndex=== 1) ? 8:9
+  const value = store.getState().gridState.inner[firstIndex][secondIndex].value[thirdIndex][forthIndex];
+  const bigValue = store.getState().gridState.value[firstIndex][secondIndex];
+  if (value === gridStateMode.O || value === gridStateMode.X || bigValue === gridStateMode.O || bigValue === gridStateMode.X) {
+    return true
+  }
+  if (store.getState().selectedGrid === 0) {
+    return false
+  }
+  if (buttonGridLocation === store.getState().selectedGrid) {
+    return false
+  }
+  return true
+}
+
 export default function TileButton(
-  {firstIndex, secondIndex, thirdIndex, forthIndex, value, onGameOver}:
+  {firstIndex, secondIndex, thirdIndex, forthIndex, value}:
   {
     value: string,
     firstIndex: number, 
     secondIndex: number,
     thirdIndex: number, 
     forthIndex: number, 
-    onGameOver: () => void
   }) {
   //Second index row, first index column
   const [length, setLength] = useState(0)
-  const buttonGridLocation = (secondIndex === 0) ? (firstIndex === 0) ? 1:(firstIndex === 1) ? 2:3:(secondIndex === 1) ? (firstIndex === 0) ? 4:(firstIndex === 1) ? 5:6:(firstIndex === 0) ? 7:(firstIndex=== 1) ? 8:9
-  const filled = (store.getState().gridState.inner[firstIndex][secondIndex].value[thirdIndex][forthIndex] === gridStateMode.O || store.getState().gridState.inner[firstIndex][secondIndex].value[thirdIndex][forthIndex] === gridStateMode.X || store.getState().gridState.value[firstIndex][secondIndex] === gridStateMode.O || store.getState().gridState.value[firstIndex][secondIndex] === gridStateMode.X) ? true:(store.getState().selectedGrid === 0) ? false:!(buttonGridLocation === store.getState().selectedGrid)
+  const filled = checkIfFilled(firstIndex, secondIndex, thirdIndex, forthIndex);
   return(
     <Pressable disabled={filled} style={filled ?  styles.tileButtonsFilledStyle:styles.tileButtonOpenStyle}
     onPress={() => {
@@ -35,7 +49,6 @@ export default function TileButton(
       { (value === "X" || value === "O") ?
         <TextAnimation mode={(value === "X") ? "X":"O"} length={length} colored={false} />:null
       }
-      {/* <Text style={styles.tileTextStyle}>{value}</Text> */}
     </Pressable>
   )
 }

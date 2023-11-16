@@ -20,7 +20,7 @@ declare global{
   }
   
   type RootType = {
-    value: gridStateMode[][]
+    value: gridStateMode[][] //represents grid. in 
     active?: {
       xOne: number,
       xTwo: number,

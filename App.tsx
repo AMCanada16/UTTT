@@ -3,21 +3,14 @@ import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions
 import Modle from "./src/Model"
 import { NativeRouter, Route, Link, Routes, useNavigate, useParams } from "react-router-native";
 import * as SplashScreen from 'expo-splash-screen';
-import WelcomePage from './src/Welcome';
+import WelcomePage from './src/Componets/Welcome';
 import { loadStorageGame, updateStorageGame } from './src/Functions/StorageFunctions';
 import store, { RootState } from './src/Redux/store';
 import { dimensionsSlice } from './src/Redux/reducers/dimensionsReducer';
 import {Provider, useSelector} from "react-redux"
-import { UltimateTicTacToe } from './src/UltimateTicTacToe';
+import { UltimateTicTacToe } from './src/Componets/UltimateTicTacToe';
 
 SplashScreen.preventAutoHideAsync();
-
-enum gridStateMode{
-  Open,
-  X,
-  O,
-  Full
-}
 
 const windowDimensions = Dimensions.get('window');
 const screenDimensions = Dimensions.get('screen');

@@ -24,8 +24,7 @@ export default function TextAnimation({length, mode, colored}:{length: number, m
   const r = useSharedValue(100);
 
   useEffect(() => {
-    console.log("Change Logger")
-    r.value = -1
+    r.value = 0;
   }, [])
 
   // highlight-start
@@ -39,21 +38,20 @@ export default function TextAnimation({length, mode, colored}:{length: number, m
   // highlight-end
 
   return (
-    <View style={[styles.container]} onLayout={() => {console.log("Starting")}}>
+    <View style={[styles.container]}>
       <Svg style={{width: length, height: length, zIndex: 1}}>
         <AnimatedCircle
           cx="50%"
           cy="50%"
           fill="blue"
-          r={0}
           animatedProps={animatedProps}
           onPress={() => {}}
         />
       </Svg>
       { (mode === "X") ?
-        <Image style={{width: length * 2.3, height: length * 2.3, position: "absolute", overlayColor: "red", tintColor: colored ? "#a0f4f7":"black", shadowColor: "#5CE1E6", shadowRadius: 25, }} source={require('../../assets/Mediamodifier-Design.svg')} />: <Image style={{width: length * 0.8, height: length * 0.8, position: "absolute"}} source={require('../../assets/circle-svgrepo-com.svg')} />
+        <Image style={{width: length * 2.3, height: length * 2.3, position: "absolute", overlayColor: "red", tintColor: colored ? "#a0f4f7":"black", shadowColor: "#5CE1E6", shadowRadius: 25, }} source={require('../../assets/Mediamodifier-Design.svg')} />:
+        <Image style={{width: length * 0.8, height: length * 0.8, position: "absolute"}} source={require('../../assets/circle-svgrepo-com.svg')} />
       }
-      {/* <TextAnimationSVGUri /> */}
     </View>
   );
 }
@@ -70,5 +68,3 @@ const styles = StyleSheet.create({
     position: "absolute"
   },
 });
-
-//  
