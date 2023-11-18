@@ -1,8 +1,9 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { StyleSheet, Pressable } from "react-native"
 import TextAnimation from "./TextAnimation"
 import { TileButtonPress } from "../Functions/TileButtonPress"
-import store from "../Redux/store"
+import store, { RootState } from "../Redux/store"
+import { useSelector } from "react-redux"
 
 enum gridStateMode{
   Open,
@@ -39,8 +40,19 @@ export default function TileButton(
   //Second index row, first index column
   const [length, setLength] = useState(0)
   const filled = checkIfFilled(firstIndex, secondIndex, thirdIndex, forthIndex);
+  const playerMode = useSelector((state: RootState) => state.playerMode)
+
+  useEffect(() => {
+    console.log(playerMode, filled, filled === false && playerMode === gridStateMode.O)
+  }, [playerMode, filled])
+  
   return(
-    <Pressable disabled={filled} style={filled ?  styles.tileButtonsFilledStyle:styles.tileButtonOpenStyle}
+    <Pressable disabled={filled} style={{
+      backgroundColor: filled ? '':(playerMode === gridStateMode.O) ? '#ff9c9c':'#5ce1e6',
+      width: '100%',
+      height: '100%',
+      borderRadius: (filled === false && playerMode === gridStateMode.O) ? 99:undefined
+    }}
     onPress={() => {
       console.log(firstIndex, secondIndex)
       TileButtonPress(firstIndex, secondIndex, thirdIndex, forthIndex)
@@ -55,21 +67,6 @@ export default function TileButton(
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    margin: "auto"
-  },
-  tileButtonContainerStyle: {
-    height: "auto",
-    aspectRatio: "1/1",
-    width: "32%",
-    backgroundColor: "blue",
-    margin: "1%"
-  },
   tileButtonOpenStyle: {
     height: "100%",
     width: "auto",
@@ -81,46 +78,4 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "gray",
   },
-  tileTextStyle: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: "auto"
-  },
-  dimentionTileText: {
-    fontSize: 250,
-    zIndex: 100
-  },
-  dimentionTileContainer: {
-    position: "absolute",
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: "100%",
-    height: "auto",
-    aspectRatio: "1/1",
-    margin:"auto",
-    zIndex: 100
-  },
-  firstRow: {
-    flexDirection: "row",
-    width: "90%"
-  },
-  firstCol: {
-    margin: "1%",
-    height: "100%",
-    width: "32%"
-  },
-  firstColFirstIndex: {
-    marginTop: "1%",
-    marginRight: "1%",
-    height: "100%",
-    width: "32%"
-  },
-  secondCol: {
-    paddingBottom: 5,
-    flex: 1
-  },
-  secondRow: {
-    flexDirection: "row",
-    height: "33.3%"
-  }
 });

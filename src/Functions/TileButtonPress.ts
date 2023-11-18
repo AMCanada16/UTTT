@@ -5,51 +5,51 @@ import { selectedGridSlice } from "../Redux/reducers/selectedGridReducer";
 import store from "../Redux/store"
 import { gridStateMode } from "../Types"
 
-function checkIfGameOver(gridState: DimentionalType): boolean {
+function checkIfGameOver(gridState: DimentionalType, playerMode: gridStateMode, firstIndex: number, secondIndex: number): boolean {
   var change: boolean = false
-  for(var playerMode = 1; playerMode < 3; playerMode++){
-    for(var index = 0; index < 3; index++){//Check Horizontal
-      for(var indexIn = 0; indexIn < 3; indexIn++){//Check Horizontal
-        if (gridState.value[index][indexIn] === playerMode){
-          if (index === 2){
-            //It's A Match
-            change = true
-          }
-        } else {
-          break
-        }
+  console.log(gridState)
+  for(var index = 0; index < 3; index++){//Check Horizontal
+    if (gridState.value[firstIndex][index] === playerMode){
+      if (index === 2){
+        //It's A Match
+        change = true
+        console.log('Horizontal')
       }
-    }
-    for(var index = 0; index < 3; index++){//Check Vertical
-      for(var indexIn = 0; indexIn < 3; indexIn++){//Check Vertical
-        if (gridState.value[indexIn][index] === playerMode) {
-          if (index === 2){
-            change = true
-          } 
-        } else {
-          break
-        }
-      }
-    }
-    for(var index = 0; index < 3; index++){//Check Diagnal Left Right
-      if (gridState.value[index][index] === playerMode) {
-        if (index === 2){
-          change = true
-        }
-      } else {
-        break
-      }
-    }
-    for(var index = 0; index < 3; index++){//Check Diagnal Right Left
-      if (gridState.value[2-index][index] === playerMode) {
-        if (index === 2){
-          change = true
-        }
-      } else {
-        break
-      }
+    } else {
+      break
     }
   }
+  for(var index = 0; index < 3; index++){//Check Vertical
+    if (gridState.value[index][secondIndex] === playerMode) {
+      if (index === 2){
+        change = true
+        console.log('Vertical')
+      } 
+    } else {
+      break
+    } 
+  }
+  for(var index = 0; index < 3; index++){//Check Diagnal Left Right
+    if (gridState.value[index][index] === playerMode) {
+      if (index === 2){
+        change = true
+        console.log('Left')
+      }
+    } else {
+      break
+    }
+  }
+  for(var index = 0; index < 3; index++){//Check Diagnal Right Left
+    if (gridState.value[2-index][index] === playerMode) {
+      if (index === 2){
+        change = true
+        console.log('Right')
+      }
+    } else {
+      break
+    }
+  }
+  
   return change
 }
 
@@ -174,14 +174,12 @@ export function TileButtonPress(
         console.log(2-index, index, "true")
         if (index === 2){
           change = true
-
           newGridState.inner[firstIndex][secondIndex].active = {
             xOne: 2,
             xTwo: 0,
             yOne: 0,
             yTwo: 2
           }
-          
         }
       } else {
         break
@@ -211,7 +209,7 @@ export function TileButtonPress(
       store.dispatch(gridStateSlice.actions.setGridState(newGridState))
     } else {
       newGridState.value[firstIndex][secondIndex] = playerMode
-      const isGameOver = checkIfGameOver(newGridState)
+      const isGameOver = checkIfGameOver(newGridState, playerMode, firstIndex, secondIndex)
       if (isGameOver){
         store.dispatch(isGameOverSlice.actions.setIsGameOver(true))
       }

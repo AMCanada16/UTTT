@@ -17,7 +17,7 @@ if (typeof window !== 'undefined') {
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export default function TextAnimation({length, mode, colored}:{length: number, mode: "X"|"O", colored: boolean}) {
-  const r = useSharedValue(100);
+  const r = useSharedValue(length);
 
   useEffect(() => {
     r.value = 0;
@@ -35,11 +35,11 @@ export default function TextAnimation({length, mode, colored}:{length: number, m
 
   return (
     <View style={[styles.container]}>
-      <Svg style={{width: length, height: length, zIndex: 1}}>
+      <Svg style={{width: length, height: length, zIndex: 1, borderRadius: (mode === "X") ? 0:length, overflow: 'hidden'}}>
         <AnimatedCircle
           cx="50%"
           cy="50%"
-          fill="blue"
+          fill={(mode === "X") ? "#5ce1e6":"#ff9c9c"}
           animatedProps={animatedProps}
           onPress={() => {}}
         />
@@ -56,7 +56,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    alignContent: 'center'
   },
   svg: {
     position: "absolute"
