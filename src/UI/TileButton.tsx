@@ -42,6 +42,7 @@ export default function TileButton(
   return(
     <Pressable disabled={filled} style={filled ?  styles.tileButtonsFilledStyle:styles.tileButtonOpenStyle}
     onPress={() => {
+      console.log(firstIndex, secondIndex)
       TileButtonPress(firstIndex, secondIndex, thirdIndex, forthIndex)
     }}
     onLayout={(e) => {setLength(e.nativeEvent.layout.height)}}

@@ -1,5 +1,11 @@
+/*
+  Ultimate Tic Tac Toe
+  Andrew Mainella
+  18 November 2023
+  Welcome.tsx
+*/
 import { useCallback, useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Button, TextInput, Pressable } from "react-native";
+import { View, Text, TextInput, Pressable } from "react-native";
 import { useNavigate } from "react-router-native";
 import GlitchComponent from '../UI/GlitchComponent';
 import { createNewGame } from '../Functions/OnlineFunctions';
@@ -9,28 +15,41 @@ import { addGame, getGames } from "../Functions/StorageFunctions";
 import { emptyGame, gridStateMode } from "../Types";
 import { useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
+import { CloseIcon } from "../UI/Icons";
 
-function Online(){
+function Online({onClose}:{onClose: () => void}){
   const navigation = useNavigate();
   const [gameId, setGameID] = useState<string>("")
   const {height, width} = useSelector((state: RootState) => state.dimensions)
+
+  async function createNew() {
+    const result = await createNewGame(emptyGame, gridStateMode.O)
+    if (result !== null){
+      navigation("/UTTT/online/"+result)
+    }
+  }
+
   return(
     <View style={{width: width * 0.8, height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
-      <Text>Load Game</Text>
+      <Pressable style={{marginTop: 25, marginLeft: 25}} onPress={() => {onClose()}}>
+        <CloseIcon width={20} height={20}/>
+      </Pressable>
+      <Text style={{marginLeft: 'auto', marginRight: 'auto', marginTop: 2}}>Load Game</Text>
       <TextInput onChangeText={(e) => {setGameID(e)}} value={gameId}/>
-      <Button title='load' onPress={() => {
-        if (/^\d{7}$/.test(gameId)){
-          navigation("/UTTT/online/"+gameId)
-        } else {
-          console.log("")
-        }
-      }}/>
-      <Button title='Create New' onPress={async () => {
-        const result = await createNewGame(emptyGame, gridStateMode.O)
-        if (result !== null){
-          navigation("/UTTT/online/"+result)
-        }
-      }}/>
+      <View style={{flexDirection: 'row'}}>
+        <Pressable onPress={() => {
+          if (/^\d{7}$/.test(gameId)){
+            navigation("/UTTT/online/"+gameId)
+          } else {
+            console.log("")
+          }
+        }} style={{marginLeft: 'auto', marginRight: 'auto', borderRadius: 15, backgroundColor: 'blue'}}>
+          <Text style={{margin: 10, color: 'white'}}>Load</Text>
+        </Pressable>
+        <Pressable onPress={() => createNew()} style={{marginLeft: 'auto', marginRight: 'auto', borderRadius: 15, backgroundColor: 'blue'}}>
+          <Text style={{margin: 10, color: 'white'}}>Create New</Text>
+        </Pressable>
+      </View>
     </View>
   )
 }
@@ -66,20 +85,20 @@ function StorageGames({isFriend, onClose}:{isFriend: boolean, onClose: () => voi
   }
 
   return(
-    <View style={{width: width * 0.8, backgroundColor: "rgba(255,255,255, 0.95)", height: height * 0.8, justifyContent: "center", alignContent: "center", alignItems: "center", borderRadius: 25}}>
-      <Pressable onPress={() => {onClose()}}>
-        <Text>Close</Text>
+    <View style={{width: width * 0.8, backgroundColor: "rgba(255,255,255, 0.95)", height: height * 0.8, borderRadius: 25}}>
+      <Pressable style={{marginTop: 25, marginLeft: 25}} onPress={() => {onClose()}}>
+        <CloseIcon width={20} height={20}/>
       </Pressable>
-      <Text>Load Game</Text>
+      <Text style={{marginTop: 2, marginLeft: 'auto', marginRight: 'auto'}}>Load Game</Text>
       { games.map((game) => (
-        <View key={game.gameId}>
+        <View key={game.gameId} style={{margin: 10, marginLeft: 'auto', marginRight: 'auto'}}>
           <Pressable onPress={() => {if (isFriend){navigation("/UTTT/friend/" + game.gameId)} else {navigation("/UTTT/ai/" + game.gameId)}}}>
             <Text>{new Date(game.lastPlayed).toString()}</Text>
           </Pressable>
         </View>
       ))}
-      <Pressable onPress={() => createNew()}>
-        <Text>Create New</Text>
+      <Pressable onPress={() => createNew()} style={{marginLeft: 'auto', marginRight: 'auto', borderRadius: 15, backgroundColor: 'blue'}}>
+        <Text style={{margin: 10, color: 'white'}}>Create New</Text>
       </Pressable>
     </View>
   )
@@ -147,7 +166,7 @@ export default function WelcomePage() {
       </View>
       <View style={{alignContent: "center", alignItems: "center", justifyContent: "center", position: "absolute", width: width, height: height}} pointerEvents='box-none'>
       { isShowingOnlineScreen ? 
-        <Online />:null
+        <Online onClose={() => setIsShowingOnlineScreen(false)}/>:null
       }
       { (isShowingFriendScreen || isShowingAIScreen) ?
         <StorageGames isFriend={isShowingFriendScreen} onClose={() => {setIsShowingAIScreen(false); setIsShowingFriendScreen(false)}}/>:null

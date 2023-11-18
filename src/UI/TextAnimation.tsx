@@ -1,22 +1,18 @@
-
-
-if (typeof window !== 'undefined') {
-    // @ts-ignore
-    window._frameTimestamp = null
-}
-
 import React, { useEffect } from "react";
-import { Button, View, StyleSheet, Text, Image } from "react-native";
+import { View, StyleSheet } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedProps,
   withTiming,
   Easing,
 } from "react-native-reanimated";
-import { Svg, Circle, Rect, Path} from "react-native-svg";
+import { Svg, Circle } from "react-native-svg";
+import { CircleIcon, XIcon } from "./Icons";
 
-const svg = require('../../assets/Mediamodifier-Design.svg');
-
+if (typeof window !== 'undefined') {
+  // @ts-ignore
+  window._frameTimestamp = null
+}
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -49,14 +45,12 @@ export default function TextAnimation({length, mode, colored}:{length: number, m
         />
       </Svg>
       { (mode === "X") ?
-        <Image style={{width: length * 2.3, height: length * 2.3, position: "absolute", overlayColor: "red", tintColor: colored ? "#a0f4f7":"black", shadowColor: "#5CE1E6", shadowRadius: 25, }} source={require('../../assets/Mediamodifier-Design.svg')} />:
-        <Image style={{width: length * 0.8, height: length * 0.8, position: "absolute"}} source={require('../../assets/circle-svgrepo-com.svg')} />
+        <XIcon width={length} height={length} style={{position: 'absolute'}} color="#5ce1e6"/>:
+        <CircleIcon width={length} height={length} style={{position: 'absolute'}} color="#ff9c9c"/>
       }
     </View>
   );
 }
-
-//
 
 const styles = StyleSheet.create({
   container: {

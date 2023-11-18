@@ -16,6 +16,7 @@
     "@reduxjs/toolkit": "^1.9.7",
     "@tensorflow/tfjs": "^4.8.0",
     "expo": "^49.0.8",
+    "expo-clipboard": "~4.3.1",
     "expo-splash-screen": "^0.20.5",
     "expo-status-bar": "~1.6.0",
     "firebase": "^9.23.0",

@@ -50,7 +50,6 @@ function checkIfGameOver(gridState: DimentionalType): boolean {
       }
     }
   }
-  console.log("The game is over return", change)
   return change
 }
 
@@ -60,12 +59,14 @@ export function TileButtonPress(
   thirdIndex: number, 
   forthIndex: number,
 ) {
+  console.log("this is first:", firstIndex, " This is second:",secondIndex)
   const playerMode = store.getState().playerMode;
   const newGrid = (thirdIndex === 0) ? (forthIndex === 0) ? 1:(forthIndex === 1) ? 2:3: (thirdIndex === 1) ?  (forthIndex === 0) ? 4:(forthIndex === 1) ? 5:6: (forthIndex === 0) ? 7:(forthIndex === 1) ? 8:9
   const bigTileIndex = (firstIndex === 0) ? (secondIndex === 0) ? 1:(secondIndex === 1) ? 4:7:(firstIndex === 1) ? (secondIndex === 0) ? 2:(secondIndex === 1) ? 5:8:(secondIndex === 0) ? 3:(secondIndex=== 1) ? 6:9
 
   let newGridState: DimentionalType = JSON.parse(JSON.stringify(store.getState().gridState));
   const isNewGridPositionFull = store.getState().gridState.value[forthIndex][thirdIndex] === gridStateMode.O || store.getState().gridState.value[forthIndex][thirdIndex] === gridStateMode.X || store.getState().gridState.value[forthIndex][thirdIndex] === gridStateMode.Full
+  //updating
   if (playerMode === gridStateMode.X){
     newGridState.inner[firstIndex][secondIndex].value[thirdIndex][forthIndex] = gridStateMode.X
     if (isNewGridPositionFull){
@@ -136,30 +137,35 @@ export function TileButtonPress(
       }
     }
     for(var index = 0; index < 3; index++){//Check Diagnal Left Right
+      if (index === 2) {
+        console.log(newGridState.inner[firstIndex][secondIndex].value, newGridState.inner[firstIndex][secondIndex].value[index], index, firstIndex, secondIndex)
+      }
       if (newGridState.inner[firstIndex][secondIndex].value[index][index] === playerMode) {
         if (index === 2){
           console.log("TURE HERE")
           change = true
           if (forthIndex > 1){
-            console.log("TURE HERE THIS")
+            console.log("TURE HERE THIS", firstIndex, secondIndex)
+            //Line moves left to right
             newGridState.inner[firstIndex][secondIndex].active = {
               xOne: 0,
               xTwo: 2,
-              yOne: 2,
-              yTwo: 0
-            }
-          } else {
-            console.log("ELSE TURE HERE THIS")
-            newGridState.inner[firstIndex][secondIndex].active = {
-              xOne: 2,
-              xTwo: 0,
               yOne: 0,
               yTwo: 2
             }
+          } else {
+            console.log("ELSE TURE HERE THIS")
+            //Line moves right to left
+            newGridState.inner[firstIndex][secondIndex].active = {
+              xOne: 2,
+              xTwo: 0,
+              yOne: 2,
+              yTwo: 0
+            }
           }
-        } else {
-          break
         }
+      } else {
+        break
       }
     }
     for(var index = 0; index < 3; index++){//Check Diagnal Right Left
@@ -181,6 +187,7 @@ export function TileButtonPress(
         break
       }
     }
+
     if (!change){
       //Checks if the sqaure is full meaning the tic tac toe has ended in a draw
       for(var indexOne = 0; index < 3; index++){
