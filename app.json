@@ -2,6 +2,7 @@
   "expo": {
     "name": "UTTT",
     "slug": "UTTT",
+    "scheme": "Archimedes4.UTTT",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,7 +16,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "Archimedes4.UTTT"
     },
     "android": {
       "adaptiveIcon": {
@@ -30,6 +32,15 @@
       "eas": {
         "projectId": "50420409-1879-402c-bd37-d2db6871cea8"
       }
-    }
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-font",
+        {
+          "fonts":["./assets/Fonts/RussoOne.ttf", "./assets/Fonts/Ultimate.ttf", "./assets/Fonts/BarlowCondensed.ttf", "./assets/Fonts/Glitch.ttf"]
+        }
+      ]
+    ]
   }
 }

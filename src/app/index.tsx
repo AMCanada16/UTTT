@@ -4,11 +4,10 @@
   18 November 2023
   Welcome.tsx
 */
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, TextInput, Pressable } from "react-native";
 import GlitchComponent from '../UI/GlitchComponent';
 import { createNewGame } from '../Functions/OnlineFunctions';
-import * as SplashScreen from 'expo-splash-screen';
 import { addGame, getGames } from "../Functions/StorageFunctions";
 import { emptyGame, gridStateMode } from "../Types";
 import { useSelector } from "react-redux";
@@ -108,6 +107,7 @@ export default function WelcomePage() {
   const [isShowingFriendScreen, setIsShowingFriendScreen] = useState<boolean>(false)
   const [isShowingAIScreen, setIsShowingAIScreen] = useState<boolean>(false)
   const {height, width} = useSelector((state: RootState) => state.dimensions)
+  
   // text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff, 0.025em 0.04em 0 #fffc00;
   //red overide: #ff9c9c //Shadow #FF5757
 
@@ -130,24 +130,24 @@ export default function WelcomePage() {
           
         </View>
       </View>
-      <View  style={{flexDirection: "row"}}>
+      <View style={{flexDirection: "row"}}>
         {/*ONLINE*/}
-        <View style={{position: "relative", width: "33%"}}>
-          <Pressable onPress={() => {setIsShowingOnlineScreen(true); setIsShowingAIScreen(false); setIsShowingFriendScreen(false)}} style={{backgroundColor: "white", borderRadius: 10, height: height * 0.15, width: width * 0.25, margin: "auto"}}>
+        <View style={{position: "relative", width: width/3}}>
+          <Pressable onPress={() => {setIsShowingOnlineScreen(true); setIsShowingAIScreen(false); setIsShowingFriendScreen(false)}} style={{backgroundColor: "white", borderRadius: 10, height: height * 0.15, width: width * 0.25, marginHorizontal: width * 0.025}}>
             <GlitchComponent fontSize={width * 0.04} text='PLAY ONLINE' animated={false} justifyText='center'height={height * 0.15} width={width * 0.25}/>
           </Pressable>
         </View>
         {/*AI*/}
-        <View style={{position: "relative", width: "33%"}}>
-          <Pressable onPress={() => {setIsShowingAIScreen(true); setIsShowingFriendScreen(false); setIsShowingOnlineScreen(false)}} style={{backgroundColor: "white", borderRadius: 10, width: width * 0.25, margin: "auto", height:  height * 0.15, justifyContent: "center"}}>
+        <View style={{position: "relative", width: width/3}}>
+          <Pressable onPress={() => {setIsShowingAIScreen(true); setIsShowingFriendScreen(false); setIsShowingOnlineScreen(false)}} style={{backgroundColor: "white", borderRadius: 10, width: width * 0.25, margin: "auto", height:  height * 0.15, justifyContent: "center", marginHorizontal: width * 0.025}}>
             <View style={{position: "relative"}}>
               <GlitchComponent fontSize={width * 0.04} text='PLAY AGAINST'animated={true}/>
               <Text style={{fontFamily: "Glitch", fontSize: width * 0.03, position: "relative", textAlign: "center", marginTop: width * 0.05, color: "green"}}>AI</Text>
             </View> 
           </Pressable>
         </View>
-        <View style={{position: "relative", width: "33%"}}>
-          <Pressable onPress={() => {setIsShowingFriendScreen(true); setIsShowingAIScreen(false); setIsShowingOnlineScreen(false)}} style={{backgroundColor: "white", borderRadius: 10, height: height * 0.15, width: width * 0.25, margin: "auto"}}>
+        <View style={{position: "relative", width: width/3}}>
+          <Pressable onPress={() => {setIsShowingFriendScreen(true); setIsShowingAIScreen(false); setIsShowingOnlineScreen(false)}} style={{backgroundColor: "white", borderRadius: 10, height: height * 0.15, width: width * 0.25, margin: "auto", marginHorizontal: width * 0.025}}>
             <GlitchComponent fontSize={width * 0.04} text='PLAY FRIEND' animated={false} justifyText='center'height={height * 0.15} width={width * 0.25}/>
           </Pressable>
         </View>

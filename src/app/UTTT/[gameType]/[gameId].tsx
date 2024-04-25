@@ -5,22 +5,22 @@
   UltimateTicTacToe.tsx
 */
 import { useEffect, useState } from "react"
-import { emptyGame, gridStateMode } from "../Types"
+import { emptyGame, gridStateMode } from "../../../Types"
 import { useSelector } from "react-redux"
-import store, { RootState } from "../Redux/store"
-import { getDimentionalFromData, loadGame, updateGame } from "../Functions/OnlineFunctions"
+import store, { RootState } from "../../../Redux/store"
+import { getDimentionalFromData, loadGame, updateGame } from "../../../Functions/OnlineFunctions"
 import { doc, onSnapshot } from "firebase/firestore"
-import { loadStorageGame, updateStorageGame } from "../Functions/StorageFunctions"
-import { db } from "../Firebase/Firebase"
+import { loadStorageGame, updateStorageGame } from "../../../Functions/StorageFunctions"
+import { db } from "../../../Firebase/Firebase"
 import { View, Text, StyleSheet, Pressable } from "react-native"
-import BigTileTextAnimation from "../UI/BigTileTextAnimation"
-import Striketrough from "../UI/Striketrough"
-import TileButton from "../UI/TileButton"
-import { isGameOverSlice } from "../Redux/reducers/isGameOverReducer"
-import { gridStateSlice } from "../Redux/reducers/gridStateReducer"
-import { selectedGridSlice } from "../Redux/reducers/selectedGridReducer"
-import { playerModeSlice } from "../Redux/reducers/playerModeReducer"
-import { ChevronLeft, CopiedIcon, CopyIcon, ResetIcon } from "../UI/Icons"
+import BigTileTextAnimation from "../../../UI/BigTileTextAnimation"
+import Striketrough from "../../../UI/Striketrough"
+import TileButton from "../../../UI/TileButton"
+import { isGameOverSlice } from "../../../Redux/reducers/isGameOverReducer"
+import { gridStateSlice } from "../../../Redux/reducers/gridStateReducer"
+import { selectedGridSlice } from "../../../Redux/reducers/selectedGridReducer"
+import { playerModeSlice } from "../../../Redux/reducers/playerModeReducer"
+import { ChevronLeft, CopiedIcon, CopyIcon, ResetIcon } from "../../../UI/Icons"
 import * as Clipboard from 'expo-clipboard';
 import { useGlobalSearchParams, useRouter } from "expo-router"
 
@@ -102,7 +102,7 @@ function MainGame() {
   )
 }
 
-export function UltimateTicTacToe() {
+export default function UltimateTicTacToe() {
   //first dimention board, second rows, third columns, forth second rows, fifth columns
   const { gameType, gameId } = useGlobalSearchParams()
   const {height, width} = useSelector((state: RootState) => state.dimensions)

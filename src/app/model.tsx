@@ -1,41 +1,41 @@
 import * as tf from '@tensorflow/tfjs';
 import { useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, StyleSheet, View } from 'react-native';
 
 function perdict(old: number[]) {
-    const model = tf.sequential();
+  const model = tf.sequential();
 
-    model.add(
-      tf.layers.dense({
-        units: 9,
-        inputShape: [9],
-        activation: "relu"
-      })
-    );
-  
-    model.add(
-      tf.layers.dense({
-        units: 81,
-        activation: "relu"
-      })
-    );
-  
-    model.add(
-      tf.layers.dense({
-        units: 9,
-        activation: "softmax"
-      })
-    );
-  
-    const learningRate = 0.005;
-    model.compile({
-      optimizer: tf.train.adam(learningRate),
-      loss: "categoricalCrossentropy",
-      metrics: ["accuracy"]
-    });
-    const input = tf.tensor2d([old])
-    let result = model.predict(input) as tf.Tensor
-    result.print()
+  model.add(
+    tf.layers.dense({
+      units: 9,
+      inputShape: [9],
+      activation: "relu"
+    })
+  );
+
+  model.add(
+    tf.layers.dense({
+      units: 81,
+      activation: "relu"
+    })
+  );
+
+  model.add(
+    tf.layers.dense({
+      units: 9,
+      activation: "softmax"
+    })
+  );
+
+  const learningRate = 0.005;
+  model.compile({
+    optimizer: tf.train.adam(learningRate),
+    loss: "categoricalCrossentropy",
+    metrics: ["accuracy"]
+  });
+  const input = tf.tensor2d([old])
+  let result = model.predict(input) as tf.Tensor
+  result.print()
 }
 
 export default function mainModel() {
