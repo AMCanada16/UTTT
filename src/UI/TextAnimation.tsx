@@ -41,7 +41,6 @@ export default function TextAnimation({length, mode, colored}:{length: number, m
           cy="50%"
           fill={(mode === "X") ? "#5ce1e6":"#ff9c9c"}
           animatedProps={animatedProps}
-          onPress={() => {}}
         />
       </Svg>
       { (mode === "X") ?

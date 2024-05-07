@@ -7,27 +7,24 @@
 import { useEffect, useState } from "react"
 import { emptyGame, gridStateMode } from "../../../Types"
 import { useSelector } from "react-redux"
-import store, { RootState } from "../../../Redux/store"
-import { getDimentionalFromData, loadGame, updateGame } from "../../../Functions/OnlineFunctions"
-import { doc, onSnapshot } from "firebase/firestore"
-import { loadStorageGame, updateStorageGame } from "../../../Functions/StorageFunctions"
-import { db } from "../../../Firebase/Firebase"
+import { RootState } from "../../../Redux/store"
+import { updateGame } from "../../../Functions/OnlineFunctions"
+import { updateStorageGame } from "../../../Functions/StorageFunctions"
 import { View, Text, StyleSheet, Pressable } from "react-native"
 import BigTileTextAnimation from "../../../UI/BigTileTextAnimation"
 import Striketrough from "../../../UI/Striketrough"
 import TileButton from "../../../UI/TileButton"
-import { isGameOverSlice } from "../../../Redux/reducers/isGameOverReducer"
-import { gridStateSlice } from "../../../Redux/reducers/gridStateReducer"
-import { selectedGridSlice } from "../../../Redux/reducers/selectedGridReducer"
-import { playerModeSlice } from "../../../Redux/reducers/playerModeReducer"
-import { ChevronLeft, CopiedIcon, CopyIcon, ResetIcon } from "../../../UI/Icons"
+import { ChevronLeft, CopiedIcon, CopyIcon, PersonIcon, ResetIcon } from "../../../UI/Icons"
 import * as Clipboard from 'expo-clipboard';
 import { useGlobalSearchParams, useRouter } from "expo-router"
+import useGame from "../../../hooks/useGame"
+import { setCurrentTurn, setGridState, setIsGameOver, setSelectedGrid } from "../../../Functions/gameActions"
+import { auth } from "../../../Firebase/Firebase"
+import PlayersPage from "../../../UI/PlayersPage"
 
 //Renders root type
-function InnerGame({firstIndex, secondIndex, game, gameLength}:{firstIndex: number, secondIndex: number, game: RootType, gameLength: number}) {
+function InnerGame({firstIndex, secondIndex, root, game, gameLength}:{firstIndex: number, secondIndex: number, root: RootType, game: GameType, gameLength: number}) {
   const { height, width } = useSelector((state: RootState) => state.dimensions)
-  const gridState = useSelector((state: RootState) => state.gridState)
   return (
     <View key={"SecondCol" + firstIndex + " " + secondIndex} style={{
       width: gameLength * 0.32,
@@ -35,8 +32,8 @@ function InnerGame({firstIndex, secondIndex, game, gameLength}:{firstIndex: numb
       overflow: 'hidden',
       marginBottom: (secondIndex === 2) ? 0:gameLength * 0.02
     }}> 
-      {game.value.map((secondRow: gridStateMode[], thirdIndex) => (
-        <View key={`SecondRow`} style={{
+      {root.value.map((secondRow: gridStateMode[], thirdIndex) => (
+        <View key={`Row_${thirdIndex}`} style={{
           flexDirection: 'row', height: (gameLength * 0.32)/3
           }}>
           { thirdIndex !== 0 ?
@@ -55,26 +52,25 @@ function InnerGame({firstIndex, secondIndex, game, gameLength}:{firstIndex: numb
               marginRight: (forthIndex !== 2) ? 5:0,
               marginBottom: (thirdIndex !== 2) ? 5:0
             }}>
-              <TileButton value={((secondColumn === gridStateMode.Open) ? " ":(secondColumn === gridStateMode.O) ? "O":(secondColumn === gridStateMode.X) ? "X":" ")} key={(firstIndex * secondIndex) + (thirdIndex * forthIndex)} firstIndex={firstIndex} secondIndex={secondIndex} thirdIndex={thirdIndex} forthIndex={forthIndex} />
+              <TileButton value={secondColumn} firstIndex={firstIndex} secondIndex={secondIndex} thirdIndex={thirdIndex} forthIndex={forthIndex} currentTurn={game.currentTurn}/>
             </View>
           ))}
         </View>
       ))}
-      {(gridState.inner[firstIndex][secondIndex].active) ? 
-        <Striketrough gridState={gridState} width={width} height={height} firstIndex={firstIndex} secondIndex={secondIndex} />:null
+      {(game.data.inner[firstIndex][secondIndex].active) ? 
+        <Striketrough gridState={game.data} width={width} height={height} firstIndex={firstIndex} secondIndex={secondIndex} />:null
       }
-      {(gridState.value[firstIndex][secondIndex] === gridStateMode.O || gridState.value[firstIndex][secondIndex] === gridStateMode.X) ? 
+      {(game.data.value[firstIndex][secondIndex] === gridStateMode.O || game.data.value[firstIndex][secondIndex] === gridStateMode.X) ? 
         <View style={styles.dimentionTileContainer}>
-          <BigTileTextAnimation mode={(gridState.value[firstIndex][secondIndex] === gridStateMode.O) ? "O":(gridState.value[firstIndex][secondIndex] === gridStateMode.X) ? "X":" "}/>
+          <BigTileTextAnimation mode={(game.data.value[firstIndex][secondIndex] === gridStateMode.O) ? "O":(game.data.value[firstIndex][secondIndex] === gridStateMode.X) ? "X":" "}/>
         </View>:null}
     </View>
   )
 }
 
-function MainGame() {
+function MainGame({game}:{game: GameType}) {
   const { height, width } = useSelector((state: RootState) => state.dimensions)
   const [gameLength, setGameLength] = useState<number>(0);
-  const gridState = useSelector((state: RootState) => state.gridState)
 
   useEffect(() => {
     setGameLength((height < width) ? height * 0.8: width * 0.8)
@@ -85,15 +81,15 @@ function MainGame() {
       height: gameLength,
       width: gameLength
     }]}>
-      {gridState.inner.map((firstRow: RootType[], firstIndex) => (
+      {game.data.inner.map((firstRow: RootType[], firstIndex) => (
         <View key={"FirstCol" + firstIndex} style={{
           width: gameLength * 0.32,
           height: gameLength,
           marginRight: (firstIndex === 2) ? 0:gameLength * 0.02
         }}>
           {
-            firstRow.map((game: RootType, secondIndex) => (
-              <InnerGame game={game} firstIndex={firstIndex} secondIndex={secondIndex} gameLength={gameLength}/>
+            firstRow.map((root: RootType, secondIndex) => (
+              <InnerGame key={`Mini_Game_${firstIndex}_${secondIndex}`} game={game} root={root} firstIndex={firstIndex} secondIndex={secondIndex} gameLength={gameLength}/>
             ))
           }
         </View>
@@ -106,50 +102,32 @@ export default function UltimateTicTacToe() {
   //first dimention board, second rows, third columns, forth second rows, fifth columns
   const { gameType, gameId } = useGlobalSearchParams()
   const {height, width} = useSelector((state: RootState) => state.dimensions)
-  const isGameOver = useSelector((state: RootState) => state.isGameOver);
-  const gridState = useSelector((state: RootState) => state.gridState)
-  const playerMode = useSelector((state: RootState) => state.playerMode)
   const router = useRouter()
   const [isCopied, setIsCopied] = useState<boolean>(false);
-  
-  async function load() {
-    if (gameType === "online" && typeof gameId === 'string'){
-      const result = await loadGame(gameId ? gameId.replace(/ /g,''):"")
-      if (result !== undefined){
-       store.dispatch(gridStateSlice.actions.setGridState(result as unknown as DimentionalType))
-      }
-      onUpdate()
-    } else if ((gameType === "ai" || gameType === "friend") && typeof gameId === 'string'){
-      loadStorageGame(gameId ? gameId.replace(/ /g,''):"")
-    }
-  }
+  const [isShowingPlayers, setIsShowingPlayers] = useState<boolean>(false)
 
-  function onUpdate() {
-    if (typeof gameId !== 'string') {
-      return
-    }
-    const unsub = onSnapshot(doc(db, "Games", gameId ? gameId.replace(/ /g,''):""), (doc) => {
-      if (doc.exists()){
-        const data = doc.data();
-        const result = getDimentionalFromData(data["gameStateInner"], data["gameStateValue"]);
-        store.dispatch(gridStateSlice.actions.setGridState(result));
-      }
-    });
-    return () => {
-      unsub()
-    }
-  }
+  const game = useGame(gameId as string, (gameType === 'online'))
 
   function resetUTTT() {
-    store.dispatch(gridStateSlice.actions.setGridState(emptyGame))
-    store.dispatch(selectedGridSlice.actions.setSelectedGrid(0))
-    store.dispatch(playerModeSlice.actions.setPlayerMode(gridStateMode.X))
-    if (gameType === "online" && typeof gameId === 'string'){
-      updateGame(gameId ? gameId.replace(/ /g,''):"", emptyGame, gridStateMode.X)
-    } else if ((gameType === "friend" || gameType === "ai") && typeof gameId === 'string'){
-      store.dispatch(gridStateSlice.actions.setGridState(emptyGame))
-      store.dispatch(isGameOverSlice.actions.setIsGameOver(false))
-      updateStorageGame(gameId ? gameId.replace(/ /g,''):"", gridState)
+    setGridState(emptyGame)
+    setSelectedGrid(0)
+    setCurrentTurn(gridStateMode.X)
+    if (game !== undefined && game.gameType === 'online'){
+      updateGame({
+        ...game,
+        selectedGrid: 0,
+        currentTurn: gridStateMode.X,
+        data: emptyGame
+      })
+    } else if ((gameType === "friend" || gameType === "ai") && game !== undefined){
+      setGridState(emptyGame)
+      setIsGameOver(false)
+      updateStorageGame(game?.gameId, {
+        ...game,
+        selectedGrid: 0,
+        currentTurn: gridStateMode.X,
+        data: emptyGame
+      })
     }
   }
 
@@ -160,17 +138,21 @@ export default function UltimateTicTacToe() {
     }
   }
 
-  useEffect(() => {
-    if (gameType === "online" && typeof gameId === 'string'){
-      updateGame(gameId ? gameId.replace(/ /g,''):"", gridState, playerMode)
-    } else if ((gameType === "ai" || gameType === "friend") && typeof gameId === 'string'){
-      updateStorageGame(gameId ? gameId.replace(/ /g,''):"", gridState)
-    }
-  }, [playerMode])
+  if (game == undefined) {
+    return (
+      <View>
+        <Text>The game could not be found.</Text>
+      </View>
+    )
+  }
 
-  useEffect(() => {
-    load()
-  }, [])
+  if (auth.currentUser === null && game.gameType === 'online') {
+    return (
+      <View style={{width: width, height: height, backgroundColor: "#5E17EB", alignItems: 'center', justifyContent: 'center', margin: "auto"}}>
+        <Text>Please Sign In</Text>
+      </View>
+    )
+  }
 
   return(
     <View style={{width: width, height: height, backgroundColor: "#5E17EB", alignItems: 'center', justifyContent: 'center', margin: "auto"}}>
@@ -196,21 +178,33 @@ export default function UltimateTicTacToe() {
         }
         <Text style={{marginLeft: 10, marginTop: 'auto', marginBottom: 'auto'}}>{gameId}</Text>
       </Pressable>
-      <MainGame />
+      <MainGame game={game}/>
       <View style={{flexDirection: "row"}}>
         <Pressable onPress={() => router.push('/')} style={{flexDirection: 'row', backgroundColor: 'white', borderRadius: 15, padding: 10, marginTop: 5, marginRight: 5}}>
           <ChevronLeft width={16} height={16}/>
           <Text style={{marginLeft: 2}}>Back</Text>
         </Pressable>
-        <Pressable onPress={() => resetUTTT()} style={{flexDirection: 'row', backgroundColor: 'white', borderRadius: 15, padding: 10, marginTop: 5, marginLeft: 5}}>
+        <Pressable onPress={() => resetUTTT()} style={{flexDirection: 'row', backgroundColor: 'white', borderRadius: 15, padding: 10, marginTop: 5, marginHorizontal: 5}}>
           <ResetIcon width={16} height={16}/>
           <Text style={{marginLeft: 2}}>Reset</Text>
         </Pressable>
+        <Pressable onPress={() => setIsShowingPlayers(true)} style={{flexDirection: 'row', backgroundColor: 'white', borderRadius: 15, padding: 10, marginTop: 5, marginLeft: 5}}>
+          <PersonIcon width={16} height={16}/>
+          <Text style={{marginLeft: 2}}>Players</Text>
+        </Pressable>
       </View>
-      { isGameOver ?
-        <View style={{position: 'absolute', width: width * 0.8, height: height * 0.8, top: 'auto', bottom: 'auto', left: 'auto', right: 'auto', backgroundColor: 'rgba(255,255,255, 0.6)', borderRadius: 25}}>
-          <Text style={{margin: 10}}>Game Over</Text>
+      { game.gameOver ?
+        <View style={{position: 'absolute', width: width * 0.8, height: height * 0.8, top: 'auto', bottom: 'auto', left: 'auto', right: 'auto', backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
+          <Text style={{margin: 10, fontSize: height * 0.2, fontFamily: "Ultimate"}}>Game Over</Text>
+          <Pressable onPress={() => {
+            router.push('/')
+          }}>
+            <Text>Back</Text>
+          </Pressable>
         </View>:null
+      }
+      { (isShowingPlayers && game.gameType === 'online')?
+        <PlayersPage accounts={game.users}/>:null
       }
     </View>
   )

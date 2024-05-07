@@ -6,7 +6,8 @@
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "storybook-generate": "sb-rn-get-stories"
   },
   "dependencies": {
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
@@ -16,9 +17,10 @@
     "expo": "^50.0.17",
     "expo-clipboard": "~5.0.1",
     "expo-constants": "~15.4.6",
+    "expo-font": "^11.10.3",
     "expo-linking": "~6.2.2",
-    "expo-router": "~3.4.8",
-    "expo-splash-screen": "~0.26.4",
+    "expo-router": "~3.4.10",
+    "expo-splash-screen": "~0.26.5",
     "expo-status-bar": "~1.11.1",
     "firebase": "^9.23.0",
     "react": "^18.2.0",
@@ -34,9 +36,18 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@react-native-community/datetimepicker": "^8.0.0",
+    "@react-native-community/slider": "^4.5.2",
+    "@storybook/addon-ondevice-actions": "^7.6.18",
+    "@storybook/addon-ondevice-controls": "^7.6.18",
+    "@storybook/react-native": "^7.6.18",
     "@types/react": "~18.2.45",
     "@types/react-native": "~0.64.12",
+    "babel-loader": "^8.3.0",
     "typescript": "^5.3.0"
   },
-  "private": true
+  "private": true,
+  "engines": {
+    "node": "18.18.0"
+  }
 }

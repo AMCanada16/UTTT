@@ -9,10 +9,6 @@ export default function Striketrough({gridState, firstIndex, secondIndex}:{gridS
   const yOne = gridState.inner[firstIndex][secondIndex].active!.yOne
   const yTwo = gridState.inner[firstIndex][secondIndex].active!.yTwo
 
-  useEffect(() => {
-    console.log("First:", firstIndex, "Second:", secondIndex)
-  }, [])
-
   return (
     <View style={{width: "100%", height: "100%", position: 'absolute'}} onLayout={(e) => {setLength(e.nativeEvent.layout.height)}}>
       <Svg width={length} height={length}>

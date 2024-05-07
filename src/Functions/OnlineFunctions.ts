@@ -1,6 +1,6 @@
 import { db, auth } from '../Firebase/Firebase';
-import { signInAnonymously } from 'firebase/auth';
-import {doc, runTransaction, updateDoc} from "firebase/firestore"
+import { signOut as signOutFirebase } from 'firebase/auth';
+import { collection, doc, getDocs, runTransaction, updateDoc } from "firebase/firestore"
 
 enum gridStateMode{
   Open,
@@ -9,10 +9,33 @@ enum gridStateMode{
   Full
 }
 
-export function getDatafromDimentionalGrid(gameSate: DimentionalType): {activeValues: number[], innerValues: number[]}{
-  var innerValues: any[] = []
+export function getDatafromDimentionalGrid(gameSate: DimentionalType): {activeValues: number[], innerValues: number[], innerValueActive: {
+  xOne: number;
+  xTwo: number;
+  yOne: number;
+  yTwo: number;
+  firstIndex: number;
+  secondIndex: number
+}[]}{
+  var innerValueActive: {
+    xOne: number;
+    xTwo: number;
+    yOne: number;
+    yTwo: number;
+    firstIndex: number;
+    secondIndex: number
+  }[] = []
+  var innerValues: number[] = []
   for(var index = 0; index < gameSate.inner.length; index++){
     for(var indexIn = 0; indexIn < gameSate.inner[index].length; indexIn++){
+      const active = gameSate.inner[index][indexIn].active
+      if (active !== undefined) {
+        innerValueActive.push({
+          ...active,
+          firstIndex: index,
+          secondIndex: indexIn
+        })
+      }
       for(var indexInIn = 0; indexInIn < gameSate.inner[index][indexIn].value.length; indexInIn++){
         for(var indexInInIn = 0; indexInInIn < gameSate.inner[index][indexIn].value[indexInIn].length; indexInInIn++){
           innerValues.push(gameSate.inner[index][indexIn].value[indexInIn][indexInInIn])
@@ -20,7 +43,7 @@ export function getDatafromDimentionalGrid(gameSate: DimentionalType): {activeVa
       }
     }
   }
-  var activeValues: any[] = []
+  var activeValues: number[] = []
   for(var indexActive = 0; indexActive < gameSate.value.length; indexActive++){
     for(var indexIn = 0; indexIn < gameSate.value[indexActive].length; indexIn++){
       activeValues.push(gameSate.value[indexActive][indexIn])
@@ -28,60 +51,67 @@ export function getDatafromDimentionalGrid(gameSate: DimentionalType): {activeVa
   }
   return {
     activeValues: activeValues,
-    innerValues: innerValues
+    innerValues: innerValues,
+    innerValueActive
   }
 }
 
-export async function createNewGame(gameSate: DimentionalType, playerMode: gridStateMode): Promise<string | null> {
+export async function createNewGame(gameSate: DimentionalType, playerMode: gridStateMode, userUid: string): Promise<string | null> {
   var date = new Date();
   const randomId = Math.floor(1000000 + Math.random() * 9000000)
-  var userUid = ""
   try{
-    const result = await signInAnonymously(auth)
-    userUid = result.user.uid
+    await runTransaction(db, async (transaction) => {
+      const result = await transaction.get(doc(db, "Games", randomId.toString()))
+      if (!result.exists()){
+        const firebaseData = getDatafromDimentionalGrid(gameSate)
+        transaction.set(doc(db, "Games", randomId.toString()), {
+          currentTurn: playerMode,
+          date: date.toISOString(),
+          gameOver: false,
+          gameStateValue: firebaseData.activeValues,
+          gameStateInner: firebaseData.innerValues,
+          gameStateActive: firebaseData.innerValueActive,
+          users: [{
+            userId: userUid,
+            player: playerMode
+          }],
+          gameId: randomId.toString(),
+          gameType: "online",
+          selectedGrid: 0
+        })
+      }
+    })
+    return randomId.toString()
   } catch (error: any) {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    console.log("error", errorMessage)
-  }
-  if (userUid !== ""){
-    try{
-      await runTransaction(db, async (transaction) => {
-        const result = await transaction.get(doc(db, "Games", randomId.toString()))
-        if (!result.exists()){
-          const firebaseData = getDatafromDimentionalGrid(gameSate)
-          transaction.set(doc(db, "Games", randomId.toString()), {
-            date: date,
-            gameStateActive: (gameSate.active === undefined) ? null: gameSate.active,
-            gameStateValue: firebaseData.activeValues,
-            gameStateInner: firebaseData.innerValues,
-            currentTurn: playerMode,
-            users: [{
-              userID: userUid,
-              player: playerMode
-            }]
-          })
-        }
-      })
-      return randomId.toString()
-    } catch (error: any) {
-      console.log(error.message)
-    }
+    console.log(error.message)
   }
   return null
 }
 
-export function updateGame(gameId: string, gameSate: DimentionalType, playerMode: gridStateMode){
-  const firebaseData = getDatafromDimentionalGrid(gameSate)
-  updateDoc(doc(db, "Games", gameId), {
-    gameStateActive: (gameSate.active === undefined) ? null: gameSate.active,
+export function updateGame(gameState: GameType){
+  const firebaseData = getDatafromDimentionalGrid(gameState.data)
+  updateDoc(doc(db, "Games", gameState.gameId), {
+    currentTurn: gameState.currentTurn,
+    date: new Date().toISOString(),
+    gameOver: gameState.gameOver,
     gameStateValue: firebaseData.activeValues,
     gameStateInner: firebaseData.innerValues,
-    currentTurn: playerMode,
+    gameStateActive: firebaseData.innerValueActive,
+    selectedGird: gameState.selectedGrid,
+    gameType: gameState.gameType,
+    gameId: gameState.gameId
   })
 }
 
-export function getDimentionalFromData(gameStateInner: number[], gameStateValueData: number[]): DimentionalType{
+export function getDimentionalFromData(gameStateInner: number[], gameStateValueData: number[], innerValueActive: {
+  xOne: number;
+  xTwo: number;
+  yOne: number;
+  yTwo: number;
+  firstIndex: number;
+  secondIndex: number
+}[]): DimentionalType{
+  // Get Inner
   var rootTypeFirst: RootType[][] = []
   for (let i = 0; i < gameStateInner.length; i += 27) {
     const chunk = gameStateInner.slice(i, i + 27);
@@ -97,15 +127,20 @@ export function getDimentionalFromData(gameStateInner: number[], gameStateValueD
         }
         gridTypeFirst.push(gridTypeSecond)
       }
+      const activeValue = innerValueActive.find((e) => {
+        return e.firstIndex === i && e.secondIndex === index
+      })
       rootTypeSecond.push({
-        value: gridTypeFirst
+        value: gridTypeFirst,
+        active: activeValue
       })
     }
     rootTypeFirst.push(rootTypeSecond)
   }
+  // Get value
   var gameStateValue: gridStateMode[][] = []
   for(let index = 0; index < gameStateValueData.length; index += 3){
-    const chunk =  gameStateValueData.slice(index, index + 27);
+    const chunk =  gameStateValueData.slice(index, index + 3);
     var gameStateValueInner: gridStateMode[] = []
     for(let i = 0; i < chunk.length; i++){
       gameStateValueInner.push(chunk[i])
@@ -119,22 +154,48 @@ export function getDimentionalFromData(gameStateInner: number[], gameStateValueD
   return gameSate
 }
 
-export async function loadGame(inputID: string): Promise<DimentionalType | undefined> {
-  var gameSate: DimentionalType | undefined = undefined
+export async function joinGame(gameId: string, currentUserId: string): Promise<boolean> {
+  let added = false
   try{
     await runTransaction(db, async (transaction) => {
-      const result = await transaction.get(doc(db, "Games", inputID))
+      const result = await transaction.get(doc(db, "Games", gameId))
       if (result.exists()){
         const data = result.data()
         if (data["users"].length <= 2){
-          gameSate = getDimentionalFromData(data["gameStateInner"], data["gameStateValue"])
+          let newUsers: compressedUserType[] = [...data["users"]]
+          newUsers.push({
+            userId: currentUserId,
+            player: gridStateMode.O
+          })
+          await transaction.update(doc(db, "Games", gameId), {
+            users: newUsers
+          })
+          added = true
         }
       } else {
-        console.log("This document", inputID, "does not exist")
+        added = false
       }
     })
   } catch (error: any) {
-    console.log("error", error.message)
+    return false
   }
-  return gameSate
+  return added
+}
+
+export async function getOnlineGames() {
+  let games: GameType[] = []
+  let result = await getDocs(collection(db, "Games"))
+  result.docs.forEach((e) => {
+    const data = e.data()
+    games.push({
+      currentTurn: data["currentTurn"],
+      date: data["date"],
+      gameOver: data["gameOver"],
+      data: getDimentionalFromData(data["gameStateInner"], data["gameStateValue"], data["gameStateActive"]),
+      selectedGrid: data["selectedGrid"],
+      gameType: data["gameType"],
+      gameId: data["gameId"]
+    })
+  })
+  return games
 }

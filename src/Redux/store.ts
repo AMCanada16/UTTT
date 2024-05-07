@@ -1,18 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
+import gridStateReducer from './reducers/gameReducer';
 import dimensionsReducer from './reducers/dimensionsReducer';
-import gridStateReducer from './reducers/gridStateReducer';
-import playerModeReducer from './reducers/playerModeReducer';
-import isGameOverReducer from './reducers/isGameOverReducer';
-import selectedGridReducer from './reducers/selectedGridReducer';
 
 
 const store = configureStore({
   reducer: {
     dimensions: dimensionsReducer,
-    gridState: gridStateReducer,
-    isGameOver: isGameOverReducer,
-    playerMode: playerModeReducer,
-    selectedGrid: selectedGridReducer,
+    gameState: gridStateReducer,
   }
 });
 

@@ -1,41 +1,50 @@
-import { useEffect, useState } from 'react';
-import { Dimensions } from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+import { Dimensions, View, useWindowDimensions } from 'react-native';
 import store, { RootState } from '../Redux/store';
 import { dimensionsSlice } from '../Redux/reducers/dimensionsReducer';
 import {Provider, useSelector} from "react-redux"
-import { Slot } from 'expo-router';
-
-const windowDimensions = Dimensions.get('window');
-const screenDimensions = Dimensions.get('screen');
+import { Slot, SplashScreen } from 'expo-router';
+import { useFonts } from 'expo-font';
+import Storybook from '../../.storybook';
+// import {useFonts} from "expo-fonts"
 
 function App() {
-  const [dimensions, setDimensions] = useState({
-    window: windowDimensions,
-    screen: screenDimensions,
-  });
-
-  useEffect(() => {
-    const subscription = Dimensions.addEventListener(
-      'change',
-      ({window, screen}) => {
-        setDimensions({window, screen});
-      },
-    );
-    return () => subscription?.remove();
-  });
+  const dimensions = useWindowDimensions()
 
   const {height, width} = useSelector((state: RootState) => state.dimensions)
 
   useEffect(() => {
-    if (dimensions.window.height !== height) {
-      store.dispatch(dimensionsSlice.actions.setHeight(dimensions.window.height))
+    console.log(dimensions)
+    if (dimensions.height !== height) {
+      store.dispatch(dimensionsSlice.actions.setHeight(dimensions.height))
     }
-    if (dimensions.window.width !== width) {
-      store.dispatch(dimensionsSlice.actions.setWidth(dimensions.window.width))
+    if (dimensions.width !== width) {
+      store.dispatch(dimensionsSlice.actions.setWidth(dimensions.width))
     }
-  }, [dimensions.window.height, dimensions.window.width])
+  }, [dimensions.height, dimensions.width, height, width])
 
-  return <Slot />
+  const [fontsLoaded, fontError] = useFonts({
+    "RussoOne":require("../../assets/Fonts/RussoOne.ttf"),
+    "Ultimate":require("../../assets/Fonts/Ultimate.ttf"),
+    "BarlowCondensed":require("../../assets/Fonts/BarlowCondensed.ttf"),
+    "Glitch":require("../../assets/Fonts/Glitch.ttf")
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded || fontError) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+  
+  return (
+    <View onLayout={() => onLayoutRootView()} style={{flex: 1}}>
+      <Slot />
+    </View>
+  )
 }
 
 export default function AppContainer() {

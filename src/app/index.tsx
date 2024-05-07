@@ -5,26 +5,67 @@
   Welcome.tsx
 */
 import { useEffect, useState } from "react";
-import { View, Text, TextInput, Pressable } from "react-native";
+import { View, Text, TextInput, Pressable, FlatList } from "react-native";
 import GlitchComponent from '../UI/GlitchComponent';
-import { createNewGame } from '../Functions/OnlineFunctions';
-import { addGame, getGames } from "../Functions/StorageFunctions";
+import { createNewGame, getOnlineGames } from '../Functions/OnlineFunctions';
+import { addGame, getStorageGames } from "../Functions/StorageFunctions";
 import { emptyGame, gridStateMode } from "../Types";
 import { useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
-import { CloseIcon } from "../UI/Icons";
-import { useRouter } from "expo-router";
+import { CloseIcon, GoogleIcon, SignInWithApple } from "../UI/Icons";
+import { router, useGlobalSearchParams, useRouter } from "expo-router";
+import { auth } from "../Firebase/Firebase";
+import OnlineAuthenticationComponent from "../UI/OnlineAuthenticationComponent";
+import AccountPage from "../UI/AccountPage";
+import useUsernameExists from "../hooks/useUsernameExists";
+import UsernameComponent from "../UI/AddUserComponent";
 
 function Online({onClose}:{onClose: () => void}){
   const router = useRouter()
   const [gameId, setGameID] = useState<string>("")
   const {height, width} = useSelector((state: RootState) => state.dimensions)
+  const [games, setGames] = useState<GameType[]>([])
+  const [isAuth, setIsAuth] = useState(false)
+  const usernameExists = useUsernameExists()
 
   async function createNew() {
-    const result = await createNewGame(emptyGame, gridStateMode.O)
-    if (result !== null){
-      router.push("/UTTT/online/"+result)
+    const uid = auth.currentUser?.uid
+    if (uid !== undefined) {
+      const result = await createNewGame(emptyGame, gridStateMode.X, uid)
+      if (result !== null){
+        router.push("/UTTT/online/"+result)
+      }
     }
+  }
+
+  async function loadGames() {
+    const result = await getOnlineGames()
+    setGames(result)
+  }
+
+  useEffect(() =>{
+    const unlisten = auth.onAuthStateChanged(
+      authUser => {
+        if (authUser !== null) {
+          loadGames()
+          setIsAuth(true)
+        } else {
+          setGames([])
+          setIsAuth(false)
+        }
+      },
+    );
+    return () => {
+      unlisten();
+    }
+ }, []);
+
+  if (!isAuth) {
+    return <OnlineAuthenticationComponent onClose={onClose}/>
+  }
+
+  if (!usernameExists) {
+    return <UsernameComponent onClose={onClose}/>
   }
 
   return(
@@ -34,18 +75,37 @@ function Online({onClose}:{onClose: () => void}){
       </Pressable>
       <Text style={{marginLeft: 'auto', marginRight: 'auto', marginTop: 2}}>Load Game</Text>
       <TextInput onChangeText={(e) => {setGameID(e)}} value={gameId}/>
-      <View style={{flexDirection: 'row'}}>
+      <FlatList
+        data={games}
+        renderItem={(game) => (
+          <Pressable
+            style={{
+              marginHorizontal: 15,
+              backgroundColor: '#d3d3d350',
+              padding: 10,
+              borderRadius: 15,
+              flexDirection: 'row',
+              marginBottom: 7.5
+            }}  
+            onPress={() => {
+              router.push("/UTTT/online/" + game.item.gameId)
+            }}
+          >
+            <Text style={{marginRight: 5}}>{game.item.gameId}</Text>
+            <Text>{game.item.date}</Text>
+          </Pressable>
+        )}
+      />
+      <View style={{flexDirection: 'row', marginBottom: 15}}>
         <Pressable onPress={() => {
           if (/^\d{7}$/.test(gameId)){
             router.push("/UTTT/online/"+gameId)
-          } else {
-            console.log("")
           }
-        }} style={{marginLeft: 'auto', marginRight: 'auto', borderRadius: 15, backgroundColor: 'blue'}}>
-          <Text style={{margin: 10, color: 'white'}}>Load</Text>
+        }} style={{marginLeft: 'auto', marginRight: 'auto', borderRadius: 15, backgroundColor: 'blue', width: width * 0.25}}>
+          <Text style={{margin: 10, color: 'white', textAlign: 'center'}}>Load</Text>
         </Pressable>
-        <Pressable onPress={() => createNew()} style={{marginLeft: 'auto', marginRight: 'auto', borderRadius: 15, backgroundColor: 'blue'}}>
-          <Text style={{margin: 10, color: 'white'}}>Create New</Text>
+        <Pressable onPress={() => createNew()} style={{marginLeft: 'auto', marginRight: 'auto', borderRadius: 15, backgroundColor: 'blue', width: width * 0.25}}>
+          <Text style={{margin: 10, color: 'white', textAlign: 'center'}}>Create New</Text>
         </Pressable>
       </View>
     </View>
@@ -56,15 +116,15 @@ function StorageGames({isFriend, onClose}:{isFriend: boolean, onClose: () => voi
   const router = useRouter();
   const [gameId, setGameID] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(true)
-  const [games, setGames] = useState<gameStorageType[]>([])
+  const [games, setGames] = useState<GameType[]>([])
   const {height, width} = useSelector((state: RootState) => state.dimensions)
 
   async function getGameData(){
     if (isFriend){
-      const result = await getGames("Friend")
+      const result = await getStorageGames("friend")
       setGames(result)
     } else {
-      const result = await getGames("AI")
+      const result = await getStorageGames("ai")
       setGames(result)
     }
   }
@@ -74,10 +134,10 @@ function StorageGames({isFriend, onClose}:{isFriend: boolean, onClose: () => voi
 
   async function createNew() {
     if (isFriend){
-      const result = await addGame("Friend")
+      const result = await addGame("friend")
       router.push("/UTTT/friend/" + result)
     } else {
-      const result = await addGame("AI")
+      const result = await addGame("ai")
       router.push("/UTTT/ai/" + result)
     }
   }
@@ -88,26 +148,28 @@ function StorageGames({isFriend, onClose}:{isFriend: boolean, onClose: () => voi
         <CloseIcon width={20} height={20}/>
       </Pressable>
       <Text style={{marginTop: 2, marginLeft: 'auto', marginRight: 'auto'}}>Load Game</Text>
-      { games.map((game) => (
-        <View key={game.gameId} style={{margin: 10, marginLeft: 'auto', marginRight: 'auto'}}>
-          <Pressable onPress={() => {if (isFriend){router.push("/UTTT/friend/" + game.gameId)} else {router.push("/UTTT/ai/" + game.gameId)}}}>
-            <Text>{new Date(game.lastPlayed).toString()}</Text>
+      <FlatList
+        data={games}
+        renderItem={(game) => (
+          <Pressable key={game.item.gameId} style={{margin: 15, marginVertical: 5, backgroundColor: '#d3d3d350', padding: 10, borderRadius: 15}} onPress={() => {if (isFriend){router.push("/UTTT/friend/" + game.item.gameId)} else {router.push("/UTTT/ai/" + game.item.gameId)}}}>
+            <Text>{new Date(game.item.date).toString()}</Text>
           </Pressable>
-        </View>
-      ))}
-      <Pressable onPress={() => createNew()} style={{marginLeft: 'auto', marginRight: 'auto', borderRadius: 15, backgroundColor: 'blue'}}>
+        )}
+      />
+      <Pressable onPress={() => createNew()} style={{marginLeft: 'auto', marginRight: 'auto', borderRadius: 15, backgroundColor: 'blue', marginBottom: 15}}>
         <Text style={{margin: 10, color: 'white'}}>Create New</Text>
       </Pressable>
     </View>
   )
 }
 
-export default function WelcomePage() {
-  const [isShowingOnlineScreen, setIsShowingOnlineScreen] = useState<boolean>(false)
-  const [isShowingFriendScreen, setIsShowingFriendScreen] = useState<boolean>(false)
-  const [isShowingAIScreen, setIsShowingAIScreen] = useState<boolean>(false)
+export function WelcomePage({
+  online
+}:{
+  online: boolean
+}) {
   const {height, width} = useSelector((state: RootState) => state.dimensions)
-  
+  const { gameType } = useGlobalSearchParams()
   // text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff, 0.025em 0.04em 0 #fffc00;
   //red overide: #ff9c9c //Shadow #FF5757
 
@@ -125,7 +187,7 @@ export default function WelcomePage() {
         <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: 50, color: "#ff9c9c", textShadowColor: "#FF5757", textShadowRadius: 25}}>TOE </Text>
       </View>
       <View>
-        <Text style={{marginLeft: '5%', marginTop: 10, marginBottom: 10, color: 'white', marginRight: "5%"}}>Ultimate Tic Tac Teo takes tic tac toe to the next level. Battle it out with your friends or AI. Online gameplay is also avaliable.</Text>
+        <Text style={{marginLeft: '5%', marginTop: 10, marginBottom: 10, color: 'white', marginRight: "5%"}}>Ultimate Tic Tac Toe takes tic tac toe to the next level. Battle it out with your friends or AI. Online gameplay is also avaliable.</Text>
         <View>
           
         </View>
@@ -133,13 +195,13 @@ export default function WelcomePage() {
       <View style={{flexDirection: "row"}}>
         {/*ONLINE*/}
         <View style={{position: "relative", width: width/3}}>
-          <Pressable onPress={() => {setIsShowingOnlineScreen(true); setIsShowingAIScreen(false); setIsShowingFriendScreen(false)}} style={{backgroundColor: "white", borderRadius: 10, height: height * 0.15, width: width * 0.25, marginHorizontal: width * 0.025}}>
+          <Pressable onPress={() => {router.push("/UTTT/online")}} style={{backgroundColor: "white", borderRadius: 10, height: height * 0.15, width: width * 0.25, marginHorizontal: ((width/3) - width * 0.25)/2}}>
             <GlitchComponent fontSize={width * 0.04} text='PLAY ONLINE' animated={false} justifyText='center'height={height * 0.15} width={width * 0.25}/>
           </Pressable>
         </View>
         {/*AI*/}
         <View style={{position: "relative", width: width/3}}>
-          <Pressable onPress={() => {setIsShowingAIScreen(true); setIsShowingFriendScreen(false); setIsShowingOnlineScreen(false)}} style={{backgroundColor: "white", borderRadius: 10, width: width * 0.25, margin: "auto", height:  height * 0.15, justifyContent: "center", marginHorizontal: width * 0.025}}>
+          <Pressable onPress={() => {router.push("/UTTT/ai")}} style={{backgroundColor: "white", borderRadius: 10, width: width * 0.25, margin: "auto", height:  height * 0.15, justifyContent: "center", marginHorizontal: ((width/3) - width * 0.25)/2}}>
             <View style={{position: "relative"}}>
               <GlitchComponent fontSize={width * 0.04} text='PLAY AGAINST'animated={true}/>
               <Text style={{fontFamily: "Glitch", fontSize: width * 0.03, position: "relative", textAlign: "center", marginTop: width * 0.05, color: "green"}}>AI</Text>
@@ -147,19 +209,29 @@ export default function WelcomePage() {
           </Pressable>
         </View>
         <View style={{position: "relative", width: width/3}}>
-          <Pressable onPress={() => {setIsShowingFriendScreen(true); setIsShowingAIScreen(false); setIsShowingOnlineScreen(false)}} style={{backgroundColor: "white", borderRadius: 10, height: height * 0.15, width: width * 0.25, margin: "auto", marginHorizontal: width * 0.025}}>
+          <Pressable onPress={() => {router.push("/UTTT/friend")}} style={{backgroundColor: "white", borderRadius: 10, height: height * 0.15, width: width * 0.25, margin: "auto", marginHorizontal: ((width/3) - width * 0.25)/2}}>
             <GlitchComponent fontSize={width * 0.04} text='PLAY FRIEND' animated={false} justifyText='center'height={height * 0.15} width={width * 0.25}/>
           </Pressable>
         </View>
       </View>
+      <Pressable onPress={() => router.push("/UTTT/account")}>
+        <Text>Account</Text>
+      </Pressable>
       <View style={{alignContent: "center", alignItems: "center", justifyContent: "center", position: "absolute", width: width, height: height}} pointerEvents='box-none'>
-      { isShowingOnlineScreen ? 
-        <Online onClose={() => setIsShowingOnlineScreen(false)}/>:null
+      { (online) ? 
+        <Online onClose={() => router.push("/")}/>:null
       }
-      { (isShowingFriendScreen || isShowingAIScreen) ?
-        <StorageGames isFriend={isShowingFriendScreen} onClose={() => {setIsShowingAIScreen(false); setIsShowingFriendScreen(false)}}/>:null
+      { (gameType === "ai" || gameType === "friend") ?
+        <StorageGames isFriend={gameType === "friend"} onClose={() => {router.push("/")}}/>:null
+      }
+      { (gameType === "account") ?
+        <AccountPage />:null
       }
       </View>
     </View>
   )
+}
+
+export default function DefaultMainWelcomePage() {
+  return <WelcomePage online={false}/>
 }

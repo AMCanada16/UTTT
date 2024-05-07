@@ -1,38 +1,27 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { emptyGame } from '../Types';
-import store from '../Redux/store';
+import { emptyGame, gridStateMode } from '../Types';
 
-declare global{
-  type gameStorageType = {
-    gameType: string
-    gameState: string
-    lastPlayed: number
-    gameId: string
-    gameOver: boolean
-  }
-}
-
-export async function addGame(gameType: "Friend" | "AI", gameState?: DimentionalType): Promise<string> { //If game state is empty the empty game state will be used
+/**
+ * A function that creates a storage game.
+ * @param gameType Storage Game Type.
+ * @returns The game id of the newly created game.
+ */
+export async function addGame(gameType: "ai"|"friend"): Promise<string> {
   try {
-    //Test
-    await AsyncStorage.removeItem('UTTT_Saves')
-    //Text
     const value = await AsyncStorage.getItem('UTTT_Saves');
-    var gameData: gameStorageType = {
-      gameType: gameType,
-      gameState: JSON.stringify((gameState) ? gameState:emptyGame),
-      lastPlayed: Date.now(),
-      gameId: Math.floor(1000000 + Math.random() * 9000000).toString(),
-      gameOver: false
-    }
     if (value !== null){
-      var data: Map<string, string> = JSON.parse(value)
+      var data: Map<string, string> = new Map()
+      const mapObject = JSON.parse(value)
+      for (const gameId in mapObject) {
+        if (!data.has(gameId)) {
+          data.set(gameId, mapObject[gameId])
+        }
+      }
       var randomId = Math.floor(1000000 + Math.random() * 9000000)
       var randIDExists = true
       var iterations = 0
       while (randIDExists){
-        console.log("This is result", data.get("YAS QUEEN"))
-        if (data.has(randomId.toString())){
+        if (!data.has(randomId.toString())) {
           randIDExists = false
         } else if (iterations >= 5000) {
           throw new Error("Could not find a empty game. Exceded game limit")
@@ -41,6 +30,15 @@ export async function addGame(gameType: "Friend" | "AI", gameState?: Dimentional
         }
         iterations++
       }
+      var gameData: GameType = {
+        currentTurn: gridStateMode.X,
+        date: new Date().toISOString(),
+        gameOver: false,
+        data: emptyGame,
+        selectedGrid: 0,
+        gameType,
+        gameId: randomId.toString()
+      }
       data.set(randomId.toString(), JSON.stringify(gameData))
       var obj = Object.fromEntries(data);
       var jsonString = JSON.stringify(obj);
@@ -48,7 +46,15 @@ export async function addGame(gameType: "Friend" | "AI", gameState?: Dimentional
       return randomId.toString()
     } else {
       const randomId = Math.floor(1000000 + Math.random() * 9000000)
-      gameData.gameId = randomId.toString()
+      var gameData: GameType = {
+        currentTurn: 0,
+        date: new Date().toISOString(),
+        gameOver: false,
+        data: emptyGame,
+        selectedGrid: 0,
+        gameType,
+        gameId: randomId.toString()
+      }
       const data = new Map([[randomId.toString(), JSON.stringify(gameData)]])
       var obj = Object.fromEntries(data);
       var jsonString = JSON.stringify(obj);
@@ -56,22 +62,19 @@ export async function addGame(gameType: "Friend" | "AI", gameState?: Dimentional
       return randomId.toString()
     }
   } catch (e) {
+    console.log(e)
     throw new Error("An Error Has Occured")
   }
 }
 
-export async function updateStorageGame(id: string, newState: DimentionalType) {
+export async function updateStorageGame(id: string, newState: GameType) {
   try{
     const value = await AsyncStorage.getItem('UTTT_Saves');
     if (value !== null){
       var data: Map<string, string> = new Map(Object.entries((JSON.parse(value))))
       if (data.has(id)){
-        const resultData: string = data.get(id)!
-        var jsonResult: gameStorageType  = JSON.parse(resultData)
-        jsonResult.gameState = JSON.stringify(newState)
-        jsonResult.lastPlayed = Date.now()
-        jsonResult.gameOver = store.getState().isGameOver
-        data.set(id, JSON.stringify(jsonResult))
+        const resultData: string = data.get(id)! 
+        data.set(id, JSON.stringify(newState))
         var obj = Object.fromEntries(data);
         var jsonString = JSON.stringify(obj);
         await AsyncStorage.mergeItem('UTTT_Saves', jsonString);
@@ -107,16 +110,15 @@ export async function deleteGame(id: string) {
   }
 }
 
-export async function getGames(gameType:  "Friend" | "AI"): Promise<gameStorageType[]> {
-  var result: gameStorageType[] = []
+export async function getStorageGames(gameType:  "ai" | "friend"): Promise<GameType[]> {
+  var result: GameType[] = []
   try{
     const value = await AsyncStorage.getItem('UTTT_Saves');
     console.log(value)
     if (value !== null){
       var data: Map<string, string> = new Map(Object.entries((JSON.parse(value))))
       data.forEach((gameData) => {
-        console.log("This is game data", gameData)
-        const parsedGameData: gameStorageType = JSON.parse(gameData)
+        const parsedGameData: GameType = JSON.parse(gameData)
         if (parsedGameData.gameType === gameType){
           result.push(parsedGameData)
         }
@@ -131,10 +133,9 @@ export async function getGames(gameType:  "Friend" | "AI"): Promise<gameStorageT
   return result
 }
 
-export async function loadStorageGame(id: string): Promise<gameStorageType>{
+export async function loadStorageGame(id: string): Promise<GameType>{
   try{
     const value = await AsyncStorage.getItem('UTTT_Saves');
-    console.log(value)
     if (value !== null){
       var data: Map<string, string> = new Map(Object.entries((JSON.parse(value))))
       if (data.has(id)){
