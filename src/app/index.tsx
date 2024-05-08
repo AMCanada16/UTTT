@@ -5,11 +5,11 @@
   Welcome.tsx
 */
 import { useEffect, useState } from "react";
-import { View, Text, TextInput, Pressable, FlatList } from "react-native";
+import { View, Text, TextInput, Pressable, FlatList, ActivityIndicator } from "react-native";
 import GlitchComponent from '../UI/GlitchComponent';
 import { createNewGame, getOnlineGames } from '../Functions/OnlineFunctions';
 import { addGame, getStorageGames } from "../Functions/StorageFunctions";
-import { emptyGame, gridStateMode } from "../Types";
+import { emptyGame, gridStateMode, loadingState } from "../Types";
 import { useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
 import { CloseIcon, GoogleIcon, SignInWithApple } from "../UI/Icons";
@@ -19,6 +19,7 @@ import OnlineAuthenticationComponent from "../UI/OnlineAuthenticationComponent";
 import AccountPage from "../UI/AccountPage";
 import useUsernameExists from "../hooks/useUsernameExists";
 import UsernameComponent from "../UI/AddUserComponent";
+import BottomComponent from "../UI/BottomComponent";
 
 function Online({onClose}:{onClose: () => void}){
   const router = useRouter()
@@ -64,7 +65,16 @@ function Online({onClose}:{onClose: () => void}){
     return <OnlineAuthenticationComponent onClose={onClose}/>
   }
 
-  if (!usernameExists) {
+  if (usernameExists === loadingState.loading) {
+    return (
+      <View style={{width: width * 0.8, height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
+        <ActivityIndicator />
+        <Text>Loading</Text>
+      </View>
+    )
+  }
+
+  if (usernameExists === loadingState.failed) {
     return <UsernameComponent onClose={onClose}/>
   }
 
@@ -176,15 +186,15 @@ export function WelcomePage({
   return(
     <View style={{backgroundColor: "#5E17EB", width: width, overflow: "hidden", height: height}}>
       <View style={{position: "relative", height: 150, marginLeft: "5%"}}>
-        <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: 150, position: "absolute"}}>ULTIMATE</Text>
-        <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: 150, color: "#00fffc", transform: [{translateX: -2}, {translateY: -1}], position: "absolute", zIndex: -1}}>ULTIMATE</Text>
-        <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: 150, color: "#fc00ff", transform: [{translateX: -2}, {translateY: 2}], position: "absolute", zIndex: -2}}>ULTIMATE</Text>
-        <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: 150, color: "#fffc00", transform: [{translateX: 1}, {translateY: 4}], position: "absolute", zIndex: -3}}>ULTIMATE</Text>
+        <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 560) ? 150:(width * 0.255), position: "absolute"}}>ULTIMATE</Text>
+        <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 560) ? 150:(width * 0.255), color: "#00fffc", transform: [{translateX: -2}, {translateY: -1}], position: "absolute", zIndex: -1}}>ULTIMATE</Text>
+        <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 560) ? 150:(width * 0.255), color: "#fc00ff", transform: [{translateX: -2}, {translateY: 2}], position: "absolute", zIndex: -2}}>ULTIMATE</Text>
+        <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 560) ? 150:(width * 0.255), color: "#fffc00", transform: [{translateX: 1}, {translateY: 4}], position: "absolute", zIndex: -3}}>ULTIMATE</Text>
       </View>
       <View style={{flexDirection: "row", marginLeft: "5%"}}>
-        <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: 50, color: "#ff9c9c", textShadowColor: "#FF5757", textShadowRadius: 25}}>TICK </Text>
-        <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: 50, color: "#a0f4f7", textShadowColor: "#5CE1E6", textShadowRadius: 25}}>TAC </Text>
-        <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: 50, color: "#ff9c9c", textShadowColor: "#FF5757", textShadowRadius: 25}}>TOE </Text>
+        <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: (width > 390) ? 50:(width * 0.13), color: "#ff9c9c", textShadowColor: "#FF5757", textShadowRadius: 25}}>TICK </Text>
+        <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: (width > 390) ? 50:(width * 0.13), color: "#a0f4f7", textShadowColor: "#5CE1E6", textShadowRadius: 25}}>TAC </Text>
+        <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: (width > 390) ? 50:(width * 0.13), color: "#ff9c9c", textShadowColor: "#FF5757", textShadowRadius: 25}}>TOE </Text>
       </View>
       <View>
         <Text style={{marginLeft: '5%', marginTop: 10, marginBottom: 10, color: 'white', marginRight: "5%"}}>Ultimate Tic Tac Toe takes tic tac toe to the next level. Battle it out with your friends or AI. Online gameplay is also avaliable.</Text>
@@ -192,31 +202,7 @@ export function WelcomePage({
           
         </View>
       </View>
-      <View style={{flexDirection: "row"}}>
-        {/*ONLINE*/}
-        <View style={{position: "relative", width: width/3}}>
-          <Pressable onPress={() => {router.push("/UTTT/online")}} style={{backgroundColor: "white", borderRadius: 10, height: height * 0.15, width: width * 0.25, marginHorizontal: ((width/3) - width * 0.25)/2}}>
-            <GlitchComponent fontSize={width * 0.04} text='PLAY ONLINE' animated={false} justifyText='center'height={height * 0.15} width={width * 0.25}/>
-          </Pressable>
-        </View>
-        {/*AI*/}
-        <View style={{position: "relative", width: width/3}}>
-          <Pressable onPress={() => {router.push("/UTTT/ai")}} style={{backgroundColor: "white", borderRadius: 10, width: width * 0.25, margin: "auto", height:  height * 0.15, justifyContent: "center", marginHorizontal: ((width/3) - width * 0.25)/2}}>
-            <View style={{position: "relative"}}>
-              <GlitchComponent fontSize={width * 0.04} text='PLAY AGAINST'animated={true}/>
-              <Text style={{fontFamily: "Glitch", fontSize: width * 0.03, position: "relative", textAlign: "center", marginTop: width * 0.05, color: "green"}}>AI</Text>
-            </View> 
-          </Pressable>
-        </View>
-        <View style={{position: "relative", width: width/3}}>
-          <Pressable onPress={() => {router.push("/UTTT/friend")}} style={{backgroundColor: "white", borderRadius: 10, height: height * 0.15, width: width * 0.25, margin: "auto", marginHorizontal: ((width/3) - width * 0.25)/2}}>
-            <GlitchComponent fontSize={width * 0.04} text='PLAY FRIEND' animated={false} justifyText='center'height={height * 0.15} width={width * 0.25}/>
-          </Pressable>
-        </View>
-      </View>
-      <Pressable onPress={() => router.push("/UTTT/account")}>
-        <Text>Account</Text>
-      </Pressable>
+      <BottomComponent />
       <View style={{alignContent: "center", alignItems: "center", justifyContent: "center", position: "absolute", width: width, height: height}} pointerEvents='box-none'>
       { (online) ? 
         <Online onClose={() => router.push("/")}/>:null

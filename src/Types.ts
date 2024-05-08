@@ -6,6 +6,13 @@ export enum gridStateMode{
   Full
 }
 
+export enum loadingState {
+  loading,
+  success,
+  failed,
+  exists
+}
+
 //Types
 declare global{
   type userType = compressedUserType & {

@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {Svg, Line} from "react-native-svg"
 import {View} from "react-native"
 
-export default function Striketrough({gridState, firstIndex, secondIndex}:{gridState: DimentionalType, width: number, height: number, firstIndex: number, secondIndex: number}) {
+/**
+ * A React Functional Component 
+ * @param gridState The 
+ * @returns 
+ */
+export default function Striketrough({gridState, firstIndex, secondIndex}:{gridState: DimentionalType, firstIndex: number, secondIndex: number}) {
   const [length, setLength] = useState<number>(0)
   const xOne = gridState.inner[firstIndex][secondIndex].active!.xOne
   const xTwo = gridState.inner[firstIndex][secondIndex].active!.xTwo

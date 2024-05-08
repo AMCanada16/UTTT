@@ -27,7 +27,8 @@ function App() {
     "RussoOne":require("../../assets/Fonts/RussoOne.ttf"),
     "Ultimate":require("../../assets/Fonts/Ultimate.ttf"),
     "BarlowCondensed":require("../../assets/Fonts/BarlowCondensed.ttf"),
-    "Glitch":require("../../assets/Fonts/Glitch.ttf")
+    "Glitch":require("../../assets/Fonts/Glitch.ttf"),
+    "Roboto":require("../../assets/Fonts/Roboto.ttf")
   });
 
   const onLayoutRootView = useCallback(async () => {

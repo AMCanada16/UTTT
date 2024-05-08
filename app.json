@@ -17,7 +17,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "Archimedes4.UTTT"
+      "bundleIdentifier": "Archimedes4.UTTT",
+      "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {
@@ -41,7 +42,8 @@
         {
           "fonts":["./assets/Fonts/RussoOne.ttf", "./assets/Fonts/Ultimate.ttf", "./assets/Fonts/BarlowCondensed.ttf", "./assets/Fonts/Glitch.ttf"]
         }
-      ]
+      ],
+      "expo-apple-authentication"
     ]
   }
 }

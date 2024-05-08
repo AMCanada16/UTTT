@@ -66,6 +66,22 @@ export function ChevronLeft({ width, height, style }: iconProps) {
   )
 }
 
+export function ChevronRight({ width, height, style }:iconProps) {
+  return (
+    <Svg
+      width={width}
+      height={height}
+      style={style}
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <G id="SVGRepo_iconCarrier">
+        <Path fill-rule="evenodd" clip-rule="evenodd" d="M8.29289 4.29289C8.68342 3.90237 9.31658 3.90237 9.70711 4.29289L16.7071 11.2929C17.0976 11.6834 17.0976 12.3166 16.7071 12.7071L9.70711 19.7071C9.31658 20.0976 8.68342 20.0976 8.29289 19.7071C7.90237 19.3166 7.90237 18.6834 8.29289 18.2929L14.5858 12L8.29289 5.70711C7.90237 5.31658 7.90237 4.68342 8.29289 4.29289Z" fill="#000000"/>
+      </G>
+    </Svg>
+  )
+}
+
 export function ResetIcon({ width, height, style }:iconProps) {
   return (
     <Svg width={width} height={height} style={style} viewBox="0 0 21 21" fill={"#000000"}>
@@ -148,4 +164,20 @@ export function PersonIcon({ width, height, style }: iconProps) {
       <Path d="M256,144c-19.72,0-37.55,7.39-50.22,20.82s-19,32-17.57,51.93C191.11,256,221.52,288,256,288s64.83-32,67.79-71.24c1.48-19.74-4.8-38.14-17.68-51.82C293.39,151.44,275.59,144,256,144Z" />
     </Svg>
   );
+}
+
+export function SignOutIcon({ width, height, style }: iconProps) {
+  return (
+    <Svg
+      width={width}
+      height={height}
+      style={style}
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <G id="SVGRepo_iconCarrier">
+        <Path fill-rule="evenodd" clip-rule="evenodd" d="M6 3C4.34315 3 3 4.34315 3 6V18C3 19.6569 4.34315 21 6 21H17C17.5523 21 18 20.5523 18 20C18 19.4477 17.5523 19 17 19H6C5.44772 19 5 18.5523 5 18V6C5 5.44772 5.44772 5 6 5H17C17.5523 5 18 4.55228 18 4C18 3.44772 17.5523 3 17 3H6ZM15.7071 7.29289C15.3166 6.90237 14.6834 6.90237 14.2929 7.29289C13.9024 7.68342 13.9024 8.31658 14.2929 8.70711L16.5858 11H8C7.44772 11 7 11.4477 7 12C7 12.5523 7.44772 13 8 13H16.5858L14.2929 15.2929C13.9024 15.6834 13.9024 16.3166 14.2929 16.7071C14.6834 17.0976 15.3166 17.0976 15.7071 16.7071L19.7071 12.7071C20.0976 12.3166 20.0976 11.6834 19.7071 11.2929L15.7071 7.29289Z" fill="#000000"/>
+      </G>
+    </Svg>
+  )
 }

@@ -1,3 +1,9 @@
+/*
+  UTTT
+  Andrew Mainella
+  PlayersPage.tsx
+  A page to show the players in a game.
+*/
 import { View, Text, Pressable, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'

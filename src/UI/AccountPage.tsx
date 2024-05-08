@@ -6,6 +6,8 @@ import { router } from 'expo-router'
 import { signOut } from '../Functions/AuthenticationFunctions'
 import { getUsername } from '../Functions/UserFunctions'
 import { auth } from '../Firebase/Firebase'
+import DefaultButton from './DefaultButton'
+import OnlineAuthenticationComponent from './OnlineAuthenticationComponent'
 
 function SignOutButton() {
   const [signOutLoading, setSignOutLoading] = useState<boolean>(false)
@@ -37,22 +39,19 @@ function SignOutButton() {
   }
 
   return (
-    <Pressable
+    <DefaultButton
       onPress={() => loadSignOut()}
-      style={{
-        backgroundColor: 'white',
-        borderRadius: 15,
-        padding: 5
-      }}
+      style={{marginBottom: 5}}
     >
       <Text>Sign Out</Text>
-    </Pressable>
+    </DefaultButton>
   )
 }
 
 export default function AccountPage() {
   const {height, width} = useSelector((state: RootState) => state.dimensions)
   const [username, setUsername] = useState<string>("");
+  const [isAuth, setIsAuth] = useState(false)
 
   async function loadUserData() {
     const uid = auth.currentUser?.uid
@@ -68,8 +67,27 @@ export default function AccountPage() {
     loadUserData()
   }, [])
 
+  useEffect(() =>{
+    const unlisten = auth.onAuthStateChanged(
+      authUser => {
+        if (authUser !== null) {
+          setIsAuth(true)
+        } else {
+          setIsAuth(false)
+        }
+      },
+    );
+    return () => {
+      unlisten();
+    }
+ }, []);
+
+  if (!isAuth) {
+    return <OnlineAuthenticationComponent onClose={() => {}}/>
+  }
+
   return (
-    <View style={{width: width * 0.8, backgroundColor: "rgba(255,255,255, 0.95)", height: height * 0.8, borderRadius: 25, padding: 10}}>
+    <View style={{width: width * (width <= 560 ? 0.95:0.8), backgroundColor: "rgba(255,255,255, 0.95)", height: height * 0.8, borderRadius: 25, padding: 10}}>
       <Pressable onPress={() => {
         router.push("/")
       }}>
@@ -77,14 +95,14 @@ export default function AccountPage() {
       </Pressable>
       <Text>Account Page</Text>
       <Text>Username: {username}</Text>
-      <Text>Stats</Text>
+      <Text>Online Stats</Text>
       <Text>Games Played</Text>
       <Text>Games Won</Text>
       <Text>Active Games</Text>
       <SignOutButton />
-      <Pressable>
-        <Text>Delete Account</Text>
-      </Pressable>
+      <DefaultButton style={{backgroundColor: "red"}}>
+        <Text style={{fontWeight: 'bold', color: 'white'}}>Delete Account</Text>
+      </DefaultButton>
     </View>
   )
 }

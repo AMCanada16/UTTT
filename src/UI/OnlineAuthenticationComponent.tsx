@@ -1,10 +1,16 @@
+/*
+  UTTT
+  Andrew Mainella
+  May 8, 2024
+  Authentication component used to play online games.
+*/
 import { View, Text, Pressable } from 'react-native'
 import React from 'react'
-import { CloseIcon, GoogleIcon, SignInWithApple } from './Icons'
+import { CloseIcon, GoogleIcon } from './Icons'
 import { useSelector } from 'react-redux'
 import { RootState } from '../Redux/store'
-import useRedirect from '../hooks/useRedirect'
-import { signInAnonymously, signInWithApple, signInWithGoogle } from '../Functions/AuthenticationFunctions'
+import { signInAnonymously, signInWithGoogle } from '../Functions/AuthenticationFunctions'
+import AppleAuthenticationButton from './AppleAuthenticationButton/index.native'
 
 export default function OnlineAuthenticationComponent({
   onClose
@@ -13,19 +19,12 @@ export default function OnlineAuthenticationComponent({
 }) {
   const {height, width} = useSelector((state: RootState) => state.dimensions)
   return (
-    <View style={{width: width * 0.8, height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
+    <View style={{width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
       <Pressable style={{marginTop: 25, marginLeft: 25}} onPress={() => {onClose()}}>
         <CloseIcon width={20} height={20}/>
       </Pressable>
       <Text>No User has sign in</Text>
-      <Pressable
-        style={{backgroundColor: "black", width: 210, height: 40, paddingHorizontal: 16.8, borderRadius: 6, marginHorizontal: ((width * 0.8) -210)/2}}
-        onPress={() => {
-          signInWithApple()
-        }}
-      >
-        <SignInWithApple width={176.4} height={40}/>
-      </Pressable>
+      <AppleAuthenticationButton />
       <Pressable 
         style={{
           backgroundColor: 'white',
@@ -33,7 +32,7 @@ export default function OnlineAuthenticationComponent({
           borderColor: "#747775",
           borderWidth: 1,
           height: 38,
-          width: 181.23,
+          width: 182,
           paddingHorizontal: 12,
           marginHorizontal: ((width * 0.8) -181.23)/2,
           marginTop: 5
@@ -42,7 +41,7 @@ export default function OnlineAuthenticationComponent({
           signInWithGoogle()
         }}
       >
-        <View style={{flexDirection: "row", alignItems: 'center'}}>
+        <View style={{flexDirection: "row", alignItems: 'center', height: 36}}>
           <GoogleIcon width={20} height={20} style={{marginRight: 14, height: 36}}/>
           <Text style={{textAlignVertical: 'center', fontSize: 14, fontFamily: 'Roboto'}}>Sign In With Google</Text>
         </View>
@@ -50,7 +49,7 @@ export default function OnlineAuthenticationComponent({
       <Pressable
         style={{
           backgroundColor: 'white',
-          borderRadius: 15,
+          borderRadius: 4,
           padding: 10,
           margin: 5,
           borderWidth: 1,

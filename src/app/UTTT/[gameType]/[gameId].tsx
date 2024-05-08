@@ -58,7 +58,7 @@ function InnerGame({firstIndex, secondIndex, root, game, gameLength}:{firstIndex
         </View>
       ))}
       {(game.data.inner[firstIndex][secondIndex].active) ? 
-        <Striketrough gridState={game.data} width={width} height={height} firstIndex={firstIndex} secondIndex={secondIndex} />:null
+        <Striketrough gridState={game.data} firstIndex={firstIndex} secondIndex={secondIndex} />:null
       }
       {(game.data.value[firstIndex][secondIndex] === gridStateMode.O || game.data.value[firstIndex][secondIndex] === gridStateMode.X) ? 
         <View style={styles.dimentionTileContainer}>

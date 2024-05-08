@@ -1,5 +1,6 @@
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { collection, doc, getDoc, setDoc, updateDoc, where, query, getCountFromServer } from "firebase/firestore";
 import { db } from "../Firebase/Firebase";
+import { loadingState } from "../Types";
 
 export async function getUsername(uid: string): Promise<string | undefined> {
   try {
@@ -34,5 +35,19 @@ export async function addUser(uid: string, username: string) {
     return true
   } catch {
     return false
+  }
+}
+
+export async function checkIfUsernameValid(username: string): Promise<loadingState> {
+  try {
+    const q = query(collection(db, "Users"), where("username", "==", username));
+    const snapshot = await getCountFromServer(q);
+    if (snapshot.data().count === 0) {
+      return loadingState.success
+    } else {
+      return loadingState.exists
+    }
+  } catch {
+    return loadingState.failed
   }
 }
