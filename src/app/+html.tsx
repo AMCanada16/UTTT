@@ -5,6 +5,7 @@ import type { PropsWithChildren } from 'react';
 // The contents of this function only run in Node.js environments and
 // do not have access to the DOM or browser APIs.
 export default function Root({ children }: PropsWithChildren) {
+  let host = 'https://'
   return (
     <html lang="en">
       <head>
@@ -39,11 +40,11 @@ export default function Root({ children }: PropsWithChildren) {
         <meta property="og:title" content="UTTT" />
         <meta
           property="og:description"
-          content="Pauly, an app for students by students. Built by the 2023-2024 Student Council."
+          content="Ultimate Tic Tac Toe. Tic Tac Toe made ultimate."
         />
         <meta
         property="og:image"
-        content={`${process.env.EXPO_PUBLIC_PAULYHOST}/Pauly-og-Image.png`}
+        content={`${host}/UTTT-og.png`}
         />
 
         {/* Twitter Meta Tags */}
@@ -51,11 +52,11 @@ export default function Root({ children }: PropsWithChildren) {
         <meta name="twitter:title" content="UTTT" />
         <meta
           name="twitter:description"
-          content="Pauly, an app for students by students. Built by the 2023-2024 Student Council."
+          content="Ultimate Tic Tac Toe. Tic Tac Toe made ultimate."
         />
         <meta
           name="twitter:image"
-          content={`${process.env.EXPO_PUBLIC_PAULYHOST}/Pauly-og-Image.png`}
+          content={`${host}/UTTT-og.png`}
         />
       </head>
       <body>{children}</body>

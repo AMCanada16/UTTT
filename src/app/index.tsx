@@ -6,13 +6,12 @@
 */
 import { useEffect, useState } from "react";
 import { View, Text, TextInput, Pressable, FlatList, ActivityIndicator } from "react-native";
-import GlitchComponent from '../UI/GlitchComponent';
 import { createNewGame, getOnlineGames } from '../Functions/OnlineFunctions';
 import { addGame, getStorageGames } from "../Functions/StorageFunctions";
 import { emptyGame, gridStateMode, loadingState } from "../Types";
 import { useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
-import { CloseIcon, GoogleIcon, SignInWithApple } from "../UI/Icons";
+import { CloseIcon } from "../UI/Icons";
 import { router, useGlobalSearchParams, useRouter } from "expo-router";
 import { auth } from "../Firebase/Firebase";
 import OnlineAuthenticationComponent from "../UI/OnlineAuthenticationComponent";
@@ -41,7 +40,9 @@ function Online({onClose}:{onClose: () => void}){
 
   async function loadGames() {
     const result = await getOnlineGames()
-    setGames(result)
+    if (result !== loadingState.failed) {
+      setGames(result)
+    }
   }
 
   useEffect(() =>{
@@ -67,7 +68,7 @@ function Online({onClose}:{onClose: () => void}){
 
   if (usernameExists === loadingState.loading) {
     return (
-      <View style={{width: width * 0.8, height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
+      <View style={{width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25, alignContent: 'center', alignItems: 'center', justifyContent: 'center'}}>
         <ActivityIndicator />
         <Text>Loading</Text>
       </View>
@@ -124,8 +125,6 @@ function Online({onClose}:{onClose: () => void}){
 
 function StorageGames({isFriend, onClose}:{isFriend: boolean, onClose: () => void}) {
   const router = useRouter();
-  const [gameId, setGameID] = useState<string>("")
-  const [loading, setLoading] = useState<boolean>(true)
   const [games, setGames] = useState<GameType[]>([])
   const {height, width} = useSelector((state: RootState) => state.dimensions)
 
@@ -153,7 +152,7 @@ function StorageGames({isFriend, onClose}:{isFriend: boolean, onClose: () => voi
   }
 
   return(
-    <View style={{width: width * 0.8, backgroundColor: "rgba(255,255,255, 0.95)", height: height * 0.8, borderRadius: 25}}>
+    <View style={{width: width * ((width <= 560) ? 0.95:0.8), backgroundColor: "rgba(255,255,255, 0.95)", height: height * 0.8, borderRadius: 25}}>
       <Pressable style={{marginTop: 25, marginLeft: 25}} onPress={() => {onClose()}}>
         <CloseIcon width={20} height={20}/>
       </Pressable>

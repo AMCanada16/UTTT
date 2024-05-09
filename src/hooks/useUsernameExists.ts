@@ -7,13 +7,6 @@ import { Unsubscribe, doc, onSnapshot } from "firebase/firestore";
 export default function useUsernameExists() {
   const [exists, setExists] = useState<loadingState>(loadingState.loading);
 
-  // useEffect(() => {
-  //   const unsub = 
-  // return () => {
-  //   unsub()
-  // }
-  // }, [])
-
   useEffect(() =>{
     let snap: undefined | Unsubscribe = undefined
     const unlisten = auth.onAuthStateChanged(

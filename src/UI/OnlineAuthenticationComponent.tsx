@@ -23,7 +23,7 @@ export default function OnlineAuthenticationComponent({
       <Pressable style={{marginTop: 25, marginLeft: 25}} onPress={() => {onClose()}}>
         <CloseIcon width={20} height={20}/>
       </Pressable>
-      <Text>No User has sign in</Text>
+      <Text style={{fontWeight: 'bold'}}>Login</Text>
       <AppleAuthenticationButton />
       <Pressable 
         style={{

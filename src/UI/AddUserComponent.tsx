@@ -1,6 +1,13 @@
+/*
+  UTTT
+  Andrew Mainella
+  8 May 2024
+  AddUserComponent.tsx
+  A react functional component to add a user.
+*/
 import { View, Text, Pressable, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { CloseIcon, SignOutIcon } from './Icons'
+import { ChevronRight, CloseIcon, SignOutIcon } from './Icons'
 import { useSelector } from 'react-redux'
 import { RootState } from '../Redux/store'
 import { addUser, checkIfUsernameValid } from '../Functions/UserFunctions'
@@ -9,6 +16,11 @@ import DefaultButton from './DefaultButton'
 import { signOut } from '../Functions/AuthenticationFunctions'
 import { loadingState } from '../Types'
 
+/**
+ * A function to add a username if the account doesn't have one
+ * @param onClose A function called when the user closes the component. This should hide the view
+ * @returns A react function
+ */
 export default function UsernameComponent({
   onClose
 }:{
@@ -31,15 +43,24 @@ export default function UsernameComponent({
   }, [username])
 
   return (
-    <View style={{width: width * 0.8, height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
+    <View style={{width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
       <Pressable style={{marginTop: 25, marginLeft: 25}} onPress={() => {onClose()}}>
         <CloseIcon width={20} height={20}/>
       </Pressable>
-      <Text>Your Account Needs a Username</Text>
-      <Text>Username</Text>
+      <Text style={{
+        fontWeight: "bold",
+        fontSize: 25,
+        textAlign: 'center'
+      }}>Your Account Needs a Username</Text>
+      <Text
+          style={{
+            marginLeft: 7.5
+          }}
+        >Username</Text>
       <TextInput 
         value={username}
         onChangeText={setUsername}
+        style={{height: 35, fontSize: 25, borderWidth: 1, borderColor: 'black', padding: 5, margin: 5, fontFamily: 'RussoOne'}}
       />
       <DefaultButton
         onPress={() => {
@@ -49,17 +70,21 @@ export default function UsernameComponent({
           }
         }}
         style={{
-          margin: 5
+          margin: 5,
+          flexDirection: 'row'
         }}
       >
         {usernameState === loadingState.loading ?
           <Text>The username needs to be longer than 2 characters</Text>:null
         }
         {usernameState === loadingState.success ?
-          <Text>Continue</Text>:null
+          <>
+            <Text style={{marginTop: 2}}>Continue</Text>
+            <ChevronRight width={20} height={20}/>
+          </>:null
         }
         {usernameState === loadingState.exists ?
-          <Text>Exists</Text>:null
+          <Text>The Username Already Exists</Text>:null
         }
          {usernameState === loadingState.failed ?
           <Text>Something has gone wrong, please try again later.</Text>:null
@@ -75,7 +100,7 @@ export default function UsernameComponent({
         }}
       >
         <SignOutIcon width={20} height={20}/>
-        <Text>Sign Out</Text>
+        <Text style={{textAlign: "center", justifyContent: 'center'}}>Sign Out</Text>
       </DefaultButton>
     </View>
   )

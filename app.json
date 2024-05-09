@@ -36,14 +36,14 @@
       }
     },
     "plugins": [
+      "expo-apple-authentication",
       "expo-router",
       [
         "expo-font",
         {
           "fonts":["./assets/Fonts/RussoOne.ttf", "./assets/Fonts/Ultimate.ttf", "./assets/Fonts/BarlowCondensed.ttf", "./assets/Fonts/Glitch.ttf"]
         }
-      ],
-      "expo-apple-authentication"
+      ]
     ]
   }
 }

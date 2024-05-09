@@ -1,3 +1,7 @@
+/*
+  UTTT
+  Andrew Mainella
+*/
 import { doc, onSnapshot } from "firebase/firestore"
 import { useEffect, useState } from "react"
 import { auth, db } from "../Firebase/Firebase"
@@ -7,6 +11,11 @@ import store, { RootState } from "../Redux/store"
 import { loadStorageGame } from "../Functions/StorageFunctions"
 import { gameSlice } from "../Redux/reducers/gameReducer"
 
+/**
+ * A hook
+ * @param gameId The id of the game to follow
+ * @returns 
+ */
 function useGameLocal(gameId: string) {
   const [game, setGame] = useState<GameType | undefined>(undefined)
   const cachedGame = useSelector((state: RootState) => state.gameState)

@@ -1,7 +1,16 @@
+/*
+  UTTT
+  Andrew Mainella
+*/
 import React, { useState } from 'react'
 import { View } from 'react-native'
 import TextAnimation from './TextAnimation'
 
+/**
+ * 
+ * @param param0 
+ * @returns 
+ */
 export default function BigTileTextAnimation({mode}:{mode: string}) {
   const [length, setLength] = useState<number>(100)
   return (

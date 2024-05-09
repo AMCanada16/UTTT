@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from 'react-native'
+import { View, Text, Pressable, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '../Redux/store'
@@ -8,6 +8,9 @@ import { getUsername } from '../Functions/UserFunctions'
 import { auth } from '../Firebase/Firebase'
 import DefaultButton from './DefaultButton'
 import OnlineAuthenticationComponent from './OnlineAuthenticationComponent'
+import { loadingState } from '../Types'
+import UsernameComponent from './AddUserComponent'
+import useUsernameExists from '../hooks/useUsernameExists'
 
 function SignOutButton() {
   const [signOutLoading, setSignOutLoading] = useState<boolean>(false)
@@ -52,6 +55,7 @@ export default function AccountPage() {
   const {height, width} = useSelector((state: RootState) => state.dimensions)
   const [username, setUsername] = useState<string>("");
   const [isAuth, setIsAuth] = useState(false)
+  const usernameExists = useUsernameExists()
 
   async function loadUserData() {
     const uid = auth.currentUser?.uid
@@ -86,6 +90,21 @@ export default function AccountPage() {
     return <OnlineAuthenticationComponent onClose={() => {}}/>
   }
 
+  if (usernameExists === loadingState.loading) {
+    return (
+      <View style={{width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25, alignContent: 'center', alignItems: 'center', justifyContent: 'center'}}>
+        <ActivityIndicator />
+        <Text>Loading</Text>
+      </View>
+    )
+  }
+
+  if (usernameExists === loadingState.failed) {
+    return <UsernameComponent onClose={() => {
+      router.push("/")
+    }}/>
+  }
+  
   return (
     <View style={{width: width * (width <= 560 ? 0.95:0.8), backgroundColor: "rgba(255,255,255, 0.95)", height: height * 0.8, borderRadius: 25, padding: 10}}>
       <Pressable onPress={() => {

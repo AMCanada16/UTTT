@@ -1,6 +1,12 @@
-import { db, auth } from '../Firebase/Firebase';
-import { signOut as signOutFirebase } from 'firebase/auth';
+/*
+  UTTT
+  Andrew Mainella
+  OnlineFunctions.ts
+  Online game functions.
+*/
+import { db } from '../Firebase/Firebase';
 import { collection, doc, getDocs, runTransaction, updateDoc } from "firebase/firestore"
+import { loadingState } from '../Types';
 
 enum gridStateMode{
   Open,
@@ -8,7 +14,11 @@ enum gridStateMode{
   O,
   Full
 }
-
+/**
+ * Converts the Dimentional type to multiple 1D arrays to be stored in firebase
+ * @param gameSate The Dimentional Type to convert
+ * @returns multiple 1D arrays
+ */
 export function getDatafromDimentionalGrid(gameSate: DimentionalType): {activeValues: number[], innerValues: number[], innerValueActive: {
   xOne: number;
   xTwo: number;
@@ -56,6 +66,13 @@ export function getDatafromDimentionalGrid(gameSate: DimentionalType): {activeVa
   }
 }
 
+/**
+ * Creates a new game online
+ * @param gameSate The current game, Dimentional Type
+ * @param playerMode The player mode assigned to the user uid.
+ * @param userUid The useruid of the player creating the game.
+ * @returns nothing on failure and the game id of the newly created game.
+ */
 export async function createNewGame(gameSate: DimentionalType, playerMode: gridStateMode, userUid: string): Promise<string | null> {
   var date = new Date();
   const randomId = Math.floor(1000000 + Math.random() * 9000000)
@@ -88,6 +105,10 @@ export async function createNewGame(gameSate: DimentionalType, playerMode: gridS
   return null
 }
 
+/**
+ * A function that updates an online game given a game type
+ * @param gameState the state of the current game
+ */
 export function updateGame(gameState: GameType){
   const firebaseData = getDatafromDimentionalGrid(gameState.data)
   updateDoc(doc(db, "Games", gameState.gameId), {
@@ -154,6 +175,12 @@ export function getDimentionalFromData(gameStateInner: number[], gameStateValueD
   return gameSate
 }
 
+/**
+ * A function to add the user to the players. Will fail if two players are already in the game
+ * @param gameId The id of the game to join
+ * @param currentUserId The uid of the joining user
+ * @returns a boolean on the result
+ */
 export async function joinGame(gameId: string, currentUserId: string): Promise<boolean> {
   let added = false
   try{
@@ -182,20 +209,28 @@ export async function joinGame(gameId: string, currentUserId: string): Promise<b
   return added
 }
 
-export async function getOnlineGames() {
-  let games: GameType[] = []
-  let result = await getDocs(collection(db, "Games"))
-  result.docs.forEach((e) => {
-    const data = e.data()
-    games.push({
-      currentTurn: data["currentTurn"],
-      date: data["date"],
-      gameOver: data["gameOver"],
-      data: getDimentionalFromData(data["gameStateInner"], data["gameStateValue"], data["gameStateActive"]),
-      selectedGrid: data["selectedGrid"],
-      gameType: data["gameType"],
-      gameId: data["gameId"]
+/**
+ * Gets the online tic tac toe games that are avaliable to the user
+ * @returns An array of games or a failed state
+ */
+export async function getOnlineGames(): Promise<GameType[] | loadingState.failed> {
+  try {
+    let games: GameType[] = []
+    let result = await getDocs(collection(db, "Games"))
+    result.docs.forEach((e) => {
+      const data = e.data()
+      games.push({
+        currentTurn: data["currentTurn"],
+        date: data["date"],
+        gameOver: data["gameOver"],
+        data: getDimentionalFromData(data["gameStateInner"], data["gameStateValue"], data["gameStateActive"]),
+        selectedGrid: data["selectedGrid"],
+        gameType: data["gameType"],
+        gameId: data["gameId"]
+      })
     })
-  })
-  return games
+    return games
+  } catch  {
+    return loadingState.failed
+  }
 }

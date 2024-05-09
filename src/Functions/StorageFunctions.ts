@@ -1,5 +1,12 @@
+/*
+  UTTT
+  Andrew Mainella
+  8 May 2024
+  StorageFunctions.ts
+  Storage functions for the games.
+*/
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { emptyGame, gridStateMode } from '../Types';
+import { emptyGame, gridStateMode, loadingState } from '../Types';
 
 /**
  * A function that creates a storage game.
@@ -89,27 +96,38 @@ export async function updateStorageGame(id: string, newState: GameType) {
   }
 }
 
-export async function deleteGame(id: string) {
+/**
+ * A function that deletes a game in local stoage
+ * @param gameId The id of the game to delete
+ * @returns The a loading state of the operation
+ */
+export async function deleteGame(gameId: string): Promise<loadingState> {
   try {
     const value = await AsyncStorage.getItem('UTTT_Saves');
     if (value !== null){
       var data: Map<string, string> =  new Map(Object.entries((JSON.parse(value))))
-      if (data.has(id)){
-        data.delete(id)
+      if (data.has(gameId)){
+        data.delete(gameId)
         var obj = Object.fromEntries(data);
         var jsonString = JSON.stringify(obj);
         await AsyncStorage.setItem('UTTT_Saves', jsonString);
+        return loadingState.success
       } else {
-        //TO DO throw error
+        return loadingState.failed
       }
     } else {
-      //TO DO throw error
+      return loadingState.failed
     }
   } catch(e) {
-  //TO DO handle/throw error
+    return loadingState.failed
   }
 }
 
+/**
+ * A function that get storage games based on the filter
+ * @param gameType A filter for the games
+ * @returns an array of games or an error
+ */
 export async function getStorageGames(gameType:  "ai" | "friend"): Promise<GameType[]> {
   var result: GameType[] = []
   try{

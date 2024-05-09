@@ -1,33 +1,47 @@
+/*
+  UTTT
+  Andrew Mainella
+  8 May 2024
+*/
 import { GoogleAuthProvider, signInWithRedirect, signInAnonymously as signInAnonymouslyFirebase, OAuthProvider, signOut as signOutFirebase } from "firebase/auth";
 import { auth, db } from "../Firebase/Firebase";
 import { deleteDoc, doc } from "firebase/firestore";
 import { deleteUser as deleteUserFirebase } from "firebase/auth";
 
+/**
+ * 
+ */
 export async function signInWithApple() {
   const provider = new OAuthProvider('apple.com');
   signInWithRedirect(auth, provider);
 }
 
+/**
+ * A function to call the redirect to sign in with google
+ */
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
   signInWithRedirect(auth, provider);
 }
 
+/**
+ * 
+ * @returns A boolean of the sucess
+ */
 export async function signInAnonymously() {
   try {
     await signInAnonymouslyFirebase(auth)
+    return true
   } catch {
-
+    return false
   }
 }
 
 export async function signOut(): Promise<boolean> {
   try {
     await signOutFirebase(auth)
-    console.log(auth, "HERE")
     return true
   } catch (error) {
-    console.log(error)
     return false
   }
 }

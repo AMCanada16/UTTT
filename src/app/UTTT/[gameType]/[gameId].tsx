@@ -24,7 +24,6 @@ import PlayersPage from "../../../UI/PlayersPage"
 
 //Renders root type
 function InnerGame({firstIndex, secondIndex, root, game, gameLength}:{firstIndex: number, secondIndex: number, root: RootType, game: GameType, gameLength: number}) {
-  const { height, width } = useSelector((state: RootState) => state.dimensions)
   return (
     <View key={"SecondCol" + firstIndex + " " + secondIndex} style={{
       width: gameLength * 0.32,

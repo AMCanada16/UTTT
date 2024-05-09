@@ -1,7 +1,16 @@
+/*
+  UTTT
+  Andrew Mainella
+*/
 import { collection, doc, getDoc, setDoc, updateDoc, where, query, getCountFromServer } from "firebase/firestore";
 import { db } from "../Firebase/Firebase";
 import { loadingState } from "../Types";
 
+/**
+ * Gets the username of a users provided the uid.
+ * @param uid The uid of the user to get
+ * @returns Returns a string if found and returns undefined if not found.
+ */
 export async function getUsername(uid: string): Promise<string | undefined> {
   try {
     const result = await getDoc(doc(db, "Users", uid))
@@ -16,7 +25,13 @@ export async function getUsername(uid: string): Promise<string | undefined> {
   }
 }
 
-export async function updateUsername(uid: string, username: string) {
+/**
+ * A function to update a user online.
+ * @param uid The uid of the user to update
+ * @param username The new username of the user
+ * @returns A boolean of wheater it succeded. Returns true if success.
+ */
+export async function updateUsername(uid: string, username: string): Promise<boolean> {
   try {
     await updateDoc(doc(db, "Users", uid), {
       username: username
@@ -27,7 +42,13 @@ export async function updateUsername(uid: string, username: string) {
   }
 }
 
-export async function addUser(uid: string, username: string) {
+/**
+ * A function to add a user online.
+ * @param uid The uid of user to add
+ * @param username The username of the user to add
+ * @returns A boolean of wheater it succeded. Returns true if success.
+ */
+export async function addUser(uid: string, username: string): Promise<boolean> {
   try {
     await setDoc(doc(db, "Users", uid), {
       username: username
@@ -38,6 +59,11 @@ export async function addUser(uid: string, username: string) {
   }
 }
 
+/**
+ * Check if the username exits from some other user.
+ * @param username The username to check
+ * @returns Returns a loadingState if it exists.
+ */
 export async function checkIfUsernameValid(username: string): Promise<loadingState> {
   try {
     const q = query(collection(db, "Users"), where("username", "==", username));
