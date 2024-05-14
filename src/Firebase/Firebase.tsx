@@ -1,14 +1,7 @@
-// Import the functions you need from the SDKs you need
 import {initializeApp, getApp, getApps } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth"
-// import setupAppCheck from "./FirebaseAppCheck";
-// import { firebase } from "@react-native-firebase/app-check";
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
+import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCCAWNKF8eHsynUew6iUSbj1RVW4IjTk8Q",
@@ -27,22 +20,9 @@ if (getApps.length === 0) {
 } else {
   app = getApp()
 }
-// setupAppCheck(app)
 
 const auth = getAuth();
 const db = getFirestore(app)
+const database = getDatabase();
 
-// async function check() {
-//   try {
-//     const { token } = await firebase.appCheck().getToken(true);
-  
-//     if (token.length > 0) {
-//       console.log('AppCheck verification passed');
-//     }
-//   } catch (error) {
-//     console.log('AppCheck verification failed');
-//   }
-// }
-// check()
-
-export { db, auth };
+export { db, auth, database };

@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { View, Text, TextInput, Pressable, FlatList, ActivityIndicator } from "react-native";
 import { createNewGame, getOnlineGames } from '../Functions/OnlineFunctions';
 import { addGame, getStorageGames } from "../Functions/StorageFunctions";
-import { emptyGame, gridStateMode, loadingState } from "../Types";
+import { emptyGame, gridStateMode, joinRulesArray, loadingState } from "../Types";
 import { useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
 import { CloseIcon } from "../UI/Icons";
@@ -19,6 +19,10 @@ import AccountPage from "../UI/AccountPage";
 import useUsernameExists from "../hooks/useUsernameExists";
 import UsernameComponent from "../UI/AddUserComponent";
 import BottomComponent from "../UI/BottomComponent";
+import DefaultButton from "../UI/DefaultButton";
+import FriendsPage from "../UI/FriendsPage";
+import SegmentedControl from "@react-native-segmented-control/segmented-control";
+import { getFriends } from "../Functions/UserFunctions";
 
 function Online({onClose}:{onClose: () => void}){
   const router = useRouter()
@@ -27,6 +31,7 @@ function Online({onClose}:{onClose: () => void}){
   const [games, setGames] = useState<GameType[]>([])
   const [isAuth, setIsAuth] = useState(false)
   const usernameExists = useUsernameExists()
+  const [searchMode, setSearchMode] = useState<joinRules>("public")
 
   async function createNew() {
     const uid = auth.currentUser?.uid
@@ -39,11 +44,27 @@ function Online({onClose}:{onClose: () => void}){
   }
 
   async function loadGames() {
-    const result = await getOnlineGames()
+    let uid = auth.currentUser?.uid
+    let currentFriends: string[] = []
+    if (searchMode === "friends") {
+      if (uid === undefined) {
+        return
+      }
+      const friendResult = await getFriends(uid)
+      if (friendResult !== undefined) {
+        currentFriends = friendResult.friends
+      }
+    }
+    const result = await getOnlineGames(searchMode, currentFriends)
+    console.log(result)
     if (result !== loadingState.failed) {
       setGames(result)
     }
   }
+
+  useEffect(() => {
+    loadGames()
+  }, [searchMode])
 
   useEffect(() =>{
     const unlisten = auth.onAuthStateChanged(
@@ -80,44 +101,90 @@ function Online({onClose}:{onClose: () => void}){
   }
 
   return(
-    <View style={{width: width * 0.8, height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
+    <View style={{width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
       <Pressable style={{marginTop: 25, marginLeft: 25}} onPress={() => {onClose()}}>
         <CloseIcon width={20} height={20}/>
       </Pressable>
-      <Text style={{marginLeft: 'auto', marginRight: 'auto', marginTop: 2}}>Load Game</Text>
-      <TextInput onChangeText={(e) => {setGameID(e)}} value={gameId}/>
+      <Text style={{textAlign: 'center', fontWeight: 'bold', marginTop: 2, fontSize: 25}}>Load Game</Text>
+      <TextInput
+        onChangeText={(e) => {
+          if (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ""].includes(e.charAt(e.length - 1))) {
+            setGameID(e)
+          }
+        }}
+        value={gameId}
+        style={{
+          borderWidth: 1,
+          borderRadius: 4,
+          borderColor: 'black',
+          marginHorizontal: 5,
+          fontSize: 16,
+          padding: 15,
+          backgroundColor: 'white',
+          marginBottom: 5,
+          marginTop: 15
+        }}
+        placeholder="Game ID"
+      />
+      <SegmentedControl
+        values={['All', 'Friends', 'Invitation']}
+        selectedIndex={joinRulesArray.indexOf(searchMode)}
+        onChange={(e) => {
+          if (e.nativeEvent.selectedSegmentIndex === 0) {
+            setSearchMode('public')
+          } else if (e.nativeEvent.selectedSegmentIndex === 1) {
+            setSearchMode('friends')
+          } else {
+            setSearchMode('invitation')
+          }
+        }}
+        style={{margin: 5, marginBottom: 10, borderWidth: 1, borderColor: 'black'}}
+      />
       <FlatList
         data={games}
         renderItem={(game) => (
-          <Pressable
-            style={{
-              marginHorizontal: 15,
-              backgroundColor: '#d3d3d350',
-              padding: 10,
-              borderRadius: 15,
-              flexDirection: 'row',
-              marginBottom: 7.5
-            }}  
+          <DefaultButton
+            style={{margin: 5, flexDirection: 'row'}}
             onPress={() => {
               router.push("/UTTT/online/" + game.item.gameId)
             }}
           >
             <Text style={{marginRight: 5}}>{game.item.gameId}</Text>
-            <Text>{game.item.date}</Text>
-          </Pressable>
+            <Text>{new Date(game.item.date).toLocaleString('en-CA', {
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric'
+            })}</Text>
+          </DefaultButton>
         )}
       />
       <View style={{flexDirection: 'row', marginBottom: 15}}>
-        <Pressable onPress={() => {
-          if (/^\d{7}$/.test(gameId)){
-            router.push("/UTTT/online/"+gameId)
-          }
-        }} style={{marginLeft: 'auto', marginRight: 'auto', borderRadius: 15, backgroundColor: 'blue', width: width * 0.25}}>
-          <Text style={{margin: 10, color: 'white', textAlign: 'center'}}>Load</Text>
-        </Pressable>
-        <Pressable onPress={() => createNew()} style={{marginLeft: 'auto', marginRight: 'auto', borderRadius: 15, backgroundColor: 'blue', width: width * 0.25}}>
-          <Text style={{margin: 10, color: 'white', textAlign: 'center'}}>Create New</Text>
-        </Pressable>
+        <DefaultButton
+          onPress={() => {
+            if (/^\d{7}$/.test(gameId)){
+              router.push("/UTTT/online/"+gameId)
+            }
+          }}
+          style={{
+            margin: 5,
+            marginBottom: 15,
+            width: width * (width <= 560 ? 0.45:0.4) - 10
+          }}
+        >
+          <Text>Load</Text>
+        </DefaultButton>
+        <DefaultButton
+          onPress={() => createNew()}
+          style={{
+            margin: 5,
+            marginBottom: 15,
+            width: width * (width <= 560 ? 0.45:0.4) - 10
+          }}
+        >
+          <Text>Create New</Text>
+        </DefaultButton>
       </View>
     </View>
   )
@@ -156,18 +223,40 @@ function StorageGames({isFriend, onClose}:{isFriend: boolean, onClose: () => voi
       <Pressable style={{marginTop: 25, marginLeft: 25}} onPress={() => {onClose()}}>
         <CloseIcon width={20} height={20}/>
       </Pressable>
-      <Text style={{marginTop: 2, marginLeft: 'auto', marginRight: 'auto'}}>Load Game</Text>
+      <Text style={{textAlign: 'center', fontWeight: 'bold', marginTop: 2, fontSize: 25}}>Load Game</Text>
       <FlatList
         data={games}
         renderItem={(game) => (
-          <Pressable key={game.item.gameId} style={{margin: 15, marginVertical: 5, backgroundColor: '#d3d3d350', padding: 10, borderRadius: 15}} onPress={() => {if (isFriend){router.push("/UTTT/friend/" + game.item.gameId)} else {router.push("/UTTT/ai/" + game.item.gameId)}}}>
-            <Text>{new Date(game.item.date).toString()}</Text>
-          </Pressable>
+          <DefaultButton
+            style={{margin: 5, flexDirection: 'row'}}
+            onPress={() => {
+              if (isFriend) {
+                router.push("/UTTT/friend/" + game.item.gameId)
+              } else {
+                router.push("/UTTT/ai/" + game.item.gameId)
+              }
+            }}
+          >
+            <Text style={{marginRight: 5}}>{game.item.gameId}</Text>
+            <Text>{new Date(game.item.date).toLocaleString('en-CA', {
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric'
+            })}</Text>
+          </DefaultButton>
         )}
       />
-      <Pressable onPress={() => createNew()} style={{marginLeft: 'auto', marginRight: 'auto', borderRadius: 15, backgroundColor: 'blue', marginBottom: 15}}>
-        <Text style={{margin: 10, color: 'white'}}>Create New</Text>
-      </Pressable>
+      <DefaultButton
+        onPress={() => createNew()}
+        style={{
+          margin: 5,
+          marginBottom: 15
+        }}
+      >
+        <Text>Create New</Text>
+      </DefaultButton>
     </View>
   )
 }
@@ -211,6 +300,9 @@ export function WelcomePage({
       }
       { (gameType === "account") ?
         <AccountPage />:null
+      }
+       { (gameType === "friends") ?
+        <FriendsPage />:null
       }
       </View>
     </View>

@@ -4,6 +4,7 @@
 */
 import store from "../Redux/store"
 import { gridStateMode } from "../Types"
+import { perdictMoveGame } from "./Ai";
 import { setCurrentTurn, setGridState, setIsGameOver, setSelectedGrid } from "./gameActions";
 
 function setGameTile(original: DimentionalType, firstIndex: number, secondIndex: number, thirdIndex: number, forthIndex: number, currentTurn: gridStateMode) {
@@ -102,6 +103,7 @@ export function TileButtonPress(
   secondIndex: number,
   thirdIndex: number, 
   forthIndex: number,
+  ai?: boolean
 ) {
   const onlineGameId = (store.getState().gameState.gameType === 'online') ? store.getState().gameState.gameId:undefined
   const playerMode = store.getState().gameState.currentTurn
@@ -144,6 +146,7 @@ export function TileButtonPress(
         break
       }
     }
+    console.log(newGridState)
     for(var index = 0; index < 3; index++){//Check Vertical
       if (newGridState.inner[firstIndex][secondIndex].value[index][forthIndex] === playerMode) {
         if (index === 2){
@@ -247,5 +250,11 @@ export function TileButtonPress(
     setCurrentTurn(gridStateMode.X, onlineGameId)
   } else if (playerMode === gridStateMode.X) {
     setCurrentTurn(gridStateMode.O, onlineGameId)
+  }
+
+  if (store.getState().gameState.gameType === 'ai' && ai !== true) {
+    console.log("HERE")
+    console.log(store.getState().gameState)
+    perdictMoveGame(store.getState().gameState)
   }
 }

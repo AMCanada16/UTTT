@@ -69,30 +69,31 @@ export async function addGame(gameType: "ai"|"friend"): Promise<string> {
       return randomId.toString()
     }
   } catch (e) {
-    console.log(e)
     throw new Error("An Error Has Occured")
   }
 }
 
-export async function updateStorageGame(id: string, newState: GameType) {
+/**
+ * A function to update a local game.
+ * @param game A AI or Friend Game
+ * @returns A loading state based on the result of the operation.
+ */
+export async function updateStorageGame(game: GameType): Promise<loadingState> {
   try{
     const value = await AsyncStorage.getItem('UTTT_Saves');
     if (value !== null){
       var data: Map<string, string> = new Map(Object.entries((JSON.parse(value))))
-      if (data.has(id)){
-        const resultData: string = data.get(id)! 
-        data.set(id, JSON.stringify(newState))
+      if (data.has(game.gameId)){
+        data.set(game.gameId, JSON.stringify(game))
         var obj = Object.fromEntries(data);
         var jsonString = JSON.stringify(obj);
         await AsyncStorage.mergeItem('UTTT_Saves', jsonString);
-      } else {
-        //TO DO throw error
+        return loadingState.success
       }
-    } else {
-      //TO DO throw error
     }
+    return loadingState.failed
   } catch {
-    //TO DO handle/throw error
+    return loadingState.failed
   }
 }
 
@@ -132,7 +133,6 @@ export async function getStorageGames(gameType:  "ai" | "friend"): Promise<GameT
   var result: GameType[] = []
   try{
     const value = await AsyncStorage.getItem('UTTT_Saves');
-    console.log(value)
     if (value !== null){
       var data: Map<string, string> = new Map(Object.entries((JSON.parse(value))))
       data.forEach((gameData) => {

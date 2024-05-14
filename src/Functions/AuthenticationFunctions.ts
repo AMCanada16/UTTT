@@ -4,9 +4,10 @@
   8 May 2024
 */
 import { GoogleAuthProvider, signInWithRedirect, signInAnonymously as signInAnonymouslyFirebase, OAuthProvider, signOut as signOutFirebase } from "firebase/auth";
-import { auth, db } from "../Firebase/Firebase";
+import { auth, database, db } from "../Firebase/Firebase";
 import { deleteDoc, doc } from "firebase/firestore";
 import { deleteUser as deleteUserFirebase } from "firebase/auth";
+import { ref, remove } from "firebase/database"
 
 /**
  * 
@@ -51,11 +52,12 @@ export async function deleteUser(): Promise<boolean> {
     const user = auth.currentUser
     if (user !== null) {
       await deleteDoc(doc(db, "Users", user.uid))
+      await remove(ref(database, `/status/${user.uid}`))
       await deleteUserFirebase(user)
       return true
     }
     return false
-  } catch {
+  } catch (e) {
     return false
   }
 }

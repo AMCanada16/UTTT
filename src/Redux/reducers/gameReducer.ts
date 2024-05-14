@@ -32,7 +32,11 @@ export const gameSlice = createSlice({
           selectedGrid: action.payload,
           gameType: state.gameType,
           gameId: state.gameId,
-          users: state.users
+          users: state.users,
+          joinRule: state.joinRule,
+          userWon: state.userWon,
+          invitations: state.invitations,
+          owner: state.owner
         }
       }
       return {
@@ -56,7 +60,11 @@ export const gameSlice = createSlice({
           selectedGrid: state.selectedGrid,
           gameType: state.gameType,
           gameId: state.gameId,
-          users: state.users
+          users: state.users,
+          joinRule: state.joinRule,
+          userWon: state.userWon,
+          invitations: state.invitations,
+          owner: state.owner
         }
       }
       return {
@@ -79,7 +87,11 @@ export const gameSlice = createSlice({
           selectedGrid: state.selectedGrid,
           gameType: state.gameType,
           gameId: state.gameId,
-          users: state.users
+          users: state.users,
+          userWon: state.userWon,
+          joinRule: state.joinRule,
+          invitations: state.invitations,
+          owner: state.owner
         }
       }
       return {
@@ -103,7 +115,11 @@ export const gameSlice = createSlice({
           selectedGrid: state.selectedGrid,
           gameType: state.gameType,
           gameId: state.gameId,
-          users: state.users
+          users: state.users,
+          joinRule: state.joinRule,
+          userWon: state.userWon,
+          invitations: state.invitations,
+          owner: state.owner
         }
       }
       return {

@@ -6,7 +6,7 @@
 import { doc, updateDoc } from "firebase/firestore";
 import { gameSlice } from "../Redux/reducers/gameReducer";
 import store from "../Redux/store";
-import { db } from "../Firebase/Firebase";
+import { auth, db } from "../Firebase/Firebase";
 import { gridStateMode } from "../Types";
 import { getDatafromDimentionalGrid } from "./OnlineFunctions";
 
@@ -33,10 +33,19 @@ export function setSelectedGrid(selectedGrid: number, gameId?: string) {
  * @param gameId The id of the *ONLINE* game. Only pass for online.
  */
 export function setIsGameOver(isGameOver: boolean, gameId?: string) {
+  //TODO error
   if (gameId !== undefined) {
-    updateDoc(doc(db, "Games", gameId), {
-      gameOver: isGameOver
-    })
+    let uid = auth.currentUser?.uid
+    if (isGameOver === true && uid !== undefined) {
+      updateDoc(doc(db, "Games", gameId), {
+        gameOver: isGameOver,
+        userWon: uid
+      })
+    } else {
+      updateDoc(doc(db, "Games", gameId), {
+        gameOver: isGameOver,
+      })
+    }
   } else {
     store.dispatch(gameSlice.actions.setIsGameOver(isGameOver))
   }

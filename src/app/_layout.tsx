@@ -13,6 +13,7 @@ import {Provider, useSelector} from "react-redux"
 import { Slot, SplashScreen } from 'expo-router';
 import { useFonts } from 'expo-font';
 import Head from "expo-router/head"
+import useShareStatus from '../hooks/useShareStatus';
 
 /**
  * The Main Component for the app that loads fonts and handels dimensions
@@ -20,11 +21,11 @@ import Head from "expo-router/head"
  */
 function App() {
   const dimensions = useWindowDimensions()
+  useShareStatus()
 
   const {height, width} = useSelector((state: RootState) => state.dimensions)
 
   useEffect(() => {
-    console.log(dimensions)
     if (dimensions.height !== height) {
       store.dispatch(dimensionsSlice.actions.setHeight(dimensions.height))
     }

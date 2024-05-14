@@ -21,6 +21,7 @@ import useGame from "../../../hooks/useGame"
 import { setCurrentTurn, setGridState, setIsGameOver, setSelectedGrid } from "../../../Functions/gameActions"
 import { auth } from "../../../Firebase/Firebase"
 import PlayersPage from "../../../UI/PlayersPage"
+import GameOverComponent from "../../../UI/GameOverComponent"
 
 //Renders root type
 function InnerGame({firstIndex, secondIndex, root, game, gameLength}:{firstIndex: number, secondIndex: number, root: RootType, game: GameType, gameLength: number}) {
@@ -121,7 +122,7 @@ export default function UltimateTicTacToe() {
     } else if ((gameType === "friend" || gameType === "ai") && game !== undefined){
       setGridState(emptyGame)
       setIsGameOver(false)
-      updateStorageGame(game?.gameId, {
+      updateStorageGame({
         ...game,
         selectedGrid: 0,
         currentTurn: gridStateMode.X,
@@ -187,23 +188,18 @@ export default function UltimateTicTacToe() {
           <ResetIcon width={16} height={16}/>
           <Text style={{marginLeft: 2}}>Reset</Text>
         </Pressable>
-        <Pressable onPress={() => setIsShowingPlayers(true)} style={{flexDirection: 'row', backgroundColor: 'white', borderRadius: 15, padding: 10, marginTop: 5, marginLeft: 5}}>
-          <PersonIcon width={16} height={16}/>
-          <Text style={{marginLeft: 2}}>Players</Text>
-        </Pressable>
+        {(game.gameType === 'online') ?
+          <Pressable onPress={() => setIsShowingPlayers(true)} style={{flexDirection: 'row', backgroundColor: 'white', borderRadius: 15, padding: 10, marginTop: 5, marginLeft: 5}}>
+            <PersonIcon width={16} height={16}/>
+            <Text style={{marginLeft: 2}}>Players</Text>
+          </Pressable>:null
+        }
       </View>
       { game.gameOver ?
-        <View style={{position: 'absolute', width: width * 0.8, height: height * 0.8, top: 'auto', bottom: 'auto', left: 'auto', right: 'auto', backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
-          <Text style={{margin: 10, fontSize: height * 0.2, fontFamily: "Ultimate"}}>Game Over</Text>
-          <Pressable onPress={() => {
-            router.push('/')
-          }}>
-            <Text>Back</Text>
-          </Pressable>
-        </View>:null
+        <GameOverComponent />:null
       }
-      { (isShowingPlayers && game.gameType === 'online')?
-        <PlayersPage accounts={game.users}/>:null
+      { (game.gameType === 'online' && (isShowingPlayers || game.users.length < 2))?
+        <PlayersPage accounts={game.users} onClose={() => {setIsShowingPlayers(false)}}/>:null
       }
     </View>
   )

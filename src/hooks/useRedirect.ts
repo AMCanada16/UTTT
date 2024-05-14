@@ -21,7 +21,8 @@ export default function useRedirect() {
         router.push("/")
       }
       setIsLoading(false)
-    } catch {
+    } catch (error) {
+      console.log(error)
       setIsLoading(false)
     }
   }

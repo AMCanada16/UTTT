@@ -10,27 +10,49 @@ export enum loadingState {
   loading,
   success,
   failed,
-  exists
+  exists,
+  notStarted
 }
+
+export const joinRulesArray = ["public", "friends", "invitation"] as const
 
 //Types
 declare global{
-  type userType = compressedUserType & {
+  type gameUserType = compressedUserType & {
     username: string
+  }
+  type invitationUserType = {
+    uid: string;
+    username: string;
+    isFriend: boolean;
+  }
+  type friendType = {
+    username: string;
+    uid: string;
+    isFriend: boolean;
+    isRequested: boolean;
+    isRequesting: boolean;
   }
   type compressedUserType = {
     userId: string,
     player: gridStateMode
   }
+  type joinRules = typeof joinRulesArray[number]
   type gameTypes =  | {
     gameType: "online",
-    users: compressedUserType[]
+    users: compressedUserType[], // The first user is the owner 
+    joinRule: joinRules
+    invitations: string[]// An array of uids of who has been invited
+    owner: string
+    userWon?: string
   } | {
     gameType: "ai",
     users?: never
+    joinRule?: never
   } | {
     gameType: "friend",
     users?: never
+    joinRule?: never
   }
   type GameTypeBase = {
     currentTurn: gridStateMode,
@@ -61,6 +83,12 @@ declare global{
       yOne: number,
       yTwo: number
     }
+  }
+
+  type OnlineStatsType = {
+    gamesPlayed: number,
+    activeGames: number,
+    gamesWon: number
   }
 }
 

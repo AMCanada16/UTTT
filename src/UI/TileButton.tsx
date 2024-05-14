@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react"
-import { StyleSheet, Pressable } from "react-native"
+import { Pressable } from "react-native"
 import TextAnimation from "./TextAnimation"
 import { TileButtonPress } from "../Functions/TileButtonPress"
-import store, { RootState } from "../Redux/store"
-import { useSelector } from "react-redux"
+import store from "../Redux/store"
 import { auth } from "../Firebase/Firebase"
 
 enum gridStateMode{
@@ -45,6 +44,7 @@ function useCheckIfFilled(
 ) {
   const [filled, setFilled] = useState<boolean>(false)
   useEffect(() => {
+    setFilled(checkIfFilled(firstIndex, secondIndex, thirdIndex, forthIndex))
     const unsubscribe = store.subscribe(() => {
       setFilled(checkIfFilled(firstIndex, secondIndex, thirdIndex, forthIndex))
     })

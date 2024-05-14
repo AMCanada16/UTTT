@@ -11,7 +11,6 @@ export default function useUsernameExists() {
     let snap: undefined | Unsubscribe = undefined
     const unlisten = auth.onAuthStateChanged(
       async authUser => {
-        console.log(authUser)
         if (authUser !== null) {
           const usernameResult = await getUsername(authUser.uid)
           if (usernameResult !== undefined) {

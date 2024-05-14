@@ -1,8 +1,9 @@
+import { doc, runTransaction } from 'firebase/firestore';
 /*
   UTTT
   Andrew Mainella
 */
-import { collection, doc, getDoc, setDoc, updateDoc, where, query, getCountFromServer } from "firebase/firestore";
+import { collection, getDoc, setDoc, updateDoc, where, query, getCountFromServer, getDocs } from "firebase/firestore";
 import { db } from "../Firebase/Firebase";
 import { loadingState } from "../Types";
 
@@ -43,15 +44,36 @@ export async function updateUsername(uid: string, username: string): Promise<boo
 }
 
 /**
+ * A function to update a user online.
+ * @param uid The uid of the user to update
+ * @param isPublic The new isPublic Value of the user
+ * @returns A boolean of wheater it succeded. Returns true if success.
+ */
+export async function updatePublic(uid: string, isPublic: string): Promise<boolean> {
+  try {
+    await updateDoc(doc(db, "Users", uid), {
+      isPublic: isPublic
+    })
+    return true
+  } catch {
+    return false
+  }
+}
+
+/**
  * A function to add a user online.
  * @param uid The uid of user to add
  * @param username The username of the user to add
+ * @param isPublic If the users account is public
  * @returns A boolean of wheater it succeded. Returns true if success.
  */
-export async function addUser(uid: string, username: string): Promise<boolean> {
+export async function addUser(uid: string, username: string, isPublic: boolean): Promise<boolean> {
   try {
     await setDoc(doc(db, "Users", uid), {
-      username: username
+      username,
+      isPublic,
+      friends: [],
+      requests: []
     })
     return true
   } catch {
@@ -73,6 +95,119 @@ export async function checkIfUsernameValid(username: string): Promise<loadingSta
     } else {
       return loadingState.exists
     }
+  } catch {
+    return loadingState.failed
+  }
+}
+
+export async function getFriends(uid: string): Promise<{
+  friends: string[],
+  requests: string[]
+} | undefined> {
+  try {
+    const result = await getDoc(doc(db, "Users", uid))
+    if (result.exists()) {
+      const data = result.data()
+      return {
+        friends: data.friends,
+        requests: data.requests
+      }
+    } else {
+      return undefined
+    }
+  } catch {
+    return undefined
+  }
+}
+
+export async function approveFriendRequest(uid: string, approveUid: string) {
+  try {
+    await runTransaction(db, async (transaction) => {
+      const usersRequestsResult = await transaction.get(doc(db, "Users", uid))
+      if (usersRequestsResult.exists()) {
+        let userRequests = [...usersRequestsResult.data().requests]
+        userRequests = userRequests.filter((e) => {
+          if (e !== approveUid) {
+            return e
+          }
+        })
+        let usersFriends = [...usersRequestsResult.data().friends]
+        usersFriends.push(approveUid)
+
+        const appoveUserResult = await transaction.get(doc(db, "Users", approveUid))
+        if (appoveUserResult.exists()) {
+          let approveUserFriends = [...appoveUserResult.data().friends]
+          approveUserFriends.push(uid)
+
+          await transaction.update(doc(db, "Users", uid), {
+            friends: usersFriends,
+            requests: userRequests
+          })
+
+          await transaction.update(doc(db, "Users", approveUid), {
+            friends: approveUserFriends
+          })
+        }
+      } else {
+        return loadingState.failed
+      }
+    })
+    return loadingState.success
+  } catch (error) {
+    console.log("ERRROR", error)
+    return loadingState.failed
+  }
+}
+
+export async function requestFriend(uid: string, requestUid: string): Promise<loadingState> {
+  try {
+    await runTransaction(db, async (transaction) => {
+      const usersRequestsRequestsResult = await transaction.get(doc(db, "Users", requestUid))
+      if (usersRequestsRequestsResult.exists()) {
+        let userRequestRequests = [...usersRequestsRequestsResult.data().requests]
+        userRequestRequests.push(uid)
+        await transaction.update(doc(db, "Users", requestUid), {
+          requests: userRequestRequests
+        })
+      } else {
+        return loadingState.failed
+      }
+    })
+    return loadingState.success
+  } catch {
+    return loadingState.failed
+  }
+}
+
+export async function removeFriend(uid: string, removeUid: string) {
+  try {
+    await runTransaction(db, async (transaction) => {
+      const usersRequestsResult = await transaction.get(doc(db, "Users", uid))
+      if (usersRequestsResult.exists()) {
+        let usersFriends = [...usersRequestsResult.data().friends]
+        usersFriends = usersFriends.filter((e) => {
+          if (e !== removeUid) {
+            return e
+          }
+        })
+        await transaction.update(doc(db, "Users", uid), {
+          friends: usersFriends
+        })
+        const removeUserResult = await transaction.get(doc(db, "Users", removeUid))
+        if (removeUserResult.exists()) {
+          let removeUserFriends = [...removeUserResult.data().friends]
+          removeUserFriends = removeUserFriends.filter((e) => {
+            if (e !== uid) {
+              return e
+            }
+          })
+          await transaction.update(doc(db, "Users", removeUid), {
+            friends:removeUserFriends
+          })
+        }
+      }
+    })
+    return loadingState.success
   } catch {
     return loadingState.failed
   }

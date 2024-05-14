@@ -14,7 +14,7 @@ export default function AppleAuthenticationButton() {
       buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
       cornerRadius={5}
       style={{
-        width: width * 0.95 - 10,
+        width: (width * ((width <= 560) ? 0.95:0.8)) - 10,
         height: 40,
         marginHorizontal: 5
       }}
@@ -28,12 +28,9 @@ export default function AppleAuthenticationButton() {
               idToken: identityToken!,
               rawNonce: nonce
           });
-          console.log(credential)
           await signInWithCredential(auth, credential);
-          console.log("mark one reached")
           // signed in
         } catch (e) {
-          console.log("something went wrong", e)
           // if (e.code === 'ERR_REQUEST_CANCELED') {
           //   // handle that the user canceled the sign-in flow
           // } else {

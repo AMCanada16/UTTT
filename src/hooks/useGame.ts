@@ -8,7 +8,7 @@ import { auth, db } from "../Firebase/Firebase"
 import { getDimentionalFromData, joinGame } from "../Functions/OnlineFunctions"
 import { useSelector } from "react-redux"
 import store, { RootState } from "../Redux/store"
-import { loadStorageGame } from "../Functions/StorageFunctions"
+import { loadStorageGame, updateStorageGame } from "../Functions/StorageFunctions"
 import { gameSlice } from "../Redux/reducers/gameReducer"
 
 /**
@@ -30,6 +30,13 @@ function useGameLocal(gameId: string) {
   useEffect(() => {
     loadGame()
   }, [cachedGame, gameId])
+
+  useEffect(() => {
+    if (game !== undefined) {
+      updateStorageGame(game)
+    }
+  }, [game])
+
   return game
 }
 
@@ -47,7 +54,9 @@ function useGameOnline(gameId: string) {
           selectedGrid: data["selectedGrid"],
           gameType: "online",
           gameId: data["gameId"],
-          users: data["users"]
+          users: data["users"],
+          joinRule: data["joinRule"],
+          invitations: data["invitations"]
         }
         const uid = auth.currentUser?.uid
         if ((data["users"] as compressedUserType[]).some((e) => {return e.userId === uid}) === false && uid !== undefined){

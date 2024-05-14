@@ -4,22 +4,119 @@
   PlayersPage.tsx
   A page to show the players in a game.
 */
-import { View, Text, Pressable, FlatList } from 'react-native'
+import { View, Text, Pressable, FlatList, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { RootState } from '../Redux/store'
+import store, { RootState } from '../Redux/store'
 import { getUsername } from '../Functions/UserFunctions'
+import DefaultButton from './DefaultButton'
+import OnlineComponent from './OnlineComponent'
+import { CloseIcon, TrashIcon } from './Icons'
+import { auth, db } from '../Firebase/Firebase'
+import SegmentedControl from '@react-native-segmented-control/segmented-control'
+import { joinRulesArray } from '../Types'
+import { gameSlice } from '../Redux/reducers/gameReducer'
+import useInvitations from '../hooks/useInvitations'
+import { doc, updateDoc } from 'firebase/firestore'
+
+function Invitations() {
+  const [isInvitationModeFriends, setIsInvitationModeFriends] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>("")
+  const users = useInvitations(search, isInvitationModeFriends)
+  const game = useSelector((state: RootState) => state.gameState)
+
+  if (game.gameType !== "online") {
+    return null
+  }
+
+  return (
+    <View style={{
+      marginBottom: 15,
+      marginHorizontal: 5,
+      flex: 1
+    }}>
+      <Text style={{
+        fontWeight: 'bold',
+        fontSize: 20,
+        marginLeft: 5
+      }}>Invite Players</Text>
+      <SegmentedControl
+        values={['Friends', 'All']}
+        selectedIndex={isInvitationModeFriends ? 0:1}
+        onChange={(e) => {
+          if (e.nativeEvent.selectedSegmentIndex === 0) {
+            setIsInvitationModeFriends(true)
+          } else {
+            setIsInvitationModeFriends(false)
+          }
+        }}
+        style={{margin: 5, marginBottom: 10, borderWidth: 1, borderColor: 'black'}}
+      />
+      <TextInput
+        value={search}
+        onChangeText={setSearch}
+        style={{
+          backgroundColor: 'white',
+          borderWidth: 1,
+          borderColor: 'black',
+          marginBottom: 5,
+          padding: 5,
+          borderRadius: 5,
+          fontSize: 16
+        }}
+      />
+      <FlatList
+        data={users.users}
+        renderItem={(user) => (
+          <DefaultButton
+            style={{
+              flexDirection: 'row'
+            }}
+          >
+            <Text>{user.item.username}</Text>
+            {game.invitations.includes(user.item.uid) ?
+              <View style={{
+                marginLeft: 'auto'
+              }}>
+                <Text>Invitation Sent</Text>
+              </View>:
+              <Pressable
+                onPress={() => {
+                  updateDoc(doc(db, "Games", game.gameId), {
+                    invitations: [...game.invitations, user.item.uid]
+                  })
+                }}
+                style={{
+                  marginLeft: 'auto'
+                }}
+              >
+                <Text>Invite</Text>
+              </Pressable>
+            }
+          </DefaultButton>
+        )}
+        style={{
+          height: 6000
+        }}
+      />
+    </View>
+  )
+}
 
 export default function PlayersPage({
-  accounts
+  accounts,
+  onClose
 }:{
   accounts: compressedUserType[]
+  onClose: () => void
 }) {
   const {height, width} = useSelector((state: RootState) => state.dimensions)
-  let [players, setPlayers] = useState<userType[]>([])
+  let [players, setPlayers] = useState<gameUserType[]>([])
+  const joinRule = useSelector((state: RootState) => state.gameState.joinRule)
+  const gameId = useSelector((state: RootState) => state.gameState.gameId)
 
   async function loadUsers() {
-    let newPlayers: userType[] = []
+    let newPlayers: gameUserType[] = []
     for (let index = 0; index < accounts.length; index += 1) {
       let username = await getUsername(accounts[index].userId)
       if (username !== undefined) {
@@ -41,22 +138,81 @@ export default function PlayersPage({
     loadUsers()
   }, [])
 
+  if (joinRule === undefined) {
+    return (
+      <View>
+        <Text>Something Wrong</Text>
+      </View>
+    )
+  }
+
   return (
     <View style={{position: 'absolute', width: width * 0.8, height: height * 0.8, top: 'auto', bottom: 'auto', left: 'auto', right: 'auto', backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
+      {players.length >= 2 ?
+        <Pressable style={{marginTop: 25, marginLeft: 25}} onPress={() => {
+          onClose()
+        }}>
+          <CloseIcon width={30} height={30}/>
+        </Pressable>:null
+      }
       <Text
-        style={{margin: 10, fontSize: 80, fontFamily: "Ultimate", textAlign: 'center'}}
-      >Players Page</Text>
-      <FlatList
-        data={players}
-        renderItem={(player) => (
-          <View>
-            <Text>{player.item.username}</Text>
-          </View>
-        )}
+        style={{margin: 10, marginTop: 0, fontSize: 80, fontFamily: "Ultimate", textAlign: 'center'}}
+      >Players</Text>
+      <Text style={{marginLeft: 5}}>Game Open To...</Text>
+      <SegmentedControl
+        values={['Public', 'Friends', 'Invitation']}
+        selectedIndex={joinRulesArray.indexOf(joinRule)}
+        onChange={(e) => {
+          if (e.nativeEvent.selectedSegmentIndex === 0) {
+            updateDoc(doc(db, "Games", gameId), {
+              joinRule: 'public'
+            })
+          } else if (e.nativeEvent.selectedSegmentIndex === 1) {
+            updateDoc(doc(db, "Games", gameId), {
+              joinRule: 'friends'
+            })
+          } else {
+            updateDoc(doc(db, "Games", gameId), {
+              joinRule: 'invitation'
+            })
+          }
+        }}
+        style={{margin: 5, marginBottom: 10, borderWidth: 1, borderColor: 'black'}}
       />
-      <Pressable>
-        <Text>Back</Text>
-      </Pressable>
+      <View style={{
+        height: 90
+      }}>
+        <FlatList
+          data={players}
+          renderItem={(player) => (
+            <DefaultButton style={{
+              flexDirection: 'row',
+              marginHorizontal: 5,
+              marginBottom: 5
+            }}>
+              <Text style={{marginRight: 'auto'}}>{player.item.username}</Text>
+              {
+
+              }
+              {player.item.userId !== auth.currentUser?.uid ?
+                <OnlineComponent uid={player.item.userId}/>:<Text>You</Text>
+              }
+              {player.item.userId !== auth.currentUser?.uid && players[0].userId === auth.currentUser?.uid ?
+                <Pressable onPress={() => {
+                            
+                }}>
+                  <TrashIcon width={20} height={20}/>
+                </Pressable>:null
+              }
+            </DefaultButton>
+          )}
+          style={{
+            height: 90,
+            marginBottom: 0
+          }}
+        />
+      </View>
+      <Invitations />
     </View>
   )
 }
