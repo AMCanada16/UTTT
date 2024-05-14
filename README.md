@@ -10,3 +10,6 @@ React Native
 Storage
 Redux
 Redux Toolkit
+
+# Hosting
+Firebase
