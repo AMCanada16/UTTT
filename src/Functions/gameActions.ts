@@ -4,9 +4,9 @@
   25 April 2024
 */
 import { doc, updateDoc } from "firebase/firestore";
-import { gameSlice } from "../Redux/reducers/gameReducer";
-import store from "../Redux/store";
-import { auth, db } from "../Firebase/Firebase";
+import { gameSlice } from "../redux/reducers/gameReducer";
+import store from "../redux/store";
+import { auth, db } from "../firebase";
 import { gridStateMode } from "../Types";
 import { getDatafromDimentionalGrid } from "./OnlineFunctions";
 

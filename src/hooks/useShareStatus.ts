@@ -1,5 +1,5 @@
 import { onDisconnect, ref, set } from 'firebase/database';
-import { auth, database } from '../Firebase/Firebase';
+import { auth, database } from '../firebase';
 import { useEffect } from 'react';
 import { Timestamp } from 'firebase/firestore';
 

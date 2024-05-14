@@ -7,7 +7,7 @@ import { View, Text, ActivityIndicator } from 'react-native';
 import { Slot } from 'expo-router';
 import useRedirect from '../../hooks/useRedirect';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../Redux/store';
+import { RootState } from '../../redux/store';
 
 export default function AppContainer() {
   const isLoading = useRedirect()

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
 import { Pressable } from "react-native"
 import TextAnimation from "./TextAnimation"
-import { TileButtonPress } from "../Functions/TileButtonPress"
-import store from "../Redux/store"
-import { auth } from "../Firebase/Firebase"
+import { TileButtonPress } from "../functions/TileButtonPress"
+import store from "../redux/store"
+import { auth } from "../firebase"
 
 enum gridStateMode{
   Open,

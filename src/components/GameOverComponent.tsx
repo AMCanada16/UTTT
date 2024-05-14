@@ -2,7 +2,7 @@ import { View, Text, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import { router } from 'expo-router'
 import { useSelector } from 'react-redux'
-import { RootState } from '../Redux/store'
+import { RootState } from '../redux/store'
 
 export default function GameOverComponent() {
   const {height, width} = useSelector((state: RootState) => state.dimensions)

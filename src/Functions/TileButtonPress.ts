@@ -2,7 +2,7 @@
   UTTT
   Andrew Mainella
 */
-import store from "../Redux/store"
+import store from "../redux/store"
 import { gridStateMode } from "../Types"
 import { perdictMoveGame } from "./Ai";
 import { setCurrentTurn, setGridState, setIsGameOver, setSelectedGrid } from "./gameActions";

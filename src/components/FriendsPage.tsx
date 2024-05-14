@@ -1,10 +1,10 @@
 import { View, Text, Pressable, FlatList, ListRenderItemInfo, ActivityIndicator, TextInput, Platform } from 'react-native';
 import React, { useState } from 'react';
-import { auth } from '../Firebase/Firebase';
+import { auth } from '../firebase';
 import { Redirect, router } from 'expo-router';
 import { useSelector } from 'react-redux';
-import { RootState } from '../Redux/store';
-import { approveFriendRequest, requestFriend } from '../Functions/UserFunctions';
+import { RootState } from '../redux/store';
+import { approveFriendRequest, requestFriend } from '../functions/UserFunctions';
 import DefaultButton from './DefaultButton';
 import { CheckMarkIcon, ChevronLeft, XIcon } from './Icons';
 import useFriends from '../hooks/useFriends';

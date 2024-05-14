@@ -1,7 +1,7 @@
 import * as tf from '@tensorflow/tfjs';
 import { useEffect, useState } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
-import { perdict, trainModel } from '../Functions/Ai';
+import { perdict, trainModel } from '../functions/Ai';
 
 export default function mainModel() {
   const [gameSate, setGameState] = useState<number[]>([0,0,0,0,0,0,0,0,0])

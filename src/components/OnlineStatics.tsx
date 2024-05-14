@@ -2,8 +2,8 @@ import { View, Text, StyleSheet, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { ActiveIcon, ControllerIcon, CrownIcon, SkullIcon } from './Icons'
 import { useSelector } from 'react-redux'
-import { RootState } from '../Redux/store'
-import { getOnlineGameStats } from '../Functions/OnlineFunctions'
+import { RootState } from '../redux/store'
+import { getOnlineGameStats } from '../functions/OnlineFunctions'
 import { loadingState } from '../Types'
 
 const styles = StyleSheet.create({

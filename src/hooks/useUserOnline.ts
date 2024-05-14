@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { database } from "../Firebase/Firebase";
+import { database } from "../firebase";
 import { onValue, ref } from "firebase/database";
 
 export default function useUserOnline(id: string) {

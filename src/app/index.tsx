@@ -6,23 +6,23 @@
 */
 import { useEffect, useState } from "react";
 import { View, Text, TextInput, Pressable, FlatList, ActivityIndicator } from "react-native";
-import { createNewGame, getOnlineGames } from '../Functions/OnlineFunctions';
-import { addGame, getStorageGames } from "../Functions/StorageFunctions";
+import { createNewGame, getOnlineGames } from '../functions/OnlineFunctions';
+import { addGame, getStorageGames } from "../functions/StorageFunctions";
 import { emptyGame, gridStateMode, joinRulesArray, loadingState } from "../Types";
 import { useSelector } from "react-redux";
-import { RootState } from "../Redux/store";
-import { CloseIcon } from "../UI/Icons";
+import { RootState } from "../redux/store";
+import { CloseIcon } from "../components/Icons";
 import { router, useGlobalSearchParams, useRouter } from "expo-router";
-import { auth } from "../Firebase/Firebase";
-import OnlineAuthenticationComponent from "../UI/OnlineAuthenticationComponent";
-import AccountPage from "../UI/AccountPage";
+import { auth } from "../firebase";
+import OnlineAuthenticationComponent from "../components/OnlineAuthenticationComponent";
+import AccountPage from "../components/AccountPage";
 import useUsernameExists from "../hooks/useUsernameExists";
-import UsernameComponent from "../UI/AddUserComponent";
-import BottomComponent from "../UI/BottomComponent";
-import DefaultButton from "../UI/DefaultButton";
-import FriendsPage from "../UI/FriendsPage";
+import UsernameComponent from "../components/AddUserComponent";
+import BottomComponent from "../components/BottomComponent";
+import DefaultButton from "../components/DefaultButton";
+import FriendsPage from "../components/FriendsPage";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
-import { getFriends } from "../Functions/UserFunctions";
+import { getFriends } from "../functions/UserFunctions";
 
 function Online({onClose}:{onClose: () => void}){
   const router = useRouter()
@@ -274,6 +274,7 @@ function Overlay({online}:{online: boolean}) {
   } else if (gameType === "friends") {
     return <FriendsPage />
   }
+  return null
 }
 
 export function WelcomePage({

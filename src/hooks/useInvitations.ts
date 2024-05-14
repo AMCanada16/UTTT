@@ -5,11 +5,11 @@ import { where } from 'firebase/firestore';
 */
 import { collection, doc, endAt, onSnapshot, orderBy, query, startAt } from "firebase/firestore"
 import { useEffect, useState } from "react"
-import { auth, db } from "../Firebase/Firebase"
-import { getFriends } from "../Functions/UserFunctions"
+import { auth, db } from "../firebase"
+import { getFriends } from "../functions/UserFunctions"
 import { loadingState } from "../Types"
 import { useSelector } from "react-redux"
-import { RootState } from "../Redux/store"
+import { RootState } from "../redux/store"
 
 /*
   TO DO

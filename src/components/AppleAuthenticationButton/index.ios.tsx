@@ -1,9 +1,9 @@
 import React from 'react'
 import * as AppleAuthentication from 'expo-apple-authentication';
-import { auth } from '../../Firebase/Firebase';
+import { auth } from '../../firebase';
 import { OAuthProvider, signInWithCredential } from 'firebase/auth';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../Redux/store';
+import { RootState } from '../../redux/store';
 
 export default function AppleAuthenticationButton() {
   const {height, width} = useSelector((state: RootState) => state.dimensions)

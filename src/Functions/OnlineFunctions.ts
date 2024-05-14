@@ -4,7 +4,7 @@
   OnlineFunctions.ts
   Online game functions.
 */
-import { auth, db } from '../Firebase/Firebase';
+import { auth, db } from '../firebase';
 import { and, collection, doc, getCountFromServer, getDocs, getDocsFromServer, or, orderBy, query, runTransaction, updateDoc, where } from "firebase/firestore"
 import { loadingState } from '../Types';
 

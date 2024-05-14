@@ -4,8 +4,8 @@
 */
 import { collection, doc, endAt, onSnapshot, orderBy, query, startAt, where } from "firebase/firestore"
 import { useEffect, useState } from "react"
-import { auth, db } from "../Firebase/Firebase"
-import { getFriends } from "../Functions/UserFunctions"
+import { auth, db } from "../firebase"
+import { getFriends } from "../functions/UserFunctions"
 
 /*
   TO DO

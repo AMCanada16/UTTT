@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { auth, db } from "../Firebase/Firebase";
-import { getUsername } from "../Functions/UserFunctions";
+import { auth, db } from "../firebase";
+import { getUsername } from "../functions/UserFunctions";
 import { loadingState } from "../Types";
 import { Unsubscribe, doc, onSnapshot } from "firebase/firestore";
 

@@ -4,7 +4,7 @@ import { doc, runTransaction } from 'firebase/firestore';
   Andrew Mainella
 */
 import { collection, getDoc, setDoc, updateDoc, where, query, getCountFromServer, getDocs } from "firebase/firestore";
-import { db } from "../Firebase/Firebase";
+import { db } from "../firebase";
 import { loadingState } from "../Types";
 
 /**

@@ -4,7 +4,7 @@
   8 May 2024
 */
 import { GoogleAuthProvider, signInWithRedirect, signInAnonymously as signInAnonymouslyFirebase, OAuthProvider, signOut as signOutFirebase } from "firebase/auth";
-import { auth, database, db } from "../Firebase/Firebase";
+import { auth, database, db } from "../firebase";
 import { deleteDoc, doc } from "firebase/firestore";
 import { deleteUser as deleteUserFirebase } from "firebase/auth";
 import { ref, remove } from "firebase/database"

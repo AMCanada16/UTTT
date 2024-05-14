@@ -7,8 +7,8 @@
 */
 import React, { useCallback, useEffect } from 'react';
 import { View, useWindowDimensions } from 'react-native';
-import store, { RootState } from '../Redux/store';
-import { dimensionsSlice } from '../Redux/reducers/dimensionsReducer';
+import store, { RootState } from '../redux/store';
+import { dimensionsSlice } from '../redux/reducers/dimensionsReducer';
 import {Provider, useSelector} from "react-redux"
 import { Slot, SplashScreen } from 'expo-router';
 import { useFonts } from 'expo-font';

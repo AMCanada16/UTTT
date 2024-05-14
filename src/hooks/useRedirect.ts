@@ -6,7 +6,7 @@
 import { getRedirectResult } from "firebase/auth"
 import { useEffect, useState } from "react"
 import { router } from "expo-router"
-import { auth } from "../Firebase/Firebase"
+import { auth } from "../firebase"
 
 /**
  * A hook that handles the redirect result for the login.
