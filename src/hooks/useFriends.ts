@@ -2,7 +2,7 @@
   UTTT
   Andrew Mainella
 */
-import { collection, doc, onSnapshot } from "firebase/firestore"
+import { collection, doc, endAt, onSnapshot, orderBy, query, startAt, where } from "firebase/firestore"
 import { useEffect, useState } from "react"
 import { auth, db } from "../Firebase/Firebase"
 import { getFriends } from "../Functions/UserFunctions"
@@ -14,13 +14,17 @@ import { getFriends } from "../Functions/UserFunctions"
   Fail
   Search
 */
-export default function useFriends() {
+export default function useFriends(search: string) {
   const [friends, setFriends] = useState<friendType[]>([])
 
   useEffect(() => {
     let uid = auth.currentUser?.uid
     if (uid !== undefined) {
-      const unsub = onSnapshot(collection(db, "Users"), async (result) => {
+      let q = query(collection(db, "Users"), orderBy("username"))
+      if (search !== "") {
+        q = query(collection(db, "Users"), orderBy("username"), startAt(search), endAt(search+"\uf8ff"))
+      }
+      const unsub = onSnapshot(q, async (result) => {
         if (uid !== undefined) {
           const friendsResult = await getFriends(uid)
           if (friendsResult !== undefined) {
@@ -45,7 +49,7 @@ export default function useFriends() {
         unsub()
       }
     }
-  }, [])
+  }, [search])
 
   return friends
 }

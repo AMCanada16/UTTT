@@ -1,6 +1,7 @@
 /*
   UTTT
   Andrew Mainella
+  14 May 2024
 */
 import React, { useState } from 'react'
 import { View } from 'react-native'
@@ -8,7 +9,7 @@ import TextAnimation from './TextAnimation'
 
 /**
  * 
- * @param param0 
+ * @param mode x or o for the type of tile animation
  * @returns 
  */
 export default function BigTileTextAnimation({mode}:{mode: string}) {

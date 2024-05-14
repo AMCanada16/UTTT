@@ -1,4 +1,4 @@
-import { View, Text, Pressable, PressableProps, ViewStyle } from 'react-native'
+import { Pressable, PressableProps, ViewStyle } from 'react-native'
 import React, { ReactNode, useState } from 'react'
 
 export default function DefaultButton({

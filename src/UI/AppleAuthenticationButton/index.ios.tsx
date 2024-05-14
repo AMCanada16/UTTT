@@ -1,4 +1,3 @@
-import { View, Text } from 'react-native'
 import React from 'react'
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { auth } from '../../Firebase/Firebase';

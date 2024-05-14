@@ -56,7 +56,8 @@ function useGameOnline(gameId: string) {
           gameId: data["gameId"],
           users: data["users"],
           joinRule: data["joinRule"],
-          invitations: data["invitations"]
+          invitations: data["invitations"],
+          owner: data["owner"]
         }
         const uid = auth.currentUser?.uid
         if ((data["users"] as compressedUserType[]).some((e) => {return e.userId === uid}) === false && uid !== undefined){

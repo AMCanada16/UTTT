@@ -5,7 +5,7 @@
   Authentication component used to play online games.
 */
 import { View, Text, Pressable } from 'react-native'
-import React, { useState } from 'react'
+import React from 'react'
 import { CloseIcon, GoogleIcon } from './Icons'
 import { useSelector } from 'react-redux'
 import { RootState } from '../Redux/store'

@@ -66,7 +66,7 @@ export default function UsernameComponent({
         onPress={() => {
           let uid = auth.currentUser?.uid
           if (uid !== undefined) {
-            addUser(uid, username, true)
+            addUser(uid, username)
           }
         }}
         style={{

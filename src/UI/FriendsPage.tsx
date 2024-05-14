@@ -1,15 +1,14 @@
-import { View, Text, Pressable, FlatList, ListRenderItemInfo, ActivityIndicator } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { auth } from '../Firebase/Firebase'
-import { Redirect, router } from 'expo-router'
-import { useSelector } from 'react-redux'
-import { RootState } from '../Redux/store'
-import { approveFriendRequest, getFriends, requestFriend } from '../Functions/UserFunctions'
-import DefaultButton from './DefaultButton'
-import { CheckMarkIcon, ChevronLeft, CloseIcon, OfflineIcon, OnlineIcon, XIcon } from './Icons'
-import useFriends from '../hooks/useFriends'
-import useUserOnline from '../hooks/useUserOnline'
-import OnlineComponent from './OnlineComponent'
+import { View, Text, Pressable, FlatList, ListRenderItemInfo, ActivityIndicator, TextInput, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { auth } from '../Firebase/Firebase';
+import { Redirect, router } from 'expo-router';
+import { useSelector } from 'react-redux';
+import { RootState } from '../Redux/store';
+import { approveFriendRequest, requestFriend } from '../Functions/UserFunctions';
+import DefaultButton from './DefaultButton';
+import { CheckMarkIcon, ChevronLeft, XIcon } from './Icons';
+import useFriends from '../hooks/useFriends';
+import OnlineComponent from './OnlineComponent';
 
 function FriendButtonComponent({
   friend
@@ -32,9 +31,14 @@ function FriendButtonComponent({
   if (friend.item.isFriend) {
     return (
       <View style={{
-        marginLeft: 'auto'
+        marginLeft: 'auto',
+        height: 20
       }}>
-        <Text>Friend</Text>
+        <Text style={{
+          fontSize: 14,
+          marginTop: 2.5,
+          marginBottom: 3.5
+        }}>Friend</Text>
       </View>
     )
   }
@@ -77,7 +81,7 @@ function FriendButtonComponent({
       <View style={{
         marginLeft: 'auto'
       }}>
-        <Text>Friend Request Sent</Text>
+        <Text style={{marginVertical: 3}}>Friend Request Sent</Text>
       </View>
     )
   }
@@ -95,14 +99,15 @@ function FriendButtonComponent({
         marginLeft: 'auto'
       }}
     >
-      <Text>Request Friend</Text>
+      <Text style={{marginVertical: 3}}>Request Friend</Text>
     </Pressable>
   )
 }
 
 export default function FriendsPage() {
   const {height, width} = useSelector((state: RootState) => state.dimensions)
-  const friends = useFriends()
+  const [search, setSearch] = useState<string>("")
+  const friends = useFriends(search)
 
 
   if (auth.currentUser === null) {
@@ -129,13 +134,36 @@ export default function FriendsPage() {
         marginTop: 5,
         marginBottom: 15
       }}>Friends</Text>
+      <TextInput
+        value={search}
+        onChangeText={setSearch}
+        //@ts-expect-error
+        style={[Platform.select({
+          web: {
+            outlineStyle: 'none'
+          }
+        }), {
+          padding: 5,
+          fontSize: 20,
+          marginHorizontal: 15,
+          marginBottom: 5,
+          borderColor: 'black',
+          borderWidth: 1,
+          borderRadius: 4,
+          fontFamily: 'RussoOne'
+        }]}
+      />
       <FlatList
         data={friends}
         renderItem={(friend) => (
           <DefaultButton style={{flexDirection: 'row', width: width * ((width <= 560) ? 0.95:0.8) - 50, marginBottom: 5, marginLeft: 15}}>
-            <Text>{friend.item.username}</Text>
+            <Text style={{marginVertical: 3}}>{friend.item.username}</Text>
             <FriendButtonComponent friend={friend}/>
-            <OnlineComponent uid={friend.item.uid}/>
+            <View style={{
+              marginLeft: 5
+            }}>
+              <OnlineComponent uid={friend.item.uid}/>
+            </View>
           </DefaultButton>
         )}  
       />

@@ -4,14 +4,14 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../Redux/store'
 import { router } from 'expo-router'
 import { deleteUser, signOut } from '../Functions/AuthenticationFunctions'
-import { checkIfUsernameValid, getUsername } from '../Functions/UserFunctions'
+import { checkIfUsernameValid, getUsername, updateUsername } from '../Functions/UserFunctions'
 import { auth } from '../Firebase/Firebase'
 import DefaultButton from './DefaultButton'
 import OnlineAuthenticationComponent from './OnlineAuthenticationComponent'
 import { loadingState } from '../Types'
 import UsernameComponent from './AddUserComponent'
 import useUsernameExists from '../hooks/useUsernameExists'
-import { ChevronLeft, CloseIcon, OnlineIcon, SignOutIcon, TrashIcon } from './Icons'
+import { ChevronLeft, CloseIcon, FriendIcon, OnlineIcon, SignOutIcon, TrashIcon } from './Icons'
 import OnlineStatics from './OnlineStatics'
 
 function DeleteText({
@@ -51,7 +51,7 @@ function DeleteText({
   }
 
   return (
-    <Text style={{fontSize: 17}}>{secondsLeft}</Text>
+    <Text style={{fontSize: 17, color: "white"}}>{secondsLeft}</Text>
   )
 }
 
@@ -126,7 +126,7 @@ function ConfirmingDelete({
               deleteAccount()
             }
           }}
-          disabled={secondsLeft !== 0 || (deleteState !== loadingState.failed && deleteState === loadingState.notStarted)}
+          disabled={secondsLeft !== 0 || (deleteState !== loadingState.failed && deleteState !== loadingState.notStarted)}
           style={{
             backgroundColor: (secondsLeft !== 0) ? "gray":"red",
             flexDirection: 'row',
@@ -206,6 +206,20 @@ export default function AccountPage() {
   const [usernameState, setUsernameState] = useState<loadingState>(loadingState.loading)
   const [isConfirmingDelete, setIsConfirmingDelete] = useState<boolean>(false);
 
+  async function loadUpdateUsername() {
+    let uid = auth.currentUser?.uid
+    if (uid !== undefined) {
+      setUsernameState(loadingState.loading)
+      const result = await updateUsername(uid, editingUsername)
+      if (result === true) {
+        setUsernameState(loadingState.success)
+        setUsername(editingUsername)
+      } else {
+        setUsernameState(loadingState.failed)
+      }
+    }
+  }
+
   async function check() {
     setUsernameState(loadingState.loading)
     if (editingUsername.length > 2) {
@@ -283,7 +297,7 @@ export default function AccountPage() {
         textAlign: 'center'
       }}>Account Page</Text>
       <View style={{flexDirection: 'row', backgroundColor: "white", padding: 10, borderRadius: 4, borderWidth: 1, borderColor: 'black', marginTop: 10}}>
-        <Text>Username: </Text>
+        <Text style={{marginVertical: 3}}>Username: </Text>
         { isUpdatingUsername ?
           <TextInput
             value={editingUsername}
@@ -295,9 +309,10 @@ export default function AccountPage() {
               }
             }), {
               width: "100%",
-              marginHorizontal: 4
+              marginHorizontal: 4,
+              fontFamily: 'RussoOne'
             }]}
-          />:<Text>{username}</Text>
+          />:<Text style={{fontFamily: 'RussoOne', marginVertical: 3}}>{username}</Text>
         }
         <Pressable
           onPress={() => {
@@ -305,8 +320,8 @@ export default function AccountPage() {
               setIsUpdatingUsername(true)
             } else {
               if (usernameState === loadingState.success) {
+                loadUpdateUsername()
                 setIsUpdatingUsername(false)
-                setUsername(editingUsername)
               } else if (usernameState === loadingState.exists && username === editingUsername) {
                 setIsUpdatingUsername(false)
               } else if (usernameState === loadingState.failed) {
@@ -321,16 +336,26 @@ export default function AccountPage() {
           hitSlop={10}
         >
           {!isUpdatingUsername ?
-            <Text>Update Username</Text>:
+            <>
+              {(usernameState === loadingState.loading) ?
+                <ActivityIndicator/>:null
+              }
+              {((usernameState === loadingState.success || username === editingUsername) && usernameState !== loadingState.loading) ?
+                <Text style={{marginVertical: 3}}>Update Username</Text>:null
+              }
+              {(usernameState === loadingState.failed) ?
+                <Text style={{marginVertical: 3}}>Something went wrong updating the username</Text>:null
+              }
+            </>:
             <>
               {(usernameState === loadingState.success || username === editingUsername) ?
-                <Text>Continue</Text>:null
+                <Text style={{marginVertical: 3}}>Continue</Text>:null
               }
               {(usernameState === loadingState.exists && username !== editingUsername) ?
-                <Text>Username Already Exists</Text>:null
+                <Text style={{marginVertical: 3}}>Username Already Exists</Text>:null
               }
                {(usernameState === loadingState.failed) ?
-                <Text>Failed</Text>:null
+                <Text style={{marginVertical: 3}}>Failed</Text>:null
               }
             </>
           }
@@ -352,16 +377,19 @@ export default function AccountPage() {
         router.push("/UTTT/friends")
       }}
         style={{
-          marginBottom: 5
+          marginBottom: 5,
+          flexDirection: 'row'
         }}
       >
-        <Text>Friends</Text>
+        <FriendIcon width={20} height={20}/>
+        <Text style={{marginVertical: 3}}>Friends</Text>
       </DefaultButton>
       <SignOutButton />
-      <DefaultButton style={{backgroundColor: "red"}} onPress={() => {
+      <DefaultButton style={{backgroundColor: "red", flexDirection: 'row'}} onPress={() => {
         setIsConfirmingDelete(true)
       }}>
-        <Text style={{fontWeight: 'bold', color: 'white'}}>Delete Account</Text>
+        <TrashIcon width={20} height={20} color='white'/>
+        <Text style={{fontWeight: 'bold', color: 'white', marginVertical: 3}}>Delete Account</Text>
       </DefaultButton>
       <Modal visible={isConfirmingDelete} transparent>
         <ConfirmingDelete onBack={() => {

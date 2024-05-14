@@ -1,3 +1,4 @@
+import { where } from 'firebase/firestore';
 /*
   UTTT
   Andrew Mainella
@@ -30,10 +31,14 @@ export default function useInvitations(search: string, friends: boolean): {
     let uid = auth.currentUser?.uid
     if (uid !== undefined) {
       let q = query(collection(db, "Users"))
-      if (search !== "") {
-        q = query(collection(db, "Users"), orderBy("username"), startAt(search), endAt(search+"\uf8ff"))
-      }
       const friendsResult = await getFriends(uid)
+      if (search !== "" && friends === true) {
+        q = query(collection(db, "Users"), where("friends", "array-contains", uid), orderBy("username"), startAt(search), endAt(search+"\uf8ff"))
+      } else if (search !== "") {
+        q = query(collection(db, "Users"), orderBy("username"), startAt(search), endAt(search+"\uf8ff"))
+      } else if (friends === true) {
+        q = query(collection(db, "Users"), where("friends", "array-contains", uid), orderBy("username"), startAt(search), endAt(search+"\uf8ff"))
+      }
       if (friendsResult !== undefined) {
         const unsub = onSnapshot(q, async (result) => {
           let usersFound: invitationUserType[] = []
@@ -63,7 +68,7 @@ export default function useInvitations(search: string, friends: boolean): {
 
   useEffect(() => {
     load()
-  }, [search, gameUsers])
+  }, [search, gameUsers, friends])
 
   return {
     state,

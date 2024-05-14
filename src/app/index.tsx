@@ -46,7 +46,7 @@ function Online({onClose}:{onClose: () => void}){
   async function loadGames() {
     let uid = auth.currentUser?.uid
     let currentFriends: string[] = []
-    if (searchMode === "friends") {
+    if (searchMode !== "invitation") {
       if (uid === undefined) {
         return
       }
@@ -103,7 +103,7 @@ function Online({onClose}:{onClose: () => void}){
   return(
     <View style={{width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
       <Pressable style={{marginTop: 25, marginLeft: 25}} onPress={() => {onClose()}}>
-        <CloseIcon width={20} height={20}/>
+        <CloseIcon width={30} height={30}/>
       </Pressable>
       <Text style={{textAlign: 'center', fontWeight: 'bold', marginTop: 2, fontSize: 25}}>Load Game</Text>
       <TextInput
@@ -221,7 +221,7 @@ function StorageGames({isFriend, onClose}:{isFriend: boolean, onClose: () => voi
   return(
     <View style={{width: width * ((width <= 560) ? 0.95:0.8), backgroundColor: "rgba(255,255,255, 0.95)", height: height * 0.8, borderRadius: 25}}>
       <Pressable style={{marginTop: 25, marginLeft: 25}} onPress={() => {onClose()}}>
-        <CloseIcon width={20} height={20}/>
+        <CloseIcon width={30} height={30}/>
       </Pressable>
       <Text style={{textAlign: 'center', fontWeight: 'bold', marginTop: 2, fontSize: 25}}>Load Game</Text>
       <FlatList
@@ -261,13 +261,27 @@ function StorageGames({isFriend, onClose}:{isFriend: boolean, onClose: () => voi
   )
 }
 
+function Overlay({online}:{online: boolean}) {
+  const { gameType } = useGlobalSearchParams()
+  if  (gameType === "account") {
+    return <AccountPage />
+  } else if (online) {
+    return <Online onClose={() => router.push("/")}/>
+  } else if (gameType === "ai" || gameType === "friend") {
+    return <StorageGames isFriend={gameType === "friend"} onClose={() => {router.push("/")}}/>
+  } else if (gameType === "account") {
+    return <AccountPage />
+  } else if (gameType === "friends") {
+    return <FriendsPage />
+  }
+}
+
 export function WelcomePage({
   online
 }:{
   online: boolean
 }) {
   const {height, width} = useSelector((state: RootState) => state.dimensions)
-  const { gameType } = useGlobalSearchParams()
   // text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff, 0.025em 0.04em 0 #fffc00;
   //red overide: #ff9c9c //Shadow #FF5757
 
@@ -292,18 +306,7 @@ export function WelcomePage({
       </View>
       <BottomComponent />
       <View style={{alignContent: "center", alignItems: "center", justifyContent: "center", position: "absolute", width: width, height: height}} pointerEvents='box-none'>
-      { (online) ? 
-        <Online onClose={() => router.push("/")}/>:null
-      }
-      { (gameType === "ai" || gameType === "friend") ?
-        <StorageGames isFriend={gameType === "friend"} onClose={() => {router.push("/")}}/>:null
-      }
-      { (gameType === "account") ?
-        <AccountPage />:null
-      }
-       { (gameType === "friends") ?
-        <FriendsPage />:null
-      }
+        <Overlay online={online}/>
       </View>
     </View>
   )

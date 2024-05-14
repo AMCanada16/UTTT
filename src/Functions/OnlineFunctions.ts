@@ -5,7 +5,7 @@
   Online game functions.
 */
 import { auth, db } from '../Firebase/Firebase';
-import { and, collection, doc, getCountFromServer, getDocs, getDocsFromServer, or, query, runTransaction, updateDoc, where } from "firebase/firestore"
+import { and, collection, doc, getCountFromServer, getDocs, getDocsFromServer, or, orderBy, query, runTransaction, updateDoc, where } from "firebase/firestore"
 import { loadingState } from '../Types';
 
 enum gridStateMode{
@@ -224,14 +224,24 @@ export async function getOnlineGames(joinRule: joinRules, currentFriends: string
     let games: GameType[] = []
     let q = query(collection(db, "Games"), or(
       and(where("joinRule", "==", "invitations"), where("invitations", "array-contains", uid)),
-      and(where("joinRule", "==", "friends"), where('owner', 'in', currentFriends)),
       where("joinRule", "==", "public")
-    ))
+    ), orderBy("gameId"))
+    if (joinRule === 'public' && currentFriends.length !== 0) {
+      q = query(collection(db, "Games"), or(
+        and(where("joinRule", "==", "invitations"), where("invitations", "array-contains", uid)),
+        and(where("joinRule", "==", "friends"), where('owner', 'in', currentFriends)),
+        and(where("joinRule", "==", "friends"), where('owner', '==', uid)),
+        where("joinRule", "==", "public")
+      ), orderBy("gameId"))
+    }
     if (joinRule === 'invitation') {
-      q = query(collection(db, "Games"), where("invitations", "array-contains", uid))
+      q = query(collection(db, "Games"), where("invitations", "array-contains-any", [uid]), orderBy("gameId"))
     }
     if (joinRule === 'friends') {
-      q = query(collection(db, "Games"), or(where('owner', 'in', currentFriends), where('owner', '==', uid)))
+      if (currentFriends.length === 0) {
+        return []
+      }
+      q = query(collection(db, "Games"), and(or(where("joinRule", "==", "public"), where("joinRule", "==", "friends")), or(where('owner', 'in', currentFriends), where('owner', '==', uid))), orderBy("gameId"))
     }
     let result = await getDocsFromServer(q)
     result.docs.forEach((e) => {
@@ -249,7 +259,8 @@ export async function getOnlineGames(joinRule: joinRules, currentFriends: string
       })
     })
     return games
-  } catch  {
+  } catch (e) {
+    console.log(e)
     return loadingState.failed
   }
 }
@@ -259,10 +270,22 @@ export async function getOnlineGameStats(): Promise<loadingState.failed | Online
   let uid = auth.currentUser?.uid
   if (uid !== undefined) {
     try {
-      const gamesPlayedQuery = query(collection(db, "Games"))
+      const gamesPlayedQuery = query(collection(db, "Games"), where("users", "array-contains-any", [{
+        player: gridStateMode.X,
+        userId: uid
+      }, {
+        player: gridStateMode.O,
+        userId: uid
+      }]))
       const gamesPlayedResult = await getCountFromServer(gamesPlayedQuery)
       const gamesPlayed = gamesPlayedResult.data().count
-      const activeGamesQuery = query(collection(db, "Games"), where("gameOver", "==", false))
+      const activeGamesQuery = query(collection(db, "Games"), and(where("gameOver", "==", false), where("users", "array-contains-any", [{
+        player: gridStateMode.X,
+        userId: uid
+      }, {
+        player: gridStateMode.O,
+        userId: uid
+      }])))
       const activePlayedResult = await getCountFromServer(activeGamesQuery)
       const activeGames = activePlayedResult.data().count
       const wonGamesQuery = query(collection(db, "Games"), where("userWon", "==", uid))

@@ -67,11 +67,10 @@ export async function updatePublic(uid: string, isPublic: string): Promise<boole
  * @param isPublic If the users account is public
  * @returns A boolean of wheater it succeded. Returns true if success.
  */
-export async function addUser(uid: string, username: string, isPublic: boolean): Promise<boolean> {
+export async function addUser(uid: string, username: string): Promise<boolean> {
   try {
     await setDoc(doc(db, "Users", uid), {
       username,
-      isPublic,
       friends: [],
       requests: []
     })

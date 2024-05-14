@@ -7,15 +7,14 @@
 import { View, Text, Pressable, FlatList, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import store, { RootState } from '../Redux/store'
+import { RootState } from '../Redux/store'
 import { getUsername } from '../Functions/UserFunctions'
 import DefaultButton from './DefaultButton'
 import OnlineComponent from './OnlineComponent'
-import { CloseIcon, TrashIcon } from './Icons'
+import { CloseIcon, FriendIcon, TrashIcon } from './Icons'
 import { auth, db } from '../Firebase/Firebase'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { joinRulesArray } from '../Types'
-import { gameSlice } from '../Redux/reducers/gameReducer'
 import useInvitations from '../hooks/useInvitations'
 import { doc, updateDoc } from 'firebase/firestore'
 
@@ -70,15 +69,19 @@ function Invitations() {
         renderItem={(user) => (
           <DefaultButton
             style={{
-              flexDirection: 'row'
+              flexDirection: 'row',
+              marginBottom: 5
             }}
           >
-            <Text>{user.item.username}</Text>
+            <Text style={{marginVertical: 3}}>{user.item.username}</Text>
+            {user.item.isFriend ?
+              <FriendIcon width={20} height={20} style={{marginLeft: 'auto', marginRight: 4}}/>:null
+            }
             {game.invitations.includes(user.item.uid) ?
               <View style={{
-                marginLeft: 'auto'
+                marginLeft: user.item.isFriend ? undefined:'auto'
               }}>
-                <Text>Invitation Sent</Text>
+                <Text style={{marginVertical: 3}}>Invitation Sent</Text>
               </View>:
               <Pressable
                 onPress={() => {
@@ -87,10 +90,10 @@ function Invitations() {
                   })
                 }}
                 style={{
-                  marginLeft: 'auto'
+                  marginLeft: user.item.isFriend ? undefined:'auto'
                 }}
               >
-                <Text>Invite</Text>
+                <Text style={{marginVertical: 3}}>Invite</Text>
               </Pressable>
             }
           </DefaultButton>
@@ -160,7 +163,7 @@ export default function PlayersPage({
       >Players</Text>
       <Text style={{marginLeft: 5}}>Game Open To...</Text>
       <SegmentedControl
-        values={['Public', 'Friends', 'Invitation']}
+        values={['Public', 'Friends', 'Invitations']}
         selectedIndex={joinRulesArray.indexOf(joinRule)}
         onChange={(e) => {
           if (e.nativeEvent.selectedSegmentIndex === 0) {
@@ -191,9 +194,6 @@ export default function PlayersPage({
               marginBottom: 5
             }}>
               <Text style={{marginRight: 'auto'}}>{player.item.username}</Text>
-              {
-
-              }
               {player.item.userId !== auth.currentUser?.uid ?
                 <OnlineComponent uid={player.item.userId}/>:<Text>You</Text>
               }
