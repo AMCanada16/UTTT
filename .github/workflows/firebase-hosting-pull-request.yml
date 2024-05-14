@@ -21,3 +21,4 @@ jobs:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ARCHIMEDES4_GAMES }}
           projectId: archimedes4-games
+          channelId: live
