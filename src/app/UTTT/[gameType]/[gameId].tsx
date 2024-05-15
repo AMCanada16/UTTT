@@ -14,7 +14,7 @@ import { View, Text, StyleSheet, Pressable, ActivityIndicator } from "react-nati
 import BigTileTextAnimation from "../../../components/BigTileTextAnimation"
 import Striketrough from "../../../components/Striketrough"
 import TileButton from "../../../components/TileButton"
-import { ChevronLeft, CopiedIcon, CopyIcon, PersonIcon, ResetIcon } from "../../../components/Icons"
+import { ChevronLeft, CloseIcon, CopiedIcon, CopyIcon, OfflineIcon, PersonIcon, ResetIcon } from "../../../components/Icons"
 import * as Clipboard from 'expo-clipboard';
 import { Redirect, useGlobalSearchParams, useRouter } from "expo-router"
 import useGame from "../../../hooks/useGame"
@@ -23,6 +23,7 @@ import { auth } from "../../../firebase"
 import PlayersPage from "../../../components/PlayersPage"
 import GameOverComponent from "../../../components/GameOverComponent"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import useIsConnected from "../../../hooks/useIsConnected"
 
 //Renders root type
 function InnerGame({firstIndex, secondIndex, root, game, gameLength}:{firstIndex: number, secondIndex: number, root: RootType, game: GameType, gameLength: number}) {
@@ -107,6 +108,7 @@ export default function UltimateTicTacToe() {
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [isShowingPlayers, setIsShowingPlayers] = useState<boolean>(false)
   const insets = useSafeAreaInsets()
+  const isConnected = useIsConnected()
 
   const game = useGame(gameId as string, (gameType === 'online'))
 
@@ -115,6 +117,20 @@ export default function UltimateTicTacToe() {
       await Clipboard.setStringAsync(gameId);
       setIsCopied(true);
     }
+  }
+
+  if (!isConnected) {
+    return (
+      <View style={{width: width, height: height, backgroundColor: "#5E17EB", alignItems: 'center', justifyContent: 'center', margin: "auto"}}>
+        <Pressable style={{position: 'absolute', top: (width <= 560) ? 25:35, left: (width <= 560) ? 25:35}} onPress={() => {
+          router.push("/")
+        }}>
+          <CloseIcon width={30} height={30} color="white"/>
+        </Pressable>
+        <OfflineIcon width={30} height={30} color="white"/>
+        <Text style={{color: 'white'}}>Offline</Text>
+      </View>
+    )
   }
 
   if (game === 'loading') {

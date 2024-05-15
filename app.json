@@ -20,7 +20,33 @@
       "bundleIdentifier": "Archimedes4.UTTT",
       "usesAppleSignIn": true,
       "privacyManifests": {
-
+        "NSPrivacyAccessedAPITypes":[
+          {
+            "NSPrivacyAccessedAPIType":"NSPrivacyAccessedAPICategoryUserDefaults",
+            "NSPrivacyAccessedAPITypeReasons":["CA92.1"]
+          }
+        ],
+        "NSPrivacyCollectedDataTypes":[
+          {
+            "NSPrivacyCollectedDataType":"NSPrivacyCollectedDataTypeEmailAddress",
+            "NSPrivacyCollectedDataTypeLinked":true,
+            "NSPrivacyCollectedDataTypePurposes":["NSPrivacyCollectedDataTypePurposeAppFunctionality"]
+          },
+          {
+            "NSPrivacyCollectedDataType":"NSPrivacyCollectedDataTypeGameplayContent",
+            "NSPrivacyCollectedDataTypeLinked":true,
+            "NSPrivacyCollectedDataTypePurposes":["NSPrivacyCollectedDataTypePurposeAppFunctionality"]
+          },
+          {
+            "NSPrivacyCollectedDataType":"NSPrivacyCollectedDataTypeCrashData",
+            "NSPrivacyCollectedDataTypePurposes":["NSPrivacyCollectedDataTypePurposeAppFunctionality"]
+          },
+          {
+            "NSPrivacyCollectedDataType":"NSPrivacyCollectedDataTypeUserID",
+            "NSPrivacyCollectedDataTypeLinked":true,
+            "NSPrivacyCollectedDataTypePurposes":["NSPrivacyCollectedDataTypePurposeAppFunctionality"]
+          }
+        ]
       }
     },
     "android": {
