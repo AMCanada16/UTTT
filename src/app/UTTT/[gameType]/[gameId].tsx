@@ -10,18 +10,19 @@ import { useSelector } from "react-redux"
 import { RootState } from "../../../redux/store"
 import { updateGame } from "../../../functions/OnlineFunctions"
 import { updateStorageGame } from "../../../functions/StorageFunctions"
-import { View, Text, StyleSheet, Pressable } from "react-native"
+import { View, Text, StyleSheet, Pressable, ActivityIndicator } from "react-native"
 import BigTileTextAnimation from "../../../components/BigTileTextAnimation"
 import Striketrough from "../../../components/Striketrough"
 import TileButton from "../../../components/TileButton"
 import { ChevronLeft, CopiedIcon, CopyIcon, PersonIcon, ResetIcon } from "../../../components/Icons"
 import * as Clipboard from 'expo-clipboard';
-import { useGlobalSearchParams, useRouter } from "expo-router"
+import { Redirect, useGlobalSearchParams, useRouter } from "expo-router"
 import useGame from "../../../hooks/useGame"
 import { setCurrentTurn, setGridState, setIsGameOver, setSelectedGrid } from "../../../functions/gameActions"
 import { auth } from "../../../firebase"
 import PlayersPage from "../../../components/PlayersPage"
 import GameOverComponent from "../../../components/GameOverComponent"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 //Renders root type
 function InnerGame({firstIndex, secondIndex, root, game, gameLength}:{firstIndex: number, secondIndex: number, root: RootType, game: GameType, gameLength: number}) {
@@ -105,31 +106,9 @@ export default function UltimateTicTacToe() {
   const router = useRouter()
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [isShowingPlayers, setIsShowingPlayers] = useState<boolean>(false)
+  const insets = useSafeAreaInsets()
 
   const game = useGame(gameId as string, (gameType === 'online'))
-
-  function resetUTTT() {
-    setGridState(emptyGame)
-    setSelectedGrid(0)
-    setCurrentTurn(gridStateMode.X)
-    if (game !== undefined && game.gameType === 'online'){
-      updateGame({
-        ...game,
-        selectedGrid: 0,
-        currentTurn: gridStateMode.X,
-        data: emptyGame
-      })
-    } else if ((gameType === "friend" || gameType === "ai") && game !== undefined){
-      setGridState(emptyGame)
-      setIsGameOver(false)
-      updateStorageGame({
-        ...game,
-        selectedGrid: 0,
-        currentTurn: gridStateMode.X,
-        data: emptyGame
-      })
-    }
-  }
 
   async function Copy() {
     if (typeof gameId === 'string') {
@@ -138,34 +117,39 @@ export default function UltimateTicTacToe() {
     }
   }
 
+  if (game === 'loading') {
+    return (
+      <View style={{width: width, height: height, backgroundColor: "#5E17EB", alignItems: 'center', justifyContent: 'center', margin: "auto"}}>
+        <ActivityIndicator />
+        <Text style={{color: 'white'}}>Loading</Text>
+      </View>
+    )
+  }
+
   if (game == undefined) {
     return (
-      <View>
-        <Text>The game could not be found.</Text>
+      <View style={{width: width, height: height, backgroundColor: "#5E17EB", alignItems: 'center', justifyContent: 'center', margin: "auto"}}>
+        <Text style={{color: 'white'}}>The game could not be found.</Text>
       </View>
     )
   }
 
   if (auth.currentUser === null && game.gameType === 'online') {
-    return (
-      <View style={{width: width, height: height, backgroundColor: "#5E17EB", alignItems: 'center', justifyContent: 'center', margin: "auto"}}>
-        <Text>Please Sign In</Text>
-      </View>
-    )
+    return <Redirect href={"/UTTT/online"}/>
   }
 
   return(
     <View style={{width: width, height: height, backgroundColor: "#5E17EB", alignItems: 'center', justifyContent: 'center', margin: "auto"}}>
       <View style={{position: "absolute", height: 150, top: 0, left: 0, flexDirection: "row"}}>
         <View style={{position: "relative", height: 150, marginLeft: "5%"}}>
-          <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: 150, color: 'black', opacity: 0.8, position: "absolute"}}>ULTIMATE</Text>
-          <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: 150, color: "#00fffc", transform: [{translateX: -2}, {translateY: -1}], position: "absolute", zIndex: -1}}>ULTIMATE</Text>
-          <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: 150, color: "#fc00ff", transform: [{translateX: -2}, {translateY: 2}], position: "absolute", zIndex: -2}}>ULTIMATE</Text>
-          <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: 150, color: "#fffc00", transform: [{translateX: 1}, {translateY: 4}], position: "absolute", zIndex: -3}}>ULTIMATE</Text>
+          <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 555) ? 150:(width * 0.255), color: 'black', opacity: 0.8, position: "absolute", marginTop: insets.top}}>ULTIMATE</Text>
+          <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 555) ? 150:(width * 0.255), color: "#00fffc", transform: [{translateX: -2}, {translateY: -1}], position: "absolute", zIndex: -1, marginTop: insets.top}}>ULTIMATE</Text>
+          <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 555) ? 150:(width * 0.255), color: "#fc00ff", transform: [{translateX: -2}, {translateY: 2}], position: "absolute", zIndex: -2, marginTop: insets.top}}>ULTIMATE</Text>
+          <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 555) ? 150:(width * 0.255), color: "#fffc00", transform: [{translateX: 1}, {translateY: 4}], position: "absolute", zIndex: -3, marginTop: insets.top}}>ULTIMATE</Text>
         </View>
-        <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: 50, color: "#ff9c9c", textShadowColor: "#FF5757", textShadowRadius: 25, position: "relative"}}>TICK </Text>
-        <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: 50, color: "#a0f4f7", textShadowColor: "#5CE1E6", textShadowRadius: 25, position: "relative"}}>TAC </Text>
-        <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: 50, color: "#ff9c9c", textShadowColor: "#FF5757", textShadowRadius: 25, position: "relative"}}>TOE </Text>
+        <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: (width > 555) ? 50:(width * 0.09), color: "#ff9c9c", textShadowColor: "#FF5757", textShadowRadius: 25, position: "relative", marginTop: insets.top}}>TICK </Text>
+        <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: (width > 555) ? 50:(width * 0.09), color: "#a0f4f7", textShadowColor: "#5CE1E6", textShadowRadius: 25, position: "relative", marginTop: insets.top}}>TAC </Text>
+        <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: (width > 555) ? 50:(width * 0.09), color: "#ff9c9c", textShadowColor: "#FF5757", textShadowRadius: 25, position: "relative", marginTop: insets.top}}>TOE </Text>
       </View>
       <Pressable style={{flexDirection: 'row', padding: 10, backgroundColor: 'white', borderRadius: 15, marginBottom: 10}} onPress={() => Copy()}>
         { gameId !== undefined ?
@@ -183,10 +167,6 @@ export default function UltimateTicTacToe() {
         <Pressable onPress={() => router.push('/')} style={{flexDirection: 'row', backgroundColor: 'white', borderRadius: 15, padding: 10, marginTop: 5, marginRight: 5}}>
           <ChevronLeft width={16} height={16}/>
           <Text style={{marginLeft: 2}}>Back</Text>
-        </Pressable>
-        <Pressable onPress={() => resetUTTT()} style={{flexDirection: 'row', backgroundColor: 'white', borderRadius: 15, padding: 10, marginTop: 5, marginHorizontal: 5}}>
-          <ResetIcon width={16} height={16}/>
-          <Text style={{marginLeft: 2}}>Reset</Text>
         </Pressable>
         {(game.gameType === 'online') ?
           <Pressable onPress={() => setIsShowingPlayers(true)} style={{flexDirection: 'row', backgroundColor: 'white', borderRadius: 15, padding: 10, marginTop: 5, marginLeft: 5}}>

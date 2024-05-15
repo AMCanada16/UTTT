@@ -11,7 +11,7 @@ import { addGame, getStorageGames } from "../functions/StorageFunctions";
 import { emptyGame, gridStateMode, joinRulesArray, loadingState } from "../Types";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { CloseIcon } from "../components/Icons";
+import { CloseIcon, OfflineIcon } from "../components/Icons";
 import { router, useGlobalSearchParams, useRouter } from "expo-router";
 import { auth } from "../firebase";
 import OnlineAuthenticationComponent from "../components/OnlineAuthenticationComponent";
@@ -23,6 +23,8 @@ import DefaultButton from "../components/DefaultButton";
 import FriendsPage from "../components/FriendsPage";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import { getFriends } from "../functions/UserFunctions";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import useIsConnected from "../hooks/useIsConnected";
 
 function Online({onClose}:{onClose: () => void}){
   const router = useRouter()
@@ -30,8 +32,9 @@ function Online({onClose}:{onClose: () => void}){
   const {height, width} = useSelector((state: RootState) => state.dimensions)
   const [games, setGames] = useState<GameType[]>([])
   const [isAuth, setIsAuth] = useState(false)
-  const usernameExists = useUsernameExists()
+  const usernameExists = useUsernameExists().exists
   const [searchMode, setSearchMode] = useState<joinRules>("public")
+  const isConnected = useIsConnected()
 
   async function createNew() {
     const uid = auth.currentUser?.uid
@@ -83,6 +86,19 @@ function Online({onClose}:{onClose: () => void}){
     }
  }, []);
 
+ if (!isConnected) {
+  return (
+    <View style={{width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
+      <Pressable style={{marginTop: (width <= 560) ? 15:25, marginLeft: (width <= 560) ? 15:25}} onPress={() => {onClose()}}>
+        <CloseIcon width={30} height={30}/>
+      </Pressable>
+      <OfflineIcon width={30} height={30} style={{
+        marginHorizontal: (width * ((width <= 560) ? 0.475:0.4)) - 15
+      }}/>
+    </View>
+  )
+ }
+
   if (!isAuth) {
     return <OnlineAuthenticationComponent onClose={onClose}/>
   }
@@ -102,7 +118,7 @@ function Online({onClose}:{onClose: () => void}){
 
   return(
     <View style={{width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
-      <Pressable style={{marginTop: 25, marginLeft: 25}} onPress={() => {onClose()}}>
+      <Pressable style={{marginTop: (width <= 560) ? 15:25, marginLeft: (width <= 560) ? 15:25}} onPress={() => {onClose()}}>
         <CloseIcon width={30} height={30}/>
       </Pressable>
       <Text style={{textAlign: 'center', fontWeight: 'bold', marginTop: 2, fontSize: 25}}>Load Game</Text>
@@ -122,8 +138,10 @@ function Online({onClose}:{onClose: () => void}){
           padding: 15,
           backgroundColor: 'white',
           marginBottom: 5,
-          marginTop: 15
+          marginTop: 15,
+          color: "black"
         }}
+        placeholderTextColor={"black"}
         placeholder="Game ID"
       />
       <SegmentedControl
@@ -170,7 +188,7 @@ function Online({onClose}:{onClose: () => void}){
           style={{
             margin: 5,
             marginBottom: 15,
-            width: width * (width <= 560 ? 0.45:0.4) - 10
+            width: width * (width <= 560 ? 0.475:0.4) - 10
           }}
         >
           <Text>Load</Text>
@@ -180,7 +198,7 @@ function Online({onClose}:{onClose: () => void}){
           style={{
             margin: 5,
             marginBottom: 15,
-            width: width * (width <= 560 ? 0.45:0.4) - 10
+            width: width * (width <= 560 ? 0.475:0.4) - 10
           }}
         >
           <Text>Create New</Text>
@@ -220,7 +238,7 @@ function StorageGames({isFriend, onClose}:{isFriend: boolean, onClose: () => voi
 
   return(
     <View style={{width: width * ((width <= 560) ? 0.95:0.8), backgroundColor: "rgba(255,255,255, 0.95)", height: height * 0.8, borderRadius: 25}}>
-      <Pressable style={{marginTop: 25, marginLeft: 25}} onPress={() => {onClose()}}>
+      <Pressable style={{marginTop: (width <= 560) ? 15:25, marginLeft: (width <= 560) ? 15:25}} onPress={() => {onClose()}}>
         <CloseIcon width={30} height={30}/>
       </Pressable>
       <Text style={{textAlign: 'center', fontWeight: 'bold', marginTop: 2, fontSize: 25}}>Load Game</Text>
@@ -283,12 +301,13 @@ export function WelcomePage({
   online: boolean
 }) {
   const {height, width} = useSelector((state: RootState) => state.dimensions)
+  const insets = useSafeAreaInsets()
   // text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff, 0.025em 0.04em 0 #fffc00;
   //red overide: #ff9c9c //Shadow #FF5757
 
   return(
     <View style={{backgroundColor: "#5E17EB", width: width, overflow: "hidden", height: height}}>
-      <View style={{position: "relative", height: 150, marginLeft: "5%"}}>
+      <View style={{position: "relative", height: 150, marginLeft: "5%", marginTop: insets.top}}>
         <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 560) ? 150:(width * 0.255), position: "absolute"}}>ULTIMATE</Text>
         <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 560) ? 150:(width * 0.255), color: "#00fffc", transform: [{translateX: -2}, {translateY: -1}], position: "absolute", zIndex: -1}}>ULTIMATE</Text>
         <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 560) ? 150:(width * 0.255), color: "#fc00ff", transform: [{translateX: -2}, {translateY: 2}], position: "absolute", zIndex: -2}}>ULTIMATE</Text>

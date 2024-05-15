@@ -121,8 +121,8 @@ export default function FriendsPage() {
           router.replace("/UTTT/account")
         }}
         style={{
-          marginTop: 25,
-          marginLeft: 25
+          marginTop: (width <= 560) ? 15:25,
+          marginLeft: (width <= 560) ? 15:25
         }}
       >
         <ChevronLeft width={30} height={30} />

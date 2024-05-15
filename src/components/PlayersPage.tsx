@@ -11,12 +11,13 @@ import { RootState } from '../redux/store'
 import { getUsername } from '../functions/UserFunctions'
 import DefaultButton from './DefaultButton'
 import OnlineComponent from './OnlineComponent'
-import { CloseIcon, FriendIcon, TrashIcon } from './Icons'
+import { ChevronLeft, CloseIcon, FriendIcon, TrashIcon } from './Icons'
 import { auth, db } from '../firebase'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { joinRulesArray } from '../Types'
 import useInvitations from '../hooks/useInvitations'
 import { doc, updateDoc } from 'firebase/firestore'
+import { router } from 'expo-router'
 
 function Invitations() {
   const [isInvitationModeFriends, setIsInvitationModeFriends] = useState<boolean>(false);
@@ -142,6 +143,7 @@ export default function PlayersPage({
   }, [])
 
   if (joinRule === undefined) {
+      // This should be unreachable this component is only viewed when a game exists and is of an online type
     return (
       <View>
         <Text>Something Wrong</Text>
@@ -150,13 +152,18 @@ export default function PlayersPage({
   }
 
   return (
-    <View style={{position: 'absolute', width: width * 0.8, height: height * 0.8, top: 'auto', bottom: 'auto', left: 'auto', right: 'auto', backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
+    <View style={{position: 'absolute', width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, top: 'auto', bottom: 'auto', left: 'auto', right: 'auto', backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
       {players.length >= 2 ?
         <Pressable style={{marginTop: 25, marginLeft: 25}} onPress={() => {
           onClose()
         }}>
           <CloseIcon width={30} height={30}/>
-        </Pressable>:null
+        </Pressable>:
+        <Pressable style={{marginTop: (width <= 560) ? 15:25, marginLeft: (width <= 560) ? 15:25}} onPress={() => {
+          router.replace("/UTTT/online")
+        }}>
+          <ChevronLeft width={30} height={30}/>
+        </Pressable>
       }
       <Text
         style={{margin: 10, marginTop: 0, fontSize: 80, fontFamily: "Ultimate", textAlign: 'center'}}

@@ -44,8 +44,8 @@ export default function UsernameComponent({
 
   return (
     <View style={{width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
-      <Pressable style={{marginTop: 25, marginLeft: 25}} onPress={() => {onClose()}}>
-        <CloseIcon width={20} height={20}/>
+      <Pressable style={{marginTop: (width <= 560) ? 15:25, marginLeft: (width <= 560) ? 15:25}} onPress={() => {onClose()}}>
+        <CloseIcon width={30} height={30}/>
       </Pressable>
       <Text style={{
         fontWeight: "bold",

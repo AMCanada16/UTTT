@@ -22,7 +22,6 @@ export default function useRedirect() {
       }
       setIsLoading(false)
     } catch (error) {
-      console.log(error)
       setIsLoading(false)
     }
   }

@@ -10,6 +10,7 @@ import { useSelector } from "react-redux"
 import store, { RootState } from "../redux/store"
 import { loadStorageGame, updateStorageGame } from "../functions/StorageFunctions"
 import { gameSlice } from "../redux/reducers/gameReducer"
+import { getUsername } from "../functions/UserFunctions"
 
 /**
  * A hook
@@ -41,9 +42,9 @@ function useGameLocal(gameId: string) {
 }
 
 function useGameOnline(gameId: string) {
-  const [game, setGame] = useState<GameType | undefined>(undefined)
+  const [game, setGame] = useState<GameType | undefined | 'loading'>('loading')
   useEffect(() => {
-    const unsub = onSnapshot(doc(db, "Games", gameId ? gameId.replace(/ /g,''):""), (doc) => {
+    const unsub = onSnapshot(doc(db, "Games", gameId ? gameId.replace(/ /g,''):""), async (doc) => {
       if (doc.exists()){
         const data = doc.data();
         const result: GameType = {
@@ -61,7 +62,10 @@ function useGameOnline(gameId: string) {
         }
         const uid = auth.currentUser?.uid
         if ((data["users"] as compressedUserType[]).some((e) => {return e.userId === uid}) === false && uid !== undefined){
-          joinGame(gameId, uid)
+          const username = await getUsername(uid)
+          if (username !== undefined) {
+            joinGame(gameId, uid)
+          }
         }
         store.dispatch(gameSlice.actions.setGame(result))
         setGame(result)

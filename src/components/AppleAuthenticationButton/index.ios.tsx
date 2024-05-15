@@ -13,9 +13,8 @@ export default function AppleAuthenticationButton() {
       buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
       cornerRadius={5}
       style={{
-        width: (width * ((width <= 560) ? 0.95:0.8)) - 10,
-        height: 40,
-        marginHorizontal: 5
+        width: (width * ((width <= 560) ? 0.95:0.8)) - 20,
+        height: 40
       }}
       onPress={async () => {
         try {

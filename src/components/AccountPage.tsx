@@ -13,6 +13,7 @@ import UsernameComponent from './AddUserComponent'
 import useUsernameExists from '../hooks/useUsernameExists'
 import { ChevronLeft, CloseIcon, FriendIcon, OnlineIcon, SignOutIcon, TrashIcon } from './Icons'
 import OnlineStatics from './OnlineStatics'
+import useUsername from '../hooks/useUsernameExists'
 
 function DeleteText({
   secondsLeft,
@@ -198,10 +199,9 @@ function SignOutButton() {
 
 export default function AccountPage() {
   const {height, width} = useSelector((state: RootState) => state.dimensions)
-  const [username, setUsername] = useState<string>("");
   const [editingUsername, setEditingUsername] = useState<string>("")
   const [isAuth, setIsAuth] = useState(false)
-  const usernameExists = useUsernameExists()
+  const username = useUsername()
   const [isUpdatingUsername, setIsUpdatingUsername] = useState<boolean>(false)
   const [usernameState, setUsernameState] = useState<loadingState>(loadingState.loading)
   const [isConfirmingDelete, setIsConfirmingDelete] = useState<boolean>(false);
@@ -213,7 +213,6 @@ export default function AccountPage() {
       const result = await updateUsername(uid, editingUsername)
       if (result === true) {
         setUsernameState(loadingState.success)
-        setUsername(editingUsername)
       } else {
         setUsernameState(loadingState.failed)
       }
@@ -233,20 +232,9 @@ export default function AccountPage() {
     check()
   }, [editingUsername])
 
-  async function loadUserData() {
-    const uid = auth.currentUser?.uid
-    if (uid !== undefined) {
-      const onlineUsername = await getUsername(uid)
-      if (onlineUsername!== undefined) {
-        setUsername(onlineUsername)
-        setEditingUsername(onlineUsername)
-      }
-    }
-  }
-
   useEffect(() => {
-    loadUserData()
-  }, [])
+    setEditingUsername(username.username)
+  }, [username.username])
 
   useEffect(() =>{
     const unlisten = auth.onAuthStateChanged(
@@ -269,7 +257,7 @@ export default function AccountPage() {
     }}/>
   }
 
-  if (usernameExists === loadingState.loading) {
+  if (username.exists === loadingState.loading) {
     return (
       <View style={{width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25, alignContent: 'center', alignItems: 'center', justifyContent: 'center'}}>
         <ActivityIndicator />
@@ -278,7 +266,7 @@ export default function AccountPage() {
     )
   }
 
-  if (usernameExists === loadingState.failed) {
+  if (username.exists === loadingState.failed) {
     return <UsernameComponent onClose={() => {
       router.push("/")
     }}/>
@@ -286,7 +274,7 @@ export default function AccountPage() {
   
   return (
     <View style={{width: width * (width <= 560 ? 0.95:0.8), backgroundColor: "rgba(255,255,255, 0.95)", height: height * 0.8, borderRadius: 25, padding: 10}}>
-      <Pressable style={{marginTop: 25, marginLeft: 25}} onPress={() => {
+      <Pressable style={{marginTop: (width <= 560) ? 15:25, marginLeft: (width <= 560) ? 15:25}} onPress={() => {
         router.push("/")
       }}>
         <CloseIcon width={30} height={30}/>
@@ -309,10 +297,11 @@ export default function AccountPage() {
               }
             }), {
               width: "100%",
-              marginHorizontal: 4,
-              fontFamily: 'RussoOne'
+              marginHorizontal: (Platform.OS === "ios") ? 0:4,
+              fontFamily: 'RussoOne',
+              fontSize: 14
             }]}
-          />:<Text style={{fontFamily: 'RussoOne', marginVertical: 3}}>{username}</Text>
+          />:<Text style={{fontFamily: 'RussoOne', marginVertical: 3, fontSize: 14}}>{username.username}</Text>
         }
         <Pressable
           onPress={() => {
@@ -322,10 +311,10 @@ export default function AccountPage() {
               if (usernameState === loadingState.success) {
                 loadUpdateUsername()
                 setIsUpdatingUsername(false)
-              } else if (usernameState === loadingState.exists && username === editingUsername) {
+              } else if (usernameState === loadingState.exists && username.username === editingUsername) {
                 setIsUpdatingUsername(false)
               } else if (usernameState === loadingState.failed) {
-                setEditingUsername(username)
+                setEditingUsername(username.username)
                 setIsUpdatingUsername(false)
               }
             }
@@ -340,7 +329,7 @@ export default function AccountPage() {
               {(usernameState === loadingState.loading) ?
                 <ActivityIndicator/>:null
               }
-              {((usernameState === loadingState.success || username === editingUsername) && usernameState !== loadingState.loading) ?
+              {((usernameState === loadingState.success || username.username === editingUsername) && usernameState !== loadingState.loading) ?
                 <Text style={{marginVertical: 3}}>Update Username</Text>:null
               }
               {(usernameState === loadingState.failed) ?
@@ -348,10 +337,10 @@ export default function AccountPage() {
               }
             </>:
             <>
-              {(usernameState === loadingState.success || username === editingUsername) ?
+              {(usernameState === loadingState.success || username.username === editingUsername) ?
                 <Text style={{marginVertical: 3}}>Continue</Text>:null
               }
-              {(usernameState === loadingState.exists && username !== editingUsername) ?
+              {(usernameState === loadingState.exists && username.username !== editingUsername) ?
                 <Text style={{marginVertical: 3}}>Username Already Exists</Text>:null
               }
                {(usernameState === loadingState.failed) ?

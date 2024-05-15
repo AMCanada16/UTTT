@@ -29,8 +29,8 @@ export default function OnlineAuthenticationComponent({
       justifyContent: 'center'
     }}>
       <View style={{width: width * ((width <= 560) ? 0.95:0.8), backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25, borderWidth: 1, borderColor: 'black', padding: 10, paddingBottom: 15}}>
-        <Pressable style={{marginTop: 25, marginLeft: 25}} onPress={() => {onClose()}}>
-          <CloseIcon width={20} height={20}/>
+        <Pressable style={{marginTop: (width <= 560) ? 0:25, marginLeft: (width <= 560) ? 0:25}} onPress={() => {onClose()}}>
+          <CloseIcon width={30} height={30}/>
         </Pressable>
         <Text style={{fontWeight: 'bold', textAlign: 'center', fontSize: 25, marginBottom: 10}}>Login</Text>
         <AppleAuthenticationButton />

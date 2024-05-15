@@ -4,27 +4,26 @@ import { getUsername } from "../functions/UserFunctions";
 import { loadingState } from "../Types";
 import { Unsubscribe, doc, onSnapshot } from "firebase/firestore";
 
-export default function useUsernameExists() {
+export default function useUsername(): {
+  exists: loadingState;
+  username: string;
+} {
   const [exists, setExists] = useState<loadingState>(loadingState.loading);
+  const [username, setUsername] = useState<string>("")
 
   useEffect(() =>{
     let snap: undefined | Unsubscribe = undefined
     const unlisten = auth.onAuthStateChanged(
       async authUser => {
         if (authUser !== null) {
-          const usernameResult = await getUsername(authUser.uid)
-          if (usernameResult !== undefined) {
-            setExists(loadingState.success)
-          } else {
-            snap = onSnapshot(doc(db, "Users", authUser.uid), (doc) => {
-              if (doc.exists()){
-                setExists(loadingState.success)
-              } else {
-                setExists(loadingState.failed)
-              }
-            });
-            setExists(loadingState.failed)
-          }
+          snap = onSnapshot(doc(db, "Users", authUser.uid), (doc) => {
+            if (doc.exists()){
+              setExists(loadingState.success)
+              setUsername(doc.data().username)
+            } else {
+              setExists(loadingState.failed)
+            }
+          });
         } else {
           setExists(loadingState.failed)
         }
@@ -37,5 +36,8 @@ export default function useUsernameExists() {
       }
     }
   }, []);
-  return exists
+  return {
+    exists,
+    username
+  }
 }
