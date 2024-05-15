@@ -20,6 +20,7 @@ import { loadingState } from '../Types'
  * A function to add a username if the account doesn't have one
  * @param onClose A function called when the user closes the component. This should hide the view
  * @returns A react function
+ * @remarks Needs internet to work. This component should be after checking if the component has internet. (need to add offline screen)
  */
 export default function UsernameComponent({
   onClose

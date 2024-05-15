@@ -1,14 +1,16 @@
 import { View, Text, Pressable, FlatList, ListRenderItemInfo, ActivityIndicator, TextInput, Platform } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { auth } from '../firebase';
 import { Redirect, router } from 'expo-router';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { approveFriendRequest, requestFriend } from '../functions/UserFunctions';
 import DefaultButton from './DefaultButton';
-import { CheckMarkIcon, ChevronLeft, XIcon } from './Icons';
+import { CheckMarkIcon, ChevronLeft, CloseIcon, OfflineIcon, XIcon } from './Icons';
 import useFriends from '../hooks/useFriends';
 import OnlineComponent from './OnlineComponent';
+import SegmentedControl from '@react-native-segmented-control/segmented-control';
+import useIsConnected from '../hooks/useIsConnected';
 
 function FriendButtonComponent({
   friend
@@ -107,8 +109,30 @@ function FriendButtonComponent({
 export default function FriendsPage() {
   const {height, width} = useSelector((state: RootState) => state.dimensions)
   const [search, setSearch] = useState<string>("")
-  const friends = useFriends(search)
+  const [isFriends, setIsFriends] = useState<boolean>(false)
+  const [page, setPgae] = useState<number>(0)
+  const friends = useFriends(search, isFriends, page)
+  const isConnected = useIsConnected()
 
+  useEffect(() => {
+    if (friends.friendsCount < 1) {
+      setIsFriends(false)
+    }
+  }, [friends.friendsCount])
+
+  if (!isConnected) {
+    return (
+      <View style={{width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25, alignContent: 'center', alignItems: 'center', justifyContent: 'center'}}>
+        <Pressable style={{position: 'absolute', top: (width <= 560) ? 25:35, left: (width <= 560) ? 25:35}} onPress={() => {
+          router.push("/")
+        }}>
+          <CloseIcon width={30} height={30}/>
+        </Pressable>
+        <OfflineIcon width={30} height={30}/>
+        <Text>Offline</Text>
+      </View>
+    )
+  }
 
   if (auth.currentUser === null) {
     return <Redirect href={"/UTTT/account"}/>
@@ -152,9 +176,25 @@ export default function FriendsPage() {
           borderRadius: 4,
           fontFamily: 'RussoOne'
         }]}
+        placeholder={"Search"}
+        placeholderTextColor={'black'}
       />
+      {friends.friendsCount >= 1 ?
+        <SegmentedControl
+          values={['Friends', 'All']}
+          selectedIndex={isFriends ? 0:1}
+          onChange={(e) => {
+            if (e.nativeEvent.selectedSegmentIndex === 0) {
+              setIsFriends(true)
+            } else {
+              setIsFriends(false)
+            }
+          }}
+          style={{margin: 5, marginBottom: 10, borderWidth: 1, borderColor: 'black'}}
+        />:null
+      }
       <FlatList
-        data={friends}
+        data={friends.friends}
         renderItem={(friend) => (
           <DefaultButton style={{flexDirection: 'row', width: width * ((width <= 560) ? 0.95:0.8) - 50, marginBottom: 5, marginLeft: 15}}>
             <Text style={{marginVertical: 3}}>{friend.item.username}</Text>

@@ -11,9 +11,10 @@ import OnlineAuthenticationComponent from './OnlineAuthenticationComponent'
 import { loadingState } from '../Types'
 import UsernameComponent from './AddUserComponent'
 import useUsernameExists from '../hooks/useUsernameExists'
-import { ChevronLeft, CloseIcon, FriendIcon, OnlineIcon, SignOutIcon, TrashIcon } from './Icons'
+import { ChevronLeft, CloseIcon, FriendIcon, OfflineIcon, OnlineIcon, SignOutIcon, TrashIcon } from './Icons'
 import OnlineStatics from './OnlineStatics'
 import useUsername from '../hooks/useUsernameExists'
+import useIsConnected from '../hooks/useIsConnected'
 
 function DeleteText({
   secondsLeft,
@@ -71,6 +72,7 @@ function ConfirmingDelete({
     const result = await deleteUser()
     if (result === true) {
       setDeleteState(loadingState.success)
+      onBack()
     } else {
       setDeleteState(loadingState.failed)
     }
@@ -205,6 +207,7 @@ export default function AccountPage() {
   const [isUpdatingUsername, setIsUpdatingUsername] = useState<boolean>(false)
   const [usernameState, setUsernameState] = useState<loadingState>(loadingState.loading)
   const [isConfirmingDelete, setIsConfirmingDelete] = useState<boolean>(false);
+  const isConnected = useIsConnected()
 
   async function loadUpdateUsername() {
     let uid = auth.currentUser?.uid
@@ -249,7 +252,21 @@ export default function AccountPage() {
     return () => {
       unlisten();
     }
- }, []);
+  }, []);
+
+  if (!isConnected) {
+    return (
+      <View style={{width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25, alignContent: 'center', alignItems: 'center', justifyContent: 'center'}}>
+        <Pressable style={{position: 'absolute', top: (width <= 560) ? 25:35, left: (width <= 560) ? 25:35}} onPress={() => {
+          router.push("/")
+        }}>
+          <CloseIcon width={30} height={30}/>
+        </Pressable>
+        <OfflineIcon width={30} height={30}/>
+        <Text>Offline</Text>
+      </View>
+    )
+  }
 
   if (!isAuth) {
     return <OnlineAuthenticationComponent onClose={() => {

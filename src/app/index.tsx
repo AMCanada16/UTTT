@@ -88,16 +88,17 @@ function Online({onClose}:{onClose: () => void}){
 
  if (!isConnected) {
   return (
-    <View style={{width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
-      <Pressable style={{marginTop: (width <= 560) ? 15:25, marginLeft: (width <= 560) ? 15:25}} onPress={() => {onClose()}}>
+    <View style={{width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25, alignContent: 'center', alignItems: 'center', justifyContent: 'center'}}>
+      <Pressable style={{position: 'absolute', top: (width <= 560) ? 25:35, left: (width <= 560) ? 25:35}} onPress={() => {
+        router.push("/")
+      }}>
         <CloseIcon width={30} height={30}/>
       </Pressable>
-      <OfflineIcon width={30} height={30} style={{
-        marginHorizontal: (width * ((width <= 560) ? 0.475:0.4)) - 15
-      }}/>
+      <OfflineIcon width={30} height={30}/>
+      <Text>Offline</Text>
     </View>
   )
- }
+}
 
   if (!isAuth) {
     return <OnlineAuthenticationComponent onClose={onClose}/>
@@ -287,8 +288,6 @@ function Overlay({online}:{online: boolean}) {
     return <Online onClose={() => router.push("/")}/>
   } else if (gameType === "ai" || gameType === "friend") {
     return <StorageGames isFriend={gameType === "friend"} onClose={() => {router.push("/")}}/>
-  } else if (gameType === "account") {
-    return <AccountPage />
   } else if (gameType === "friends") {
     return <FriendsPage />
   }
