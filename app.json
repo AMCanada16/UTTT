@@ -52,7 +52,6 @@
           }
         ]
       }
-      //"googleServicesFile": "./GoogleService-Info.plist"  
     },
     "android": {
       "adaptiveIcon": {
@@ -71,6 +70,12 @@
       }
     },
     "plugins": [
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.94813812988-lhtl01ojo9jchu3h8sbvr97uk9p1ajum"
+        }
+      ],
       "expo-apple-authentication",
       "expo-router",
       [
@@ -78,8 +83,7 @@
         {
           "fonts":["./assets/Fonts/RussoOne.ttf", "./assets/Fonts/Ultimate.ttf", "./assets/Fonts/BarlowCondensed.ttf", "./assets/Fonts/Glitch.ttf"]
         }
-      ],
-     // "@react-native-google-signin/google-signin"
+      ]
     ]
   }
 }
