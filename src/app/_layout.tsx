@@ -6,7 +6,7 @@
 
 */
 import React, { useCallback, useEffect } from 'react';
-import { View, useWindowDimensions } from 'react-native';
+import { StatusBar, View, useWindowDimensions } from 'react-native';
 import store, { RootState } from '../redux/store';
 import { dimensionsSlice } from '../redux/reducers/dimensionsReducer';
 import {Provider, useSelector} from "react-redux"
@@ -57,6 +57,7 @@ function App() {
       <Head>
         <title>UTTT</title>
       </Head>
+      <StatusBar barStyle={'light-content'}/>
       <View onLayout={() => onLayoutRootView()} style={{flex: 1}}>
         <Slot />
       </View>

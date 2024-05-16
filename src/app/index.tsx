@@ -4,7 +4,7 @@
   18 November 2023
   Welcome.tsx
 */
-import { View, Text, Pressable, FlatList } from "react-native";
+import { View, Text, Pressable, FlatList, Image } from "react-native";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { router, useGlobalSearchParams, useRouter } from "expo-router";
@@ -28,6 +28,16 @@ function Overlay({online}:{online: boolean}) {
   }
   return null
 }
+
+function getImageLength(width: number, height: number) {
+  if (width < height) {
+    if (width <= 1000) {
+      return (width * 0.9)/3 - 10
+    }
+    return (width * 0.8)/3 - 10
+  }
+  return (height * 0.8)/3 - 10
+} 
 
 export function WelcomePage({
   online
@@ -53,9 +63,20 @@ export function WelcomePage({
         <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: (width > 390) ? 50:(width * 0.13) - 10, color: "#ff9c9c", textShadowColor: "#FF5757", textShadowRadius: 25, textAlign: 'center'}}>TOE </Text>
       </Text>
       <View>
-        <Text style={{marginLeft: '5%', marginTop: 10, marginBottom: 10, color: 'white', marginRight: "5%"}}>Ultimate Tic Tac Toe takes tic tac toe to the next level. Battle it out with your friends or AI. Online gameplay is also avaliable.</Text>
-        <View>
-          
+        <Text style={{marginLeft: '5%', marginTop: 10, marginBottom: 10, color: 'white', marginRight: "5%", textAlign: (width > 1000) ? 'center':undefined}}>Ultimate Tic Tac Toe takes tic tac toe to the next level. Battle it out with your friends or AI. Online gameplay is also avaliable.</Text>
+        <View style={{flexDirection: 'row'}}>
+          <View style={{marginHorizontal: 5, marginLeft: (width - ((getImageLength(width, height) * 3) + 25))/2}}>
+            <Image source={require("../../assets/UTTT-Demo-Start.gif")} style={{width: getImageLength(width, height), height: getImageLength(width, height), overflow: 'hidden'}} width={width/3} height={100}/>
+            <Text style={{textAlign: 'center', color: 'white', fontSize: width * 0.01}}>Play Tic Tac Toe inside Tic Tac Toe.</Text>
+          </View>
+          <View style={{marginHorizontal: 5}}>
+            <Image source={require("../../assets/UTTT-Demo-End.gif")} style={{width: getImageLength(width, height), height: getImageLength(width, height), overflow: 'hidden'}} width={100} height={100}/>
+            <Text style={{textAlign: 'center', color: 'white', fontSize: width * 0.01}}>Win the big game to win.</Text>
+          </View>
+          <View style={{marginHorizontal: 5}}>
+            <Image source={require("../../assets/UTTT-Demo-Ai.gif")} style={{width: getImageLength(width, height), height: getImageLength(width, height), overflow: 'hidden'}} width={100} height={100}/>
+            <Text style={{textAlign: 'center', color: 'white', fontSize: width * 0.01}}>Play Against AI</Text>
+          </View>
         </View>
       </View>
       <BottomComponent />
