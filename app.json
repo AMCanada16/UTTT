@@ -15,49 +15,77 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "plugins": [  
+      "@react-native-google-signin/google-signin",
+      "expo-apple-authentication",
+      "expo-router",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/Fonts/RussoOne.ttf",
+            "./assets/Fonts/Ultimate.ttf",
+            "./assets/Fonts/BarlowCondensed.ttf",
+            "./assets/Fonts/Glitch.ttf"
+          ]
+        }
+      ]
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "Archimedes4.UTTT",
       "usesAppleSignIn": true,
       "privacyManifests": {
-        "NSPrivacyAccessedAPITypes":[
+        "NSPrivacyAccessedAPITypes": [
           {
-            "NSPrivacyAccessedAPIType":"NSPrivacyAccessedAPICategoryUserDefaults",
-            "NSPrivacyAccessedAPITypeReasons":["CA92.1"]
+            "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
+            "NSPrivacyAccessedAPITypeReasons": [
+              "CA92.1"
+            ]
           }
         ],
-        "NSPrivacyCollectedDataTypes":[
+        "NSPrivacyCollectedDataTypes": [
           {
-            "NSPrivacyCollectedDataType":"NSPrivacyCollectedDataTypeEmailAddress",
-            "NSPrivacyCollectedDataTypeLinked":true,
-            "NSPrivacyCollectedDataTypeTracking":false,
-            "NSPrivacyCollectedDataTypePurposes":["NSPrivacyCollectedDataTypePurposeAppFunctionality"]
+            "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeEmailAddress",
+            "NSPrivacyCollectedDataTypeLinked": true,
+            "NSPrivacyCollectedDataTypeTracking": false,
+            "NSPrivacyCollectedDataTypePurposes": [
+              "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+            ]
           },
           {
-            "NSPrivacyCollectedDataType":"NSPrivacyCollectedDataTypeGameplayContent",
-            "NSPrivacyCollectedDataTypeLinked":true,
-            "NSPrivacyCollectedDataTypeTracking":false,
-            "NSPrivacyCollectedDataTypePurposes":["NSPrivacyCollectedDataTypePurposeAppFunctionality"]
+            "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeGameplayContent",
+            "NSPrivacyCollectedDataTypeLinked": true,
+            "NSPrivacyCollectedDataTypeTracking": false,
+            "NSPrivacyCollectedDataTypePurposes": [
+              "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+            ]
           },
           {
-            "NSPrivacyCollectedDataType":"NSPrivacyCollectedDataTypeCrashData",
-            "NSPrivacyCollectedDataTypeTracking":false,
-            "NSPrivacyCollectedDataTypePurposes":["NSPrivacyCollectedDataTypePurposeAppFunctionality"]
+            "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeCrashData",
+            "NSPrivacyCollectedDataTypeTracking": false,
+            "NSPrivacyCollectedDataTypePurposes": [
+              "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+            ]
           },
           {
-            "NSPrivacyCollectedDataType":"NSPrivacyCollectedDataTypeUserID",
-            "NSPrivacyCollectedDataTypeLinked":true,
-            "NSPrivacyCollectedDataTypeTracking":false,
-            "NSPrivacyCollectedDataTypePurposes":["NSPrivacyCollectedDataTypePurposeAppFunctionality"]
+            "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeUserID",
+            "NSPrivacyCollectedDataTypeLinked": true,
+            "NSPrivacyCollectedDataTypeTracking": false,
+            "NSPrivacyCollectedDataTypePurposes": [
+              "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+            ]
           }
         ]
-      }
+      },
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "Archimedes4.UTTT"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -68,22 +96,6 @@
       "eas": {
         "projectId": "50420409-1879-402c-bd37-d2db6871cea8"
       }
-    },
-    "plugins": [
-      [
-        "@react-native-google-signin/google-signin",
-        {
-          "iosUrlScheme": "com.googleusercontent.apps.94813812988-lhtl01ojo9jchu3h8sbvr97uk9p1ajum"
-        }
-      ],
-      "expo-apple-authentication",
-      "expo-router",
-      [
-        "expo-font",
-        {
-          "fonts":["./assets/Fonts/RussoOne.ttf", "./assets/Fonts/Ultimate.ttf", "./assets/Fonts/BarlowCondensed.ttf", "./assets/Fonts/Glitch.ttf"]
-        }
-      ]
-    ]
+    }
   }
 }
