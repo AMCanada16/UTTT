@@ -1,6 +1,7 @@
 node_modules/
 .expo/
 dist/
+ios/
 npm-debug.*
 *.jks
 *.p8
@@ -18,4 +19,4 @@ web-build/
 .metro-health-check*
 
 # contains sensitive information
-GoogleService-Info-6.plist
+GoogleService-Info.plist

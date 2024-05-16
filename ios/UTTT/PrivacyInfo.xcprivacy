@@ -20,6 +20,8 @@
         <string>NSPrivacyCollectedDataTypeEmailAddress</string>
         <key>NSPrivacyCollectedDataTypeLinked</key>
         <true/>
+        <key>NSPrivacyCollectedDataTypeTracking</key>
+        <false/>
         <key>NSPrivacyCollectedDataTypePurposes</key>
         <array>
           <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
@@ -30,6 +32,8 @@
         <string>NSPrivacyCollectedDataTypeGameplayContent</string>
         <key>NSPrivacyCollectedDataTypeLinked</key>
         <true/>
+        <key>NSPrivacyCollectedDataTypeTracking</key>
+        <false/>
         <key>NSPrivacyCollectedDataTypePurposes</key>
         <array>
           <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
@@ -38,6 +42,8 @@
       <dict>
         <key>NSPrivacyCollectedDataType</key>
         <string>NSPrivacyCollectedDataTypeCrashData</string>
+        <key>NSPrivacyCollectedDataTypeTracking</key>
+        <false/>
         <key>NSPrivacyCollectedDataTypePurposes</key>
         <array>
           <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
@@ -48,6 +54,8 @@
         <string>NSPrivacyCollectedDataTypeUserID</string>
         <key>NSPrivacyCollectedDataTypeLinked</key>
         <true/>
+        <key>NSPrivacyCollectedDataTypeTracking</key>
+        <false/>
         <key>NSPrivacyCollectedDataTypePurposes</key>
         <array>
           <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
