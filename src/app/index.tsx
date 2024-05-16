@@ -4,90 +4,16 @@
   18 November 2023
   Welcome.tsx
 */
-import { useEffect, useState } from "react";
 import { View, Text, Pressable, FlatList } from "react-native";
-import { addGame, getStorageGames } from "../functions/StorageFunctions";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { CloseIcon } from "../components/Icons";
 import { router, useGlobalSearchParams, useRouter } from "expo-router";
 import AccountPage from "../components/AccountPage";
 import BottomComponent from "../components/BottomComponent";
-import DefaultButton from "../components/DefaultButton";
 import FriendsPage from "../components/FriendsPage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import SelectOnlineGame from "../components/SelectOnlineGame"
-
-function StorageGames({isFriend, onClose}:{isFriend: boolean, onClose: () => void}) {
-  const router = useRouter();
-  const [games, setGames] = useState<GameType[]>([])
-  const {height, width} = useSelector((state: RootState) => state.dimensions)
-
-  async function getGameData(){
-    if (isFriend){
-      const result = await getStorageGames("friend")
-      setGames(result)
-    } else {
-      const result = await getStorageGames("ai")
-      setGames(result)
-    }
-  }
-  useEffect(() => { 
-    getGameData()
-  }, [])
-
-  async function createNew() {
-    if (isFriend){
-      const result = await addGame("friend")
-      router.push("/UTTT/friend/" + result)
-    } else {
-      const result = await addGame("ai")
-      router.push("/UTTT/ai/" + result)
-    }
-  }
-
-  return(
-    <View style={{width: width * ((width <= 560) ? 0.95:0.8), backgroundColor: "rgba(255,255,255, 0.95)", height: height * 0.8, borderRadius: 25}}>
-      <Pressable style={{marginTop: (width <= 560) ? 15:25, marginLeft: (width <= 560) ? 15:25}} onPress={() => {onClose()}}>
-        <CloseIcon width={30} height={30}/>
-      </Pressable>
-      <Text style={{textAlign: 'center', fontWeight: 'bold', marginTop: 2, fontSize: 25}}>Load Game</Text>
-      <FlatList
-        data={games}
-        renderItem={(game) => (
-          <DefaultButton
-            style={{margin: 5, flexDirection: 'row'}}
-            onPress={() => {
-              if (isFriend) {
-                router.push("/UTTT/friend/" + game.item.gameId)
-              } else {
-                router.push("/UTTT/ai/" + game.item.gameId)
-              }
-            }}
-          >
-            <Text style={{marginRight: 5}}>{game.item.gameId}</Text>
-            <Text>{new Date(game.item.date).toLocaleString('en-CA', {
-              month: 'long',
-              day: 'numeric',
-              year: 'numeric',
-              hour: 'numeric',
-              minute: 'numeric'
-            })}</Text>
-          </DefaultButton>
-        )}
-      />
-      <DefaultButton
-        onPress={() => createNew()}
-        style={{
-          margin: 5,
-          marginBottom: 15
-        }}
-      >
-        <Text>Create New</Text>
-      </DefaultButton>
-    </View>
-  )
-}
+import SelectStorageGames from "../components/SelectStorageGame";
 
 function Overlay({online}:{online: boolean}) {
   const { gameType } = useGlobalSearchParams()
@@ -96,7 +22,7 @@ function Overlay({online}:{online: boolean}) {
   } else if (online) {
     return <SelectOnlineGame onClose={() => router.push("/")}/>
   } else if (gameType === "ai" || gameType === "friend") {
-    return <StorageGames isFriend={gameType === "friend"} onClose={() => {router.push("/")}}/>
+    return <SelectStorageGames isFriend={gameType === "friend"} onClose={() => {router.push("/")}}/>
   } else if (gameType === "friends") {
     return <FriendsPage />
   }

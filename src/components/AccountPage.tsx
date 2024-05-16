@@ -39,7 +39,7 @@ export function DeleteText({
 
   if (deleteState === loadingState.success) {
     return (
-      <Text>Your Account Has Been Deleted</Text>
+      <Text>{game === true ? "The Game Has Been Deleted":"Your Account Has Been Deleted"}</Text>
     )
   }
 
