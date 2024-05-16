@@ -4,7 +4,7 @@ import { RootState } from "../redux/store"
 import { useSelector } from "react-redux"
 import useUsernameExists from "../hooks/useUsernameExists"
 import useIsConnected from "../hooks/useIsConnected"
-import { createNewGame, getOnlineGames } from "../functions/OnlineFunctions"
+import { createNewGame, getInvitationsCount, getOnlineGames } from "../functions/OnlineFunctions"
 import { emptyGame, gridStateMode, joinRulesArray, loadingState } from "../Types"
 import { auth, db } from "../firebase"
 import { ActivityIndicator, Pressable, View, Text, TextInput, Modal, FlatList } from "react-native"
@@ -89,6 +89,7 @@ export default function SelectOnlineGame({onClose}:{onClose: () => void}){
   const [searchMode, setSearchMode] = useState<joinRules>("public")
   const isConnected = useIsConnected()
   const [deleting, setDeleting] = useState<string>("")
+  const [numInvitations, setNumInvitations] = useState<number>(0);
 
   async function createNew() {
     const uid = auth.currentUser?.uid
@@ -112,9 +113,11 @@ export default function SelectOnlineGame({onClose}:{onClose: () => void}){
         currentFriends = friendResult.friends
       }
     }
+    const invitationNum = await getInvitationsCount()
     const result = await getOnlineGames(searchMode, currentFriends)
-    if (result !== loadingState.failed) {
+    if (result !== loadingState.failed && invitationNum !== loadingState.failed) {
       setGames(result)
+      setNumInvitations(invitationNum)
     }
   }
 
@@ -201,7 +204,7 @@ export default function SelectOnlineGame({onClose}:{onClose: () => void}){
           placeholder="Game ID"
         />
         <SegmentedControl
-          values={['All', 'Friends', 'Invitation']}
+          values={['All', 'Friends', 'Invitation ' + numInvitations]}
           selectedIndex={joinRulesArray.indexOf(searchMode)}
           onChange={(e) => {
             if (e.nativeEvent.selectedSegmentIndex === 0) {
@@ -239,6 +242,9 @@ export default function SelectOnlineGame({onClose}:{onClose: () => void}){
                 </Pressable>:null
               }
             </DefaultButton>
+          )}
+          ListEmptyComponent={() => (
+            <Text style={{textAlign: 'center', fontSize: width * 0.05, fontFamily: "RussoOne"}}>There are no results!</Text>
           )}
         />
         <View style={{flexDirection: 'row', marginBottom: 15}}>

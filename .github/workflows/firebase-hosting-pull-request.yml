@@ -16,6 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.20.2"
+          cache: yarn
       - run: yarn install && npx expo export -p web
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
