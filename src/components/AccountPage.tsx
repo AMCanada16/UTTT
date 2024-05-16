@@ -10,18 +10,19 @@ import DefaultButton from './DefaultButton'
 import OnlineAuthenticationComponent from './OnlineAuthenticationComponent'
 import { loadingState } from '../Types'
 import UsernameComponent from './AddUserComponent'
-import useUsernameExists from '../hooks/useUsernameExists'
 import { ChevronLeft, CloseIcon, FriendIcon, OfflineIcon, OnlineIcon, SignOutIcon, TrashIcon } from './Icons'
 import OnlineStatics from './OnlineStatics'
 import useUsername from '../hooks/useUsernameExists'
 import useIsConnected from '../hooks/useIsConnected'
 
-function DeleteText({
+export function DeleteText({
   secondsLeft,
-  deleteState
+  deleteState,
+  game
 }:{
   secondsLeft: number,
-  deleteState: loadingState
+  deleteState: loadingState,
+  game?: boolean
 }) {
   if (secondsLeft === 0 && deleteState === loadingState.notStarted) {
     return (
@@ -31,7 +32,7 @@ function DeleteText({
           fontWeight: "bold",
           color: "white",
           fontSize: 17
-        }}>DELETE EVERYTHING</Text>
+        }}>{game === true ? "DELETE GAME":"DELETE EVERYTHING"}</Text>
       </>
     )
   }

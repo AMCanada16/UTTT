@@ -3,11 +3,12 @@
   Andrew Mainella
   8 May 2024
 */
-import { GoogleAuthProvider, signInWithRedirect, signInAnonymously as signInAnonymouslyFirebase, OAuthProvider, signOut as signOutFirebase } from "firebase/auth";
+import { GoogleAuthProvider, signInWithRedirect, signInAnonymously as signInAnonymouslyFirebase, OAuthProvider, signOut as signOutFirebase, signInWithCredential } from "firebase/auth";
 import { auth, database, db } from "../firebase";
 import { deleteDoc, doc } from "firebase/firestore";
 import { deleteUser as deleteUserFirebase } from "firebase/auth";
 import { ref, remove } from "firebase/database"
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 /**
  * 
@@ -23,6 +24,18 @@ export async function signInWithApple() {
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
   signInWithRedirect(auth, provider);
+  // try {
+  //   await GoogleSignin.hasPlayServices();
+  //   const userInfo = await GoogleSignin.signIn();
+  //   const provider = new GoogleAuthProvider();
+  //   const credential = provider.
+  //   .credential({
+  //       idToken: userInfo.idToken
+  //       rawNonce: userInfo.
+  //   });
+  //   await signInWithCredential(auth, credential);
+  // } catch (error) {
+  // }
 }
 
 /**

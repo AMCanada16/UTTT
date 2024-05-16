@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#5E17EB"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -47,7 +47,8 @@
             "NSPrivacyCollectedDataTypePurposes":["NSPrivacyCollectedDataTypePurposeAppFunctionality"]
           }
         ]
-      }
+      },
+      "googleServicesFile": "./GoogleService-Info.plist"  
     },
     "android": {
       "adaptiveIcon": {
@@ -72,7 +73,8 @@
         {
           "fonts":["./assets/Fonts/RussoOne.ttf", "./assets/Fonts/Ultimate.ttf", "./assets/Fonts/BarlowCondensed.ttf", "./assets/Fonts/Glitch.ttf"]
         }
-      ]
+      ],
+      "@react-native-google-signin/google-signin"
     ]
   }
 }

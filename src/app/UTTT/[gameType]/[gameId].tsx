@@ -75,7 +75,11 @@ function MainGame({game}:{game: GameType}) {
   const [gameLength, setGameLength] = useState<number>(0);
 
   useEffect(() => {
-    setGameLength((height < width) ? height * 0.8: width * 0.8)
+    if ((width < height && width <= 560) || (width > height && height <= 560)) {
+      setGameLength((height < width) ? height * 0.9: width * 0.9)
+    } else {
+      setGameLength((height < width) ? height * 0.8: width * 0.8) 
+    }
   }, [width, height])
 
   return (
@@ -146,6 +150,10 @@ export default function UltimateTicTacToe() {
     return (
       <View style={{width: width, height: height, backgroundColor: "#5E17EB", alignItems: 'center', justifyContent: 'center', margin: "auto"}}>
         <Text style={{color: 'white'}}>The game could not be found.</Text>
+        <Pressable onPress={() => router.push('/')} style={{flexDirection: 'row', backgroundColor: 'white', borderRadius: 15, padding: 10, marginTop: 5, marginRight: 5}}>
+          <ChevronLeft width={16} height={16}/>
+          <Text style={{marginLeft: 2}}>Back</Text>
+        </Pressable>
       </View>
     )
   }

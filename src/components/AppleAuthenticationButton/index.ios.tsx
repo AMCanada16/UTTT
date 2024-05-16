@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 
 export default function AppleAuthenticationButton() {
-  const {height, width} = useSelector((state: RootState) => state.dimensions)
+  const {width} = useSelector((state: RootState) => state.dimensions)
   return (
     <AppleAuthentication.AppleAuthenticationButton
       buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
@@ -29,6 +29,7 @@ export default function AppleAuthenticationButton() {
           await signInWithCredential(auth, credential);
           // signed in
         } catch (e) {
+          console.log(e)
           // if (e.code === 'ERR_REQUEST_CANCELED') {
           //   // handle that the user canceled the sign-in flow
           // } else {

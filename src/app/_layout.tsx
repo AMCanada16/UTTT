@@ -14,7 +14,6 @@ import { Slot, SplashScreen } from 'expo-router';
 import { useFonts } from 'expo-font';
 import Head from "expo-router/head"
 import useShareStatus from '../hooks/useShareStatus';
-import useIsConnected from '../hooks/useIsConnected';
 
 /**
  * The Main Component for the app that loads fonts and handels dimensions

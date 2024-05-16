@@ -3,9 +3,57 @@
 <plist version="1.0">
   <dict>
     <key>NSPrivacyAccessedAPITypes</key>
-    <array/>
+    <array>
+      <dict>
+        <key>NSPrivacyAccessedAPIType</key>
+        <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+        <key>NSPrivacyAccessedAPITypeReasons</key>
+        <array>
+          <string>CA92.1</string>
+        </array>
+      </dict>
+    </array>
     <key>NSPrivacyCollectedDataTypes</key>
-    <array/>
+    <array>
+      <dict>
+        <key>NSPrivacyCollectedDataType</key>
+        <string>NSPrivacyCollectedDataTypeEmailAddress</string>
+        <key>NSPrivacyCollectedDataTypeLinked</key>
+        <true/>
+        <key>NSPrivacyCollectedDataTypePurposes</key>
+        <array>
+          <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+        </array>
+      </dict>
+      <dict>
+        <key>NSPrivacyCollectedDataType</key>
+        <string>NSPrivacyCollectedDataTypeGameplayContent</string>
+        <key>NSPrivacyCollectedDataTypeLinked</key>
+        <true/>
+        <key>NSPrivacyCollectedDataTypePurposes</key>
+        <array>
+          <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+        </array>
+      </dict>
+      <dict>
+        <key>NSPrivacyCollectedDataType</key>
+        <string>NSPrivacyCollectedDataTypeCrashData</string>
+        <key>NSPrivacyCollectedDataTypePurposes</key>
+        <array>
+          <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+        </array>
+      </dict>
+      <dict>
+        <key>NSPrivacyCollectedDataType</key>
+        <string>NSPrivacyCollectedDataTypeUserID</string>
+        <key>NSPrivacyCollectedDataTypeLinked</key>
+        <true/>
+        <key>NSPrivacyCollectedDataTypePurposes</key>
+        <array>
+          <string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string>
+        </array>
+      </dict>
+    </array>
     <key>NSPrivacyTracking</key>
     <false/>
     <key>NSPrivacyTrackingDomains</key>

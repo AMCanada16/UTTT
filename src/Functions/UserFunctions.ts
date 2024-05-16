@@ -1,9 +1,8 @@
-import { doc, runTransaction } from 'firebase/firestore';
 /*
   UTTT
   Andrew Mainella
 */
-import { collection, getDoc, setDoc, updateDoc, where, query, getCountFromServer, getDocs } from "firebase/firestore";
+import { collection, getDoc, setDoc, updateDoc, where, query, getCountFromServer, doc, runTransaction  } from "firebase/firestore";
 import { db } from "../firebase";
 import { loadingState } from "../Types";
 
@@ -153,7 +152,6 @@ export async function approveFriendRequest(uid: string, approveUid: string) {
     })
     return loadingState.success
   } catch (error) {
-    console.log("ERRROR", error)
     return loadingState.failed
   }
 }

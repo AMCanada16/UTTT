@@ -69,6 +69,8 @@ function useGameOnline(gameId: string) {
         }
         store.dispatch(gameSlice.actions.setGame(result))
         setGame(result)
+      } else {
+        setGame(undefined)
       }
     });
     return () => {
