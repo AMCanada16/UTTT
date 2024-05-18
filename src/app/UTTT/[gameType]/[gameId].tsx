@@ -109,6 +109,7 @@ export default function UltimateTicTacToe() {
   const router = useRouter()
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [isShowingPlayers, setIsShowingPlayers] = useState<boolean>(false)
+  const [isShowingGameOver, setIsShowingGameOver] = useState<boolean>(true)
   const insets = useSafeAreaInsets()
   const isConnected = useIsConnected()
 
@@ -204,17 +205,22 @@ export default function UltimateTicTacToe() {
           <ChevronLeft width={16} height={16}/>
           <Text style={{marginLeft: 2}}>Back</Text>
         </Pressable>
-        {(game.gameType === 'online') ?
+        {(game.gameType === 'online' && game.gameOver === gridStateMode.Open) ?
           <Pressable onPress={() => setIsShowingPlayers(true)} style={{flexDirection: 'row', backgroundColor: 'white', borderRadius: 15, padding: 10, marginTop: 5, marginLeft: 5}}>
             <PersonIcon width={16} height={16}/>
             <Text style={{marginLeft: 2}}>Players</Text>
           </Pressable>:null
         }
+        {(game.gameOver !== gridStateMode.Open && isShowingGameOver === false) ?
+          <Pressable onPress={() => setIsShowingGameOver(true)} style={{flexDirection: 'row', backgroundColor: 'white', borderRadius: 15, padding: 10, marginTop: 5, marginLeft: 5}}>
+            <Text>Show game over</Text>
+          </Pressable>:null
+        }
       </View>
-      { (game.gameOver !== gridStateMode.Open) ?
-        <GameOverComponent />:null
+      { (game.gameOver !== gridStateMode.Open && isShowingGameOver === true) ?
+        <GameOverComponent onClose={() => setIsShowingGameOver(false)}/>:null
       }
-      { (game.gameType === 'online' && (isShowingPlayers || game.users.length < 2))?
+      { (game.gameType === 'online' && (isShowingPlayers || game.users.length < 2) && game.gameOver === gridStateMode.Open)?
         <PlayersPage accounts={game.users} onClose={() => {setIsShowingPlayers(false)}}/>:null
       }
     </View>

@@ -268,6 +268,7 @@ export function TileButtonPress(
   forthIndex: number,
   ai?: boolean
 ) {
+  // check if the game is current
   if (store.getState().gameState.gameOver !== gridStateMode.Open) {
     return
   }
