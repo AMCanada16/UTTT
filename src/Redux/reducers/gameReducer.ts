@@ -4,7 +4,7 @@ import { gridStateMode } from '../../Types';
 const initalState: GameType = {
   currentTurn: 0,
   date: new Date().toISOString(),
-  gameOver: false,
+  gameOver: gridStateMode.Open,
   data: {
     inner: [],
     value: [],
@@ -105,7 +105,7 @@ export const gameSlice = createSlice({
         users: undefined
       }
     },
-    setIsGameOver: (state, action: PayloadAction<boolean>) => {
+    setGameOver: (state, action: PayloadAction<gridStateMode>) => {
       if (state.gameType === "online") {
         return {
           currentTurn: state.currentTurn,

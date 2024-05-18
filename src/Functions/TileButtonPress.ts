@@ -4,7 +4,7 @@
 */
 import store from "../redux/store"
 import { gridStateMode } from "../Types"
-import { setCurrentTurn, setGridState, setIsGameOver, setSelectedGrid } from "./gameActions";
+import { setCurrentTurn, setGridState, setGameOver, setSelectedGrid } from "./gameActions";
 import * as tf from '@tensorflow/tfjs';
 
 let model: tf.Sequential | undefined
@@ -54,6 +54,7 @@ function getModel(): tf.Sequential {
 }
 
 export async function perdict(old: number[]) {
+  console.log(old.toString().replaceAll("1", "3").replaceAll("2", "1").replaceAll("3", "-1"))
   let newOld = old.map((e) => {
     if (e === 2) {
       return 1
@@ -63,7 +64,6 @@ export async function perdict(old: number[]) {
   const currentModel = getModel()
   const input = tf.tensor([newOld]);
   let result = currentModel.predict(input) as tf.Tensor
-  result.print()
   result.flatten()
   let array: number[][] = await result.array() as number[][]
 
@@ -78,13 +78,15 @@ export async function perdict(old: number[]) {
     }
   }
   newArray[highestIndex] = 2
+  console.log(newArray.toString().replaceAll("1", "3").replaceAll("2", "1").replaceAll("3", "-1"))
   return newArray
 }
 
 export const trainModel = async () => {
-  const xGames = [[0,1,-1,0,1,-1,0,0,0], [-1,-1,0,0,1,0,0,0,0], [-1,1,0,0,-1,0,0,0,0], [-1,1,0,0,-1,-1,0,1,0], [-1,0,1,0,1,0,0,0,0], [0,-1,0,0,-1,-1,1,1,0], [-1,0,1,0,-1,0,1,0,0], [-1,0,0,0,-1,0,0,1,0]]
-  const yGames = [[0,1,-1,0,1,-1,0,1,0], [-1,-1,1,0,1,0,0,0,0], [-1,1,0,0,-1,0,0,0,1], [-1,1,0,1,-1,-1,0,1,0], [-1,0,1,0,1,0,1,0,0], [0,-1,0,0,-1,-1,1,1,1], [-1,0,1,0,-1,0,1,0,1], [-1,0,0,0,-1,0,0,1,1]]
+  const xGames = [[0,1,-1,0,1,-1,0,0,0], [-1,-1,0,0,1,0,0,0,0], [-1,1,0,0,-1,0,0,0,0], [-1,1,0,0,-1,-1,0,1,0], [-1,0,1,0,1,0,0,0,0], [0,-1,0,0,-1,-1,1,1,0], [-1,0,1,0,-1,0,1,0,0], [-1,0,0,0,-1,0,0,1,0], [1,0,1,0,0,0,0,0,0], [1,1,0,0,0,0,0,0,0], [1,0,0,0,1,0,0,0,0], [1,0,0,0,-1,0,0,0,0], [-1,1,0,0,0,0,0,1,1], [1,1,0,0,-1,0,1,-1,-1], [1,0,0,0,0,0,1,0,0], [1,0,0,0,0,0,0,0,0], [1,0,1,0,0,0,0,0,0], [-1,0,1,0,0,0,0,0,0], [1,0,0,0,0,0,0,0,0], [1,0,0,0,0,0,0,0,1], [1,0,0,0,0,0,0,0,0], [1,0,0,0,0,0,1,0,0], [1,1,0,0,-1,0,0,1,0], [1,0,0,0,-1,0,1,0,0], [-1,0,0,0,0,0,1,0,1], [1,0,0,0,0,0,0,0,0], [-1,-1,0,1,-1,0,0,0,0], [-1,0,0,1,0,0,0,0,0], [1,0,0,0,0,0,0,0,0], [1,0,-1,0,-1,0,0,0,0], [0,0,1,0,-1,1,0,0,0], [-1,1,0,0,1,0,0,0,0], [0,0,0,0,0,-1,0,1,1], [0,1,-1,0,1,0,0,0,0], [0,-1,-1,0,0,0,0,-1,0], [1,0,0,0,0,-1,0,0,1], [0,1,-1,1,0,-1,-1,1,1], [1,0,0,0,1,0,0,0,0], [1,0,0,1,0,0,0,0,0], [1,0,0,1,0,0,0,0,0], [0,0,-1,0,0,0,0,0,-1], [-1,0,0,1,-1,-1,0,0,0], [0,0,0,0,1,0,0,1,0], [0,0,0,0,1,0,0,0,1], [-1,-1,0,0,1,0,0,0,0], [0,-1,-1,0,1,-1,0,0,1], [0,1,-1,0,1,-1,0,0,0], [1,0,0,-1,1,0,1,0,-1]]
+  const yGames = [[0,1,-1,0,1,-1,0,1,0], [-1,-1,1,0,1,0,0,0,0], [-1,1,0,0,-1,0,0,0,1], [-1,1,0,1,-1,-1,0,1,0], [-1,0,1,0,1,0,1,0,0], [0,-1,0,0,-1,-1,1,1,1], [-1,0,1,0,-1,0,1,0,1], [-1,0,0,0,-1,0,0,1,1], [1,1,1,0,0,0,0,0,0], [1,1,1,0,0,0,0,0,0], [1,0,0,0,1,0,0,0,1], [1,0,1,0,-1,0,0,0,0], [-1,1,0,0,1,0,0,1,1], [1,1,1,0,-1,0,1,-1,-1], [1,0,0,1,0,0,1,0,0], [1,0,0,0,1,0,0,0,0], [1,1,1,0,0,0,0,0,0], [-1,0,1,0,1,0,0,0,0], [1,0,0,0,1,0,0,0,0], [1,0,0,0,1,0,0,0,1], [1,0,0,0,1,0,0,0,0], [1,0,0,1,0,0,1,0,0], [1,1,1,0,-1,0,0,1,0], [1,0,0,1,-1,0,1,0,0], [-1,0,0,0,0,0,1,1,1], [1,0,0,0,1,0,0,0,0], [-1,-1,0,1,-1,0,0,0,1], [-1,0,0,1,1,0,0,0,0], [1,0,0,0,1,0,0,0,0], [1,0,-1,0,-1,0,1,0,0], [0,0,1,0,-1,1,0,0,1], [-1,1,0,0,1,0,0,1,0], [0,0,0,0,0,-1,1,1,1], [0,1,-1,0,1,0,0,1,0], [1,-1,-1,0,0,0,0,-1,0], [1,0,0,0,1,-1,0,0,1], [0,1,-1,1,1,-1,-1,1,1], [1,0,0,0,1,0,0,0,1], [1,0,0,1,0,0,1,0,0], [1,0,0,1,0,0,1,0,0], [0,0,-1,0,0,1,0,0,-1], [-1,0,0,1,-1,-1,0,0,1], [0,1,0,0,1,0,0,1,0], [1,0,0,0,1,0,0,0,1], [-1,-1,1,0,1,0,0,0,0], [1,-1,-1,0,1,-1,0,0,1], [0,1,-1,0,1,-1,0,1,0], [1,0,1,-1,1,0,1,0,-1]]
 
+  
   const xTensors = []
   const yTensors = []
   for (var index = 0; index < xGames.length; index += 1) {
@@ -118,6 +120,20 @@ export const trainModel = async () => {
   model = currentModel
 };
 
+export function twoDtoOneDValue(twoD: number[][]) {
+  var newArr: number[] = [0,0,0,0,0,0,0,0,0];
+  
+  for(var i = 0; i < twoD.length; i += 1)
+  {
+    if (twoD[i].length === 3) {
+      newArr[i] = twoD[i][0]
+      newArr[i+3] = twoD[i][1]
+      newArr[i+6] = twoD[i][2]
+    }
+  }
+  return newArr
+}
+
 export function twoDtoOneD(twoD: number[][]) {
   var newArr: number[] = [];
   
@@ -132,9 +148,11 @@ export async function perdictMoveGame(game: GameType) {
   if (game.selectedGrid !== 0) {
     perdictOnGrid(game, game.selectedGrid)
   } else {
-    let miniGame = twoDtoOneD(game.data.value)
+    console.log(game.data.value)
+    let miniGame = twoDtoOneDValue(game.data.value)
     let oldMiniGame = [...miniGame]
-    let newMiniGame = await perdict(miniGame)
+    console.log("MiniGame:", oldMiniGame)
+    let newMiniGame = await perdict(oldMiniGame)
     let index = 0;
     while (index < oldMiniGame.length) {
       if (newMiniGame[index] !== oldMiniGame[index]) {
@@ -142,7 +160,7 @@ export async function perdictMoveGame(game: GameType) {
       }
       index += 1;
     }
-    perdictOnGrid(game, index)
+    perdictOnGrid(game, index + 1)
   }
 }
 
@@ -150,6 +168,7 @@ function setGameTile(original: DimentionalType, firstIndex: number, secondIndex:
   let newValue = [...original.inner[firstIndex][secondIndex].value]
   let newValueOne = [...newValue[thirdIndex]]
   newValueOne[forthIndex] = currentTurn
+  console.log(newValue)
   newValue[thirdIndex] = newValueOne
   let newInner = [...original.inner]
   let newInnerOne = [...original.inner[firstIndex]]
@@ -184,17 +203,19 @@ function setActive(original: DimentionalType, firstIndex: number, secondIndex: n
 }
 
 function setValue(original: DimentionalType, firstIndex: number, secondIndex: number, value: gridStateMode) {
+  console.log("Old", original.value)
   let newValue = [...original.value]
   let newValueOne = [...original.value[firstIndex]]
   newValueOne[secondIndex] = value
   newValue[firstIndex] = newValueOne
+  console.log("NEw:", newValue)
   return {
     ...original,
     value: newValue
   }
 }
 
-function checkIfGameOver(gridState: DimentionalType, playerMode: gridStateMode, firstIndex: number, secondIndex: number): boolean {
+function checkIfGameOver(gridState: DimentionalType, playerMode: gridStateMode, firstIndex: number, secondIndex: number): gridStateMode{
   var change: boolean = false
   for(var index = 0; index < 3; index++){//Check Horizontal
     if (gridState.value[firstIndex][index] === playerMode){
@@ -234,7 +255,10 @@ function checkIfGameOver(gridState: DimentionalType, playerMode: gridStateMode, 
     }
   }
   
-  return change
+  if (change) {
+    return playerMode
+  }
+  return gridStateMode.Open
 }
 
 export function TileButtonPress(
@@ -244,6 +268,9 @@ export function TileButtonPress(
   forthIndex: number,
   ai?: boolean
 ) {
+  if (store.getState().gameState.gameOver !== gridStateMode.Open) {
+    return
+  }
   const onlineGameId = (store.getState().gameState.gameType === 'online') ? store.getState().gameState.gameId:undefined
   const playerMode = store.getState().gameState.currentTurn
   const newGrid = (thirdIndex === 0) ? (forthIndex === 0) ? 1:(forthIndex === 1) ? 2:3: (thirdIndex === 1) ?  (forthIndex === 0) ? 4:(forthIndex === 1) ? 5:6: (forthIndex === 0) ? 7:(forthIndex === 1) ? 8:9
@@ -259,6 +286,7 @@ export function TileButtonPress(
     } else {
       setSelectedGrid(newGrid, onlineGameId)
     }
+    // A boolean if a square has become x or o (if so we need to check for win)
     var change: boolean = false
     for(var index = 0; index < 3; index++){//Check Horizontal
       if (newGridState.inner[firstIndex][secondIndex].value[thirdIndex][index] === playerMode){
@@ -374,11 +402,27 @@ export function TileButtonPress(
       }
       setGridState(newGridState, onlineGameId)
     } else {
+      console.log("Setting Value:", playerMode)
       newGridState = setValue(newGridState, firstIndex, secondIndex, playerMode)
-      setIsGameOver(checkIfGameOver(newGridState, playerMode, firstIndex, secondIndex), onlineGameId)
+      setGameOver(checkIfGameOver(newGridState, playerMode, firstIndex, secondIndex), onlineGameId)
       setGridState(newGridState, onlineGameId)
       if (newGrid === bigTileIndex){
         setSelectedGrid(0, onlineGameId)
+      }
+    }
+
+    for(var indexOne = 0; index < 3; index++){
+      var complete = true
+      for(var index = 0; index < 3; index++){
+        if (newGridState.value[indexOne][index] === gridStateMode.Open){
+          complete = false
+          break              
+        }
+      }
+      if (!complete){
+        break
+      } else {
+        setGameOver(gridStateMode.Full)
       }
     }
   }

@@ -32,22 +32,22 @@ export function setSelectedGrid(selectedGrid: number, gameId?: string) {
  * @param isGameOver The new value of if the game is over.
  * @param gameId The id of the *ONLINE* game. Only pass for online.
  */
-export function setIsGameOver(isGameOver: boolean, gameId?: string) {
+export function setGameOver(gameOver: gridStateMode, gameId?: string) {
   //TODO error
   if (gameId !== undefined) {
     let uid = auth.currentUser?.uid
-    if (isGameOver === true && uid !== undefined) {
+    if (gameOver === gridStateMode.Open && uid !== undefined) {
       updateDoc(doc(db, "Games", gameId), {
-        gameOver: isGameOver,
+        gameOver: gameOver,
         userWon: uid
       })
     } else {
       updateDoc(doc(db, "Games", gameId), {
-        gameOver: isGameOver,
+        gameOver: gameOver,
       })
     }
   } else {
-    store.dispatch(gameSlice.actions.setIsGameOver(isGameOver))
+    store.dispatch(gameSlice.actions.setGameOver(gameOver))
   }
 }
 

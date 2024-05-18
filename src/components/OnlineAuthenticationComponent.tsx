@@ -13,11 +13,6 @@ import { signInAnonymously } from '../functions/AuthenticationFunctions'
 import AppleAuthenticationButton from './AppleAuthenticationButton'
 import DefaultButton from './DefaultButton'
 import { signInWithGoogle } from '../functions/signInWithGoogle'
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
-
-GoogleSignin.configure({
-  iosClientId: '94813812988-lhtl01ojo9jchu3h8sbvr97uk9p1ajum.apps.googleusercontent.com'
-});
 
 
 export default function OnlineAuthenticationComponent({

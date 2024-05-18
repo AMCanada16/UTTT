@@ -5,11 +5,9 @@
   UltimateTicTacToe.tsx
 */
 import { useEffect, useState } from "react"
-import { emptyGame, gridStateMode } from "../../../Types"
+import { gridStateMode } from "../../../Types"
 import { useSelector } from "react-redux"
 import { RootState } from "../../../redux/store"
-import { updateGame } from "../../../functions/OnlineFunctions"
-import { updateStorageGame } from "../../../functions/StorageFunctions"
 import { View, Text, StyleSheet, Pressable, ActivityIndicator } from "react-native"
 import BigTileTextAnimation from "../../../components/BigTileTextAnimation"
 import Striketrough from "../../../components/Striketrough"
@@ -18,12 +16,12 @@ import { ChevronLeft, CloseIcon, CopiedIcon, CopyIcon, OfflineIcon, PersonIcon, 
 import * as Clipboard from 'expo-clipboard';
 import { Redirect, useGlobalSearchParams, useRouter } from "expo-router"
 import useGame from "../../../hooks/useGame"
-import { setCurrentTurn, setGridState, setIsGameOver, setSelectedGrid } from "../../../functions/gameActions"
 import { auth } from "../../../firebase"
 import PlayersPage from "../../../components/PlayersPage"
 import GameOverComponent from "../../../components/GameOverComponent"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import useIsConnected from "../../../hooks/useIsConnected"
+import { trainModel } from "../../../functions/TileButtonPress"
 
 //Renders root type
 function InnerGame({firstIndex, secondIndex, root, game, gameLength}:{firstIndex: number, secondIndex: number, root: RootType, game: GameType, gameLength: number}) {
@@ -115,6 +113,7 @@ export default function UltimateTicTacToe() {
   const isConnected = useIsConnected()
 
   const game = useGame(gameId as string, (gameType === 'online'))
+  const [modelLoading, setModelLoading] = useState<boolean>(true)
 
   async function Copy() {
     if (typeof gameId === 'string') {
@@ -122,6 +121,19 @@ export default function UltimateTicTacToe() {
       setIsCopied(true);
     }
   }
+
+  async function loadModal() {
+    await trainModel()
+    setModelLoading(false)
+  }
+
+  useEffect(() => {
+    if (gameType === 'ai') {
+      loadModal()
+    } else {
+      setModelLoading(false)
+    }
+  }, [])
 
   if (!isConnected) {
     return (
@@ -137,7 +149,7 @@ export default function UltimateTicTacToe() {
     )
   }
 
-  if (game === 'loading') {
+  if (game === 'loading' || modelLoading) {
     return (
       <View style={{width: width, height: height, backgroundColor: "#5E17EB", alignItems: 'center', justifyContent: 'center', margin: "auto"}}>
         <ActivityIndicator />
@@ -199,7 +211,7 @@ export default function UltimateTicTacToe() {
           </Pressable>:null
         }
       </View>
-      { game.gameOver ?
+      { (game.gameOver !== gridStateMode.Open) ?
         <GameOverComponent />:null
       }
       { (game.gameType === 'online' && (isShowingPlayers || game.users.length < 2))?

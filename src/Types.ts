@@ -57,7 +57,7 @@ declare global{
   type GameTypeBase = {
     currentTurn: gridStateMode,
     date: string,
-    gameOver: boolean
+    gameOver: gridStateMode,
     data: DimentionalType,
     selectedGrid: number,
     gameId: string

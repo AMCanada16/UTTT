@@ -40,7 +40,7 @@ export async function addGame(gameType: "ai"|"friend"): Promise<string> {
       var gameData: GameType = {
         currentTurn: gridStateMode.X,
         date: new Date().toISOString(),
-        gameOver: false,
+        gameOver: gridStateMode.Open,
         data: emptyGame,
         selectedGrid: 0,
         gameType,
@@ -56,7 +56,7 @@ export async function addGame(gameType: "ai"|"friend"): Promise<string> {
       var gameData: GameType = {
         currentTurn: 0,
         date: new Date().toISOString(),
-        gameOver: false,
+        gameOver: gridStateMode.Open,
         data: emptyGame,
         selectedGrid: 0,
         gameType,
