@@ -18,8 +18,8 @@ export default function useUsername(): {
         if (authUser !== null) {
           snap = onSnapshot(doc(db, "Users", authUser.uid), (doc) => {
             if (doc.exists()){
-              setExists(loadingState.success)
               setUsername(doc.data().username)
+              setExists(loadingState.success)
             } else {
               setExists(loadingState.failed)
             }

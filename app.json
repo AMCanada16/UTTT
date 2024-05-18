@@ -29,7 +29,8 @@
             "./assets/Fonts/Glitch.ttf"
           ]
         }
-      ]
+      ],
+      "expo-notifications"
     ],
     "ios": {
       "supportsTablet": true,
