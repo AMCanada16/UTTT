@@ -1,4 +1,4 @@
-import { View, Text, Pressable, ActivityIndicator, TextInput, Platform, Modal } from 'react-native'
+import { View, Text, Pressable, ActivityIndicator, TextInput, Platform, Modal, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
@@ -209,6 +209,7 @@ export default function AccountPage() {
   const [usernameState, setUsernameState] = useState<loadingState>(loadingState.loading)
   const [isConfirmingDelete, setIsConfirmingDelete] = useState<boolean>(false);
   const isConnected = useIsConnected()
+  const [pageHeight, setPageHeight] = useState<number>(0)
 
   async function loadUpdateUsername() {
     let uid = auth.currentUser?.uid
@@ -291,118 +292,120 @@ export default function AccountPage() {
   }
   
   return (
-    <View style={{width: width * (width <= 560 ? 0.95:0.8), backgroundColor: "rgba(255,255,255, 0.95)", height: height * 0.8, borderRadius: 25, padding: 10}}>
-      <Pressable style={{marginTop: (width <= 560) ? 15:25, marginLeft: (width <= 560) ? 15:25}} onPress={() => {
-        router.push("/")
-      }}>
-        <CloseIcon width={30} height={30}/>
-      </Pressable>
-      <Text style={{
-        fontWeight: "bold",
-        fontSize: 25,
-        textAlign: 'center'
-      }}>Account Page</Text>
-      <View style={{flexDirection: 'row', backgroundColor: "white", padding: 10, borderRadius: 4, borderWidth: 1, borderColor: 'black', marginTop: 10}}>
-        <Text style={{marginVertical: 3}}>Username: </Text>
-        { isUpdatingUsername ?
-          <TextInput
-            value={editingUsername}
-            onChangeText={setEditingUsername}
-            // @ts-expect-error
-            style={[Platform.select({
-              web: {
-                outlineStyle: 'none'
-              }
-            }), {
-              width: "100%",
-              marginHorizontal: (Platform.OS === "ios") ? 0:4,
-              fontFamily: 'RussoOne',
-              fontSize: 14
-            }]}
-          />:<Text style={{fontFamily: 'RussoOne', marginVertical: 3, fontSize: 14}}>{username.username}</Text>
-        }
-        <Pressable
-          onPress={() => {
-            if (!isUpdatingUsername) {
-              setIsUpdatingUsername(true)
-            } else {
-              if (usernameState === loadingState.success) {
-                loadUpdateUsername()
-                setIsUpdatingUsername(false)
-              } else if (usernameState === loadingState.exists && username.username === editingUsername) {
-                setIsUpdatingUsername(false)
-              } else if (usernameState === loadingState.failed) {
-                setEditingUsername(username.username)
-                setIsUpdatingUsername(false)
-              }
-            }
-          }}
-          style={{
-            marginLeft: 'auto'
-          }}
-          hitSlop={10}
-        >
-          {!isUpdatingUsername ?
-            <>
-              {(usernameState === loadingState.loading) ?
-                <ActivityIndicator/>:null
-              }
-              {((usernameState === loadingState.success || username.username === editingUsername) && usernameState !== loadingState.loading) ?
-                <Text style={{marginVertical: 3}}>Update Username</Text>:null
-              }
-              {(usernameState === loadingState.failed) ?
-                <Text style={{marginVertical: 3}}>Something went wrong updating the username</Text>:null
-              }
-            </>:
-            <>
-              {(usernameState === loadingState.success || username.username === editingUsername) ?
-                <Text style={{marginVertical: 3}}>Continue</Text>:null
-              }
-              {(usernameState === loadingState.exists && username.username !== editingUsername) ?
-                <Text style={{marginVertical: 3}}>Username Already Exists</Text>:null
-              }
-               {(usernameState === loadingState.failed) ?
-                <Text style={{marginVertical: 3}}>Failed</Text>:null
-              }
-            </>
-          }
+    <View style={{width: width * (width <= 560 ? 0.95:0.8), backgroundColor: "rgba(255,255,255, 0.95)", height: (pageHeight > (height * 0.8)) ? height * 0.9:height * 0.8, borderRadius: 25, padding: 10}}>
+      <View onLayout={(e) => {setPageHeight(e.nativeEvent.layout.height)}}>
+        <Pressable style={{marginTop: (width <= 560) ? 15:25, marginLeft: (width <= 560) ? 15:25}} onPress={() => {
+          router.push("/")
+        }}>
+          <CloseIcon width={30} height={30}/>
         </Pressable>
-      </View>
-      <View style={{
-        flexDirection: 'row',
-        marginVertical: 15
-      }}>
-        <OnlineIcon width={20} height={20} style={{
-          marginRight: 5
-        }}/>
         <Text style={{
-          fontSize: 16, marginTop: 2
-        }}>Online Stats</Text>
-      </View>
-      <OnlineStatics />
-      <DefaultButton onPress={() => {
-        router.push("/UTTT/friends")
-      }}
-        style={{
-          marginBottom: 5,
-          flexDirection: 'row'
+          fontWeight: "bold",
+          fontSize: 25,
+          textAlign: 'center'
+        }}>Account Page</Text>
+        <View style={{flexDirection: 'row', backgroundColor: "white", padding: 10, borderRadius: 4, borderWidth: 1, borderColor: 'black', marginTop: 10}}>
+          <Text style={{marginVertical: 3}}>Username: </Text>
+          { isUpdatingUsername ?
+            <TextInput
+              value={editingUsername}
+              onChangeText={setEditingUsername}
+              // @ts-expect-error
+              style={[Platform.select({
+                web: {
+                  outlineStyle: 'none'
+                }
+              }), {
+                width: "100%",
+                marginHorizontal: (Platform.OS === "ios") ? 0:4,
+                fontFamily: 'RussoOne',
+                fontSize: 14
+              }]}
+            />:<Text style={{fontFamily: 'RussoOne', marginVertical: 3, fontSize: 14}}>{username.username}</Text>
+          }
+          <Pressable
+            onPress={() => {
+              if (!isUpdatingUsername) {
+                setIsUpdatingUsername(true)
+              } else {
+                if (usernameState === loadingState.success) {
+                  loadUpdateUsername()
+                  setIsUpdatingUsername(false)
+                } else if (usernameState === loadingState.exists && username.username === editingUsername) {
+                  setIsUpdatingUsername(false)
+                } else if (usernameState === loadingState.failed) {
+                  setEditingUsername(username.username)
+                  setIsUpdatingUsername(false)
+                }
+              }
+            }}
+            style={{
+              marginLeft: 'auto'
+            }}
+            hitSlop={10}
+          >
+            {!isUpdatingUsername ?
+              <>
+                {(usernameState === loadingState.loading) ?
+                  <ActivityIndicator/>:null
+                }
+                {((usernameState === loadingState.success || username.username === editingUsername) && usernameState !== loadingState.loading) ?
+                  <Text style={{marginVertical: 3}}>Update Username</Text>:null
+                }
+                {(usernameState === loadingState.failed) ?
+                  <Text style={{marginVertical: 3}}>Something went wrong updating the username</Text>:null
+                }
+              </>:
+              <>
+                {(usernameState === loadingState.success || username.username === editingUsername) ?
+                  <Text style={{marginVertical: 3}}>Continue</Text>:null
+                }
+                {(usernameState === loadingState.exists && username.username !== editingUsername) ?
+                  <Text style={{marginVertical: 3}}>Username Already Exists</Text>:null
+                }
+                {(usernameState === loadingState.failed) ?
+                  <Text style={{marginVertical: 3}}>Failed</Text>:null
+                }
+              </>
+            }
+          </Pressable>
+        </View>
+        <View style={{
+          flexDirection: 'row',
+          marginVertical: 15
+        }}>
+          <OnlineIcon width={20} height={20} style={{
+            marginRight: 5
+          }}/>
+          <Text style={{
+            fontSize: 16, marginTop: 2
+          }}>Online Stats</Text>
+        </View>
+        <OnlineStatics />
+        <DefaultButton onPress={() => {
+          router.push("/UTTT/friends")
         }}
-      >
-        <FriendIcon width={20} height={20}/>
-        <Text style={{marginVertical: 3}}>Friends</Text>
-      </DefaultButton>
-      <SignOutButton />
-      <DefaultButton style={{backgroundColor: "red", flexDirection: 'row'}} onPress={() => {
-        setIsConfirmingDelete(true)
-      }}>
-        <TrashIcon width={20} height={20} color='white'/>
-        <Text style={{fontWeight: 'bold', color: 'white', marginVertical: 3}}>Delete Account</Text>
-      </DefaultButton>
-      <Modal visible={isConfirmingDelete} transparent>
-        <ConfirmingDelete onBack={() => {
-          setIsConfirmingDelete(false)
-        }}/>
-      </Modal>
+          style={{
+            marginBottom: 5,
+            flexDirection: 'row'
+          }}
+        >
+          <FriendIcon width={20} height={20}/>
+          <Text style={{marginVertical: 3}}>Friends</Text>
+        </DefaultButton>
+        <SignOutButton />
+        <DefaultButton style={{backgroundColor: "red", flexDirection: 'row'}} onPress={() => {
+          setIsConfirmingDelete(true)
+        }}>
+          <TrashIcon width={20} height={20} color='white'/>
+          <Text style={{fontWeight: 'bold', color: 'white', marginVertical: 3}}>Delete Account</Text>
+        </DefaultButton>
+        <Modal visible={isConfirmingDelete} transparent>
+          <ConfirmingDelete onBack={() => {
+            setIsConfirmingDelete(false)
+          }}/>
+        </Modal>
+      </View>
     </View>
   )
 }

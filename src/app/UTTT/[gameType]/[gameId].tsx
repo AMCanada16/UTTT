@@ -21,7 +21,7 @@ import PlayersPage from "../../../components/PlayersPage"
 import GameOverComponent from "../../../components/GameOverComponent"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import useIsConnected from "../../../hooks/useIsConnected"
-import { trainModel } from "../../../functions/TileButtonPress"
+import { trainModel } from "../../../functions/Ai"
 
 //Renders root type
 function InnerGame({firstIndex, secondIndex, root, game, gameLength}:{firstIndex: number, secondIndex: number, root: RootType, game: GameType, gameLength: number}) {
