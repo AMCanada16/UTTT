@@ -1,4 +1,4 @@
-import { twoDtoOneDValue } from "../../src/functions/TileButtonPress";
+import { twoDtoOneDValue } from "../../src/functions/Ai";
 
 test('Converts a value two dimentional array to one dimension correctly', () => {
   expect(twoDtoOneDValue([

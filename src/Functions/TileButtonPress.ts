@@ -13,7 +13,7 @@ function setGameTile(original: DimentionalType, firstIndex: number, secondIndex:
   let newValue = [...original.inner[firstIndex][secondIndex].value]
   let newValueOne = [...newValue[thirdIndex]]
   newValueOne[forthIndex] = currentTurn
-  console.log(newValue)
+
   newValue[thirdIndex] = newValueOne
   let newInner = [...original.inner]
   let newInnerOne = [...original.inner[firstIndex]]
@@ -106,7 +106,7 @@ function checkIfGameOver(gridState: DimentionalType, playerMode: gridStateMode, 
   return gridStateMode.Open
 }
 
-export function TileButtonPress(
+export async function TileButtonPress(
   firstIndex: number, 
   secondIndex: number,
   thirdIndex: number, 
@@ -281,6 +281,7 @@ export function TileButtonPress(
   }
 
   if (store.getState().gameState.gameType === 'ai' && ai !== true) {
-    perdictMoveGame(store.getState().gameState)
+    let result = await perdictMoveGame(store.getState().gameState)
+    TileButtonPress(result.firstIndex, result.secondIndex, result.thirdIndex, result.fourthIndex, result.ai)
   }
 }

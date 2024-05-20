@@ -7,43 +7,43 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0EC50B9998D4470ABF786740 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07030472124477495F271BC /* noop-file.swift */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		23D3636B01DE423F822A21AA /* BarlowCondensed.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A703CFB788B4C3385A36240 /* BarlowCondensed.ttf */; };
-		28FCEB42DBA34F749AE58880 /* Glitch.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F4A8F85965BD4A5B99392D96 /* Glitch.ttf */; };
+		1DE8DC0453D640A191E5D292 /* Ultimate.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6C9E208619164F4EBCFE1F6E /* Ultimate.ttf */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		5170C62014884C5282EA9EA9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A4F343AC1B504D748CDCA9A6 /* GoogleService-Info.plist */; };
-		5E72BCB762094235AD7D8B9B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = B5B10C8B2E68401994420F93 /* PrivacyInfo.xcprivacy */; };
-		8A3081F0368F4B879D79A455 /* RussoOne.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 97E0FE09DE9F4920B778E2A9 /* RussoOne.ttf */; };
+		74DDA1433C704EC597C57B4A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A48F69F233CD455EA2DF6257 /* PrivacyInfo.xcprivacy */; };
+		779517BD20F04F579D357327 /* RussoOne.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5AD69B1DA7BB4A2587EA8FB0 /* RussoOne.ttf */; };
+		8E5C37B7DD1D4342BC29E800 /* Glitch.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 391D89334F964EA0A8A2C7DA /* Glitch.ttf */; };
+		9342C1538A614EC0876EF733 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 479494C1876E483D8D63ABF8 /* GoogleService-Info.plist */; };
 		96905EF65AED1B983A6B3ABC /* libPods-UTTT.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-UTTT.a */; };
+		A08071AFEC2B45838761063D /* BarlowCondensed.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F14DA66F33A47F4BA16D0DA /* BarlowCondensed.ttf */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		FB1FED3E2A074D7B80FDA6C9 /* Ultimate.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC6E4FAA3E654D35A1ADEA05 /* Ultimate.ttf */; };
+		F3A7CFC9737449D4844737E2 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE1BE1768D6442DBCB7F76D /* noop-file.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0A703CFB788B4C3385A36240 /* BarlowCondensed.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = BarlowCondensed.ttf; path = ../assets/Fonts/BarlowCondensed.ttf; sourceTree = "<group>"; };
+		0F14DA66F33A47F4BA16D0DA /* BarlowCondensed.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = BarlowCondensed.ttf; path = ../assets/Fonts/BarlowCondensed.ttf; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* UTTT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UTTT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = UTTT/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = UTTT/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = UTTT/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = UTTT/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = UTTT/main.m; sourceTree = "<group>"; };
-		14FD07F0AD954DC0A8B45751 /* UTTT-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "UTTT-Bridging-Header.h"; path = "UTTT/UTTT-Bridging-Header.h"; sourceTree = "<group>"; };
+		1C8EF18AF5A94FE9B747A98D /* UTTT-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "UTTT-Bridging-Header.h"; path = "UTTT/UTTT-Bridging-Header.h"; sourceTree = "<group>"; };
+		391D89334F964EA0A8A2C7DA /* Glitch.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Glitch.ttf; path = ../assets/Fonts/Glitch.ttf; sourceTree = "<group>"; };
+		479494C1876E483D8D63ABF8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "UTTT/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		58EEBF8E8E6FB1BC6CAF49B5 /* libPods-UTTT.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-UTTT.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5AD69B1DA7BB4A2587EA8FB0 /* RussoOne.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = RussoOne.ttf; path = ../assets/Fonts/RussoOne.ttf; sourceTree = "<group>"; };
 		6C2E3173556A471DD304B334 /* Pods-UTTT.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UTTT.debug.xcconfig"; path = "Target Support Files/Pods-UTTT/Pods-UTTT.debug.xcconfig"; sourceTree = "<group>"; };
+		6C9E208619164F4EBCFE1F6E /* Ultimate.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Ultimate.ttf; path = ../assets/Fonts/Ultimate.ttf; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-UTTT.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UTTT.release.xcconfig"; path = "Target Support Files/Pods-UTTT/Pods-UTTT.release.xcconfig"; sourceTree = "<group>"; };
-		97E0FE09DE9F4920B778E2A9 /* RussoOne.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = RussoOne.ttf; path = ../assets/Fonts/RussoOne.ttf; sourceTree = "<group>"; };
-		A4F343AC1B504D748CDCA9A6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "UTTT/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A48F69F233CD455EA2DF6257 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = PrivacyInfo.xcprivacy; path = UTTT/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = UTTT/SplashScreen.storyboard; sourceTree = "<group>"; };
-		AC6E4FAA3E654D35A1ADEA05 /* Ultimate.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Ultimate.ttf; path = ../assets/Fonts/Ultimate.ttf; sourceTree = "<group>"; };
-		B5B10C8B2E68401994420F93 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = PrivacyInfo.xcprivacy; path = UTTT/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		C07030472124477495F271BC /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "UTTT/noop-file.swift"; sourceTree = "<group>"; };
+		DAE1BE1768D6442DBCB7F76D /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "UTTT/noop-file.swift"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F4A8F85965BD4A5B99392D96 /* Glitch.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Glitch.ttf; path = ../assets/Fonts/Glitch.ttf; sourceTree = "<group>"; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-UTTT/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -69,10 +69,10 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				B5B10C8B2E68401994420F93 /* PrivacyInfo.xcprivacy */,
-				A4F343AC1B504D748CDCA9A6 /* GoogleService-Info.plist */,
-				C07030472124477495F271BC /* noop-file.swift */,
-				14FD07F0AD954DC0A8B45751 /* UTTT-Bridging-Header.h */,
+				A48F69F233CD455EA2DF6257 /* PrivacyInfo.xcprivacy */,
+				479494C1876E483D8D63ABF8 /* GoogleService-Info.plist */,
+				DAE1BE1768D6442DBCB7F76D /* noop-file.swift */,
+				1C8EF18AF5A94FE9B747A98D /* UTTT-Bridging-Header.h */,
 			);
 			name = UTTT;
 			sourceTree = "<group>";
@@ -102,7 +102,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				D65327D7A22EEC0BE12398D9 /* Pods */,
 				D7E4C46ADA2E9064B798F356 /* ExpoModulesProviders */,
-				98AD2DFDA5D94EB3B9180DB9 /* Resources */,
+				A51F9B51FD2D448B822F8BAB /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -125,13 +125,13 @@
 			name = UTTT;
 			sourceTree = "<group>";
 		};
-		98AD2DFDA5D94EB3B9180DB9 /* Resources */ = {
+		A51F9B51FD2D448B822F8BAB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				97E0FE09DE9F4920B778E2A9 /* RussoOne.ttf */,
-				AC6E4FAA3E654D35A1ADEA05 /* Ultimate.ttf */,
-				0A703CFB788B4C3385A36240 /* BarlowCondensed.ttf */,
-				F4A8F85965BD4A5B99392D96 /* Glitch.ttf */,
+				5AD69B1DA7BB4A2587EA8FB0 /* RussoOne.ttf */,
+				6C9E208619164F4EBCFE1F6E /* Ultimate.ttf */,
+				0F14DA66F33A47F4BA16D0DA /* BarlowCondensed.ttf */,
+				391D89334F964EA0A8A2C7DA /* Glitch.ttf */,
 			);
 			name = Resources;
 			path = "";
@@ -171,13 +171,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "UTTT" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				5A362CF097C301A4BD5EC403 /* [Expo] Configure project */,
+				5C04EE8AA98DAC7D88245C8D /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				28852792BA4CCF35590FB77E /* [CP] Embed Pods Frameworks */,
+				7845F09BBE1523BD050FA8B7 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -197,7 +197,9 @@
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = SYV2CK2N9N;
 						LastSwiftMigration = 1250;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -227,12 +229,12 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				5E72BCB762094235AD7D8B9B /* PrivacyInfo.xcprivacy in Resources */,
-				5170C62014884C5282EA9EA9 /* GoogleService-Info.plist in Resources */,
-				8A3081F0368F4B879D79A455 /* RussoOne.ttf in Resources */,
-				FB1FED3E2A074D7B80FDA6C9 /* Ultimate.ttf in Resources */,
-				23D3636B01DE423F822A21AA /* BarlowCondensed.ttf in Resources */,
-				28FCEB42DBA34F749AE58880 /* Glitch.ttf in Resources */,
+				74DDA1433C704EC597C57B4A /* PrivacyInfo.xcprivacy in Resources */,
+				9342C1538A614EC0876EF733 /* GoogleService-Info.plist in Resources */,
+				779517BD20F04F579D357327 /* RussoOne.ttf in Resources */,
+				1DE8DC0453D640A191E5D292 /* Ultimate.ttf in Resources */,
+				A08071AFEC2B45838761063D /* BarlowCondensed.ttf in Resources */,
+				8E5C37B7DD1D4342BC29E800 /* Glitch.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,25 +278,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		28852792BA4CCF35590FB77E /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-UTTT/Pods-UTTT-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-UTTT/Pods-UTTT-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5A362CF097C301A4BD5EC403 /* [Expo] Configure project */ = {
+		5C04EE8AA98DAC7D88245C8D /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -312,6 +296,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-UTTT/expo-configure-project.sh\"\n";
+		};
+		7845F09BBE1523BD050FA8B7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-UTTT/Pods-UTTT-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-UTTT/Pods-UTTT-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -359,7 +361,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */,
-				0EC50B9998D4470ABF786740 /* noop-file.swift in Sources */,
+				F3A7CFC9737449D4844737E2 /* noop-file.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -373,7 +375,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = UTTT/UTTT.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SYV2CK2N9N;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -406,7 +411,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = UTTT/UTTT.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SYV2CK2N9N;
 				INFOPLIST_FILE = UTTT/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

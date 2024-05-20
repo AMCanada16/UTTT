@@ -3,9 +3,12 @@
   Andrew Mainella
 */
 import * as tf from '@tensorflow/tfjs';
-import "@tensorflow/tfjs-react-native"
+import { bundleResourceIO } from '@tensorflow/tfjs-react-native';
+import { Platform } from 'react-native';
+import '@tensorflow/tfjs-react-native';
 
-let model: tf.Sequential | undefined
+
+let model: tf.LayersModel | undefined
 
 function createModel() {
   const model = tf.sequential();
@@ -41,13 +44,22 @@ function createModel() {
   return model
 }
 
-function getModel(): tf.Sequential {
+async function getModel(): Promise<tf.LayersModel> {
   if (model !== undefined) {
     return model
   } else {
-    let result = createModel()
-    model = result
-    return result
+    if (Platform.OS === 'web') {
+      let result = createModel()
+      model = result
+      return result
+    } else {
+      const modelJson = require('../../assets/main.json');
+      const modelWeights = require('../../assets/main.bin');
+      
+      const result = await tf.loadLayersModel(bundleResourceIO(modelJson, modelWeights))
+      model = result
+      return result
+    }
   }
 }
 
@@ -59,12 +71,18 @@ export async function perdict(old: number[]) {
     }
     return e
   })
-  const currentModel = getModel()
+  await tf.ready()
+  const currentModel = await getModel()
   const input = tf.tensor2d([newOld]);
+
+
+  //Crashs if not
+  await tf.setBackend("cpu")
+ 
   let result = currentModel.predict(input) as tf.Tensor
   result.flatten()
   let array: number[][] = await result.array() as number[][]
-
+  result.dispose()
   
   let newArray = [...old]
   let highest = 0
@@ -83,36 +101,28 @@ export async function perdict(old: number[]) {
 export const trainModel = async () => {
   try {
     await tf.ready()
-    console.log("Train")
+    if (Platform.OS !== "web") {
+      return
+    }
     const xGames = [[0,1,-1,0,1,-1,0,0,0], [-1,-1,0,0,1,0,0,0,0], [-1,1,0,0,-1,0,0,0,0], [-1,1,0,0,-1,-1,0,1,0], [-1,0,1,0,1,0,0,0,0], [0,-1,0,0,-1,-1,1,1,0], [-1,0,1,0,-1,0,1,0,0], [-1,0,0,0,-1,0,0,1,0], [1,0,1,0,0,0,0,0,0], [1,1,0,0,0,0,0,0,0], [1,0,0,0,1,0,0,0,0], [1,0,0,0,-1,0,0,0,0], [-1,1,0,0,0,0,0,1,1], [1,1,0,0,-1,0,1,-1,-1], [1,0,0,0,0,0,1,0,0], [1,0,0,0,0,0,0,0,0], [1,0,1,0,0,0,0,0,0], [-1,0,1,0,0,0,0,0,0], [1,0,0,0,0,0,0,0,0], [1,0,0,0,0,0,0,0,1], [1,0,0,0,0,0,0,0,0], [1,0,0,0,0,0,1,0,0], [1,1,0,0,-1,0,0,1,0], [1,0,0,0,-1,0,1,0,0], [-1,0,0,0,0,0,1,0,1], [1,0,0,0,0,0,0,0,0], [-1,-1,0,1,-1,0,0,0,0], [-1,0,0,1,0,0,0,0,0], [1,0,0,0,0,0,0,0,0], [1,0,-1,0,-1,0,0,0,0], [0,0,1,0,-1,1,0,0,0], [-1,1,0,0,1,0,0,0,0], [0,0,0,0,0,-1,0,1,1], [0,1,-1,0,1,0,0,0,0], [0,-1,-1,0,0,0,0,-1,0], [1,0,0,0,0,-1,0,0,1], [0,1,-1,1,0,-1,-1,1,1], [1,0,0,0,1,0,0,0,0], [1,0,0,1,0,0,0,0,0], [1,0,0,1,0,0,0,0,0], [0,0,-1,0,0,0,0,0,-1], [-1,0,0,1,-1,-1,0,0,0], [0,0,0,0,1,0,0,1,0], [0,0,0,0,1,0,0,0,1], [-1,-1,0,0,1,0,0,0,0], [0,-1,-1,0,1,-1,0,0,1], [0,1,-1,0,1,-1,0,0,0], [1,0,0,-1,1,0,1,0,-1]]
     const yGames = [[0,1,-1,0,1,-1,0,1,0], [-1,-1,1,0,1,0,0,0,0], [-1,1,0,0,-1,0,0,0,1], [-1,1,0,1,-1,-1,0,1,0], [-1,0,1,0,1,0,1,0,0], [0,-1,0,0,-1,-1,1,1,1], [-1,0,1,0,-1,0,1,0,1], [-1,0,0,0,-1,0,0,1,1], [1,1,1,0,0,0,0,0,0], [1,1,1,0,0,0,0,0,0], [1,0,0,0,1,0,0,0,1], [1,0,1,0,-1,0,0,0,0], [-1,1,0,0,1,0,0,1,1], [1,1,1,0,-1,0,1,-1,-1], [1,0,0,1,0,0,1,0,0], [1,0,0,0,1,0,0,0,0], [1,1,1,0,0,0,0,0,0], [-1,0,1,0,1,0,0,0,0], [1,0,0,0,1,0,0,0,0], [1,0,0,0,1,0,0,0,1], [1,0,0,0,1,0,0,0,0], [1,0,0,1,0,0,1,0,0], [1,1,1,0,-1,0,0,1,0], [1,0,0,1,-1,0,1,0,0], [-1,0,0,0,0,0,1,1,1], [1,0,0,0,1,0,0,0,0], [-1,-1,0,1,-1,0,0,0,1], [-1,0,0,1,1,0,0,0,0], [1,0,0,0,1,0,0,0,0], [1,0,-1,0,-1,0,1,0,0], [0,0,1,0,-1,1,0,0,1], [-1,1,0,0,1,0,0,1,0], [0,0,0,0,0,-1,1,1,1], [0,1,-1,0,1,0,0,1,0], [1,-1,-1,0,0,0,0,-1,0], [1,0,0,0,1,-1,0,0,1], [0,1,-1,1,1,-1,-1,1,1], [1,0,0,0,1,0,0,0,1], [1,0,0,1,0,0,1,0,0], [1,0,0,1,0,0,1,0,0], [0,0,-1,0,0,1,0,0,-1], [-1,0,0,1,-1,-1,0,0,1], [0,1,0,0,1,0,0,1,0], [1,0,0,0,1,0,0,0,1], [-1,-1,1,0,1,0,0,0,0], [1,-1,-1,0,1,-1,0,0,1], [0,1,-1,0,1,-1,0,1,0], [1,0,1,-1,1,0,1,0,-1]]
   
-    console.log("Ten")
     const stackedX = tf.tensor2d(xGames);
     const stackedY = tf.tensor2d(yGames);
-    console.log("After ten")
   
-    let currentModel = getModel()
-    console.log("After Modle")
-    // runOnUI((item: string, workModle: tf.Sequential) => {
-    //   'worklet';
+    let currentModel = await getModel()
     await currentModel.fit(stackedX, stackedY, {
       epochs: 100,
       shuffle: true,
       batchSize: 32
     });
-    //   console.log("This" + item)
-    // })("ting", currentModel)
-  
-    console.log("After Fit")
+
     stackedX.dispose()
     stackedY.dispose()
   
     model = currentModel
   } catch (err) {
-    console.log(err)
   }
-
 };
 
 export function twoDtoOneDValue(twoD: number[][]) {
