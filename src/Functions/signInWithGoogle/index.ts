@@ -2,9 +2,6 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import { auth } from "../../firebase";
 
-GoogleSignin.configure({
-  iosClientId: '94813812988-lhtl01ojo9jchu3h8sbvr97uk9p1ajum.apps.googleusercontent.com'
-});
 /**
  * A function to call the redirect to sign in with google
  */

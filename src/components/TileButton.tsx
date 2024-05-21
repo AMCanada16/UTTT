@@ -24,6 +24,9 @@ function checkIfFilled(firstIndex: number, secondIndex: number, thirdIndex: numb
       return true
     }
   }
+  if (currentGame.gameType === 'ai' && currentGame.currentTurn === gridStateMode.O) {
+    return true
+  }
   if (value === gridStateMode.O || value === gridStateMode.X || bigValue === gridStateMode.O || bigValue === gridStateMode.X) {
     return true
   }

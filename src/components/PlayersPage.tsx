@@ -17,7 +17,7 @@ import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { joinRulesArray } from '../Types'
 import useInvitations from '../hooks/useInvitations'
 import { doc, updateDoc } from 'firebase/firestore'
-import { router } from 'expo-router'
+import { useRouter } from 'expo-router'
 
 function Invitations() {
   const [isInvitationModeFriends, setIsInvitationModeFriends] = useState<boolean>(false);
@@ -118,6 +118,7 @@ export default function PlayersPage({
   let [players, setPlayers] = useState<gameUserType[]>([])
   const joinRule = useSelector((state: RootState) => state.gameState.joinRule)
   const gameId = useSelector((state: RootState) => state.gameState.gameId)
+  const router = useRouter()
 
   async function loadUsers() {
     let newPlayers: gameUserType[] = []

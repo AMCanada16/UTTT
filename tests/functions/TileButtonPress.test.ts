@@ -1,4 +1,4 @@
-import { twoDtoOneDValue } from "../../src/functions/Ai";
+import { twoDtoOneDValue } from "../../src/functions/Ai/common";
 
 test('Converts a value two dimentional array to one dimension correctly', () => {
   expect(twoDtoOneDValue([

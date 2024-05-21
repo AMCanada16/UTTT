@@ -7,7 +7,7 @@
 import { View, Text, Pressable, FlatList, Image } from "react-native";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { router, useGlobalSearchParams, useRouter } from "expo-router";
+import { useGlobalSearchParams, useRouter } from "expo-router";
 import AccountPage from "../components/AccountPage";
 import BottomComponent from "../components/BottomComponent";
 import FriendsPage from "../components/FriendsPage";
@@ -16,6 +16,7 @@ import SelectOnlineGame from "../components/SelectOnlineGame"
 import SelectStorageGames from "../components/SelectStorageGame";
 
 function Overlay({online}:{online: boolean}) {
+  const router = useRouter()
   const { gameType } = useGlobalSearchParams()
   if  (gameType === "account") {
     return <AccountPage />

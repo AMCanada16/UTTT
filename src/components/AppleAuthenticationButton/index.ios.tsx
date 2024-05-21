@@ -29,7 +29,6 @@ export default function AppleAuthenticationButton() {
           await signInWithCredential(auth, credential);
           // signed in
         } catch (e: unknown) {
-          console.log(e)
           if (typeof e === 'object' && e !== null && 'code' in e && e.code === 'ERR_REQUEST_CANCELED') {
             // handle that the user canceled the sign-in flow
           } else {

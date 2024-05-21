@@ -4,7 +4,7 @@
 */
 import store from "../redux/store"
 import { gridStateMode } from "../Types"
-import { perdictMoveGame } from "./Ai";
+import { perdictMoveGame } from "./Ai/common";
 import { setCurrentTurn, setGridState, setGameOver, setSelectedGrid } from "./gameActions";
 
 
@@ -48,12 +48,10 @@ function setActive(original: DimentionalType, firstIndex: number, secondIndex: n
 }
 
 function setValue(original: DimentionalType, firstIndex: number, secondIndex: number, value: gridStateMode) {
-  console.log("Old", original.value)
   let newValue = [...original.value]
   let newValueOne = [...original.value[firstIndex]]
   newValueOne[secondIndex] = value
   newValue[firstIndex] = newValueOne
-  console.log("NEw:", newValue)
   return {
     ...original,
     value: newValue
@@ -248,7 +246,6 @@ export async function TileButtonPress(
       }
       setGridState(newGridState, onlineGameId)
     } else {
-      console.log("Setting Value:", playerMode)
       newGridState = setValue(newGridState, firstIndex, secondIndex, playerMode)
       setGameOver(checkIfGameOver(newGridState, playerMode, firstIndex, secondIndex), onlineGameId)
       setGridState(newGridState, onlineGameId)

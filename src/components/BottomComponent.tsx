@@ -1,6 +1,6 @@
 import { View, Text, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { router } from 'expo-router'
+import { useRouter } from 'expo-router'
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
 import GlitchComponent from './GlitchComponent'
@@ -16,6 +16,7 @@ export default function BottomComponent() {
   const [collapsed, setCollpased] = useState<collapsedMode>(collapsedMode.full)
   const [componentWidth, setComponentWidth] = useState<number>(0);
   const [mainComponentWidth, setMainComponentWidth] = useState<number>(0);
+  const router = useRouter()
 
   useEffect(() => {
     if (width <= 560) {

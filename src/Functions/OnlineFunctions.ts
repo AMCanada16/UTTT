@@ -260,7 +260,6 @@ export async function getOnlineGames(joinRule: joinRules, currentFriends: string
     })
     return games
   } catch (e) {
-    console.log(e)
     return loadingState.failed
   }
 }

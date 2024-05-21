@@ -5,8 +5,8 @@
 */
 import { getRedirectResult } from "firebase/auth"
 import { useEffect, useState } from "react"
-import { router } from "expo-router"
 import { auth } from "../firebase"
+import { useRouter } from "expo-router"
 
 /**
  * A hook that handles the redirect result for the login.
@@ -14,6 +14,7 @@ import { auth } from "../firebase"
  */
 export default function useRedirect() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const router = useRouter()
   async function load() {
     try {
       const result = await getRedirectResult(auth)

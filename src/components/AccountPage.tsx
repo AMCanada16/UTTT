@@ -2,7 +2,6 @@ import { View, Text, Pressable, ActivityIndicator, TextInput, Platform, Modal, S
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
-import { router } from 'expo-router'
 import { deleteUser, signOut } from '../functions/AuthenticationFunctions'
 import { checkIfUsernameValid, getUsername, updateUsername } from '../functions/UserFunctions'
 import { auth } from '../firebase'
@@ -14,6 +13,7 @@ import { ChevronLeft, CloseIcon, FriendIcon, OfflineIcon, OnlineIcon, SignOutIco
 import OnlineStatics from './OnlineStatics'
 import useUsername from '../hooks/useUsernameExists'
 import useIsConnected from '../hooks/useIsConnected'
+import { useRouter } from 'expo-router'
 
 export function DeleteText({
   secondsLeft,
@@ -210,6 +210,7 @@ export default function AccountPage() {
   const [isConfirmingDelete, setIsConfirmingDelete] = useState<boolean>(false);
   const isConnected = useIsConnected()
   const [pageHeight, setPageHeight] = useState<number>(0)
+  const router = useRouter()
 
   async function loadUpdateUsername() {
     let uid = auth.currentUser?.uid

@@ -1,7 +1,7 @@
 import { View, Text, Pressable, FlatList, ListRenderItemInfo, ActivityIndicator, TextInput, Platform } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { auth } from '../firebase';
-import { Redirect, router } from 'expo-router';
+import { Redirect, useRouter  } from 'expo-router';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { approveFriendRequest, requestFriend } from '../functions/UserFunctions';
@@ -113,6 +113,7 @@ export default function FriendsPage() {
   const [page, setPgae] = useState<number>(0)
   const friends = useFriends(search, isFriends, page)
   const isConnected = useIsConnected()
+  const router = useRouter()
 
   useEffect(() => {
     if (friends.friendsCount < 1) {
