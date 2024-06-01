@@ -1,15 +1,16 @@
 # UTTT
 React Native Ultimate Tic Tac Toe
 
-# Stack
+## Stack
 Framework
 Expo
 React
-React Native
+React Nativ
+Tensorflow
 
 Storage
 Redux
 Redux Toolkit
 
-# Hosting
+## Hosting
 Firebase
