@@ -4,7 +4,7 @@
   18 November 2023
   Welcome.tsx
 */
-import { View, Text, Pressable, FlatList, Image } from "react-native";
+import { View, Text, Image } from "react-native";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { useGlobalSearchParams, useRouter } from "expo-router";
@@ -21,7 +21,7 @@ function Overlay({online}:{online: boolean}) {
   if  (gameType === "account") {
     return <AccountPage />
   } else if (online) {
-    return <SelectOnlineGame onClose={() => router.push("/")}/>
+    return <SelectOnlineGame onClose={() => {router.push("/")}}/>
   } else if (gameType === "ai" || gameType === "friend") {
     return <SelectStorageGames isFriend={gameType === "friend"} onClose={() => {router.push("/")}}/>
   } else if (gameType === "friends") {

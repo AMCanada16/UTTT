@@ -4,7 +4,11 @@
   Code pulled from Pauly (which mostly pulled it from stack overflow)
 */
 
-export default function generateUUID() { // Public Domain/MIT
+/**
+ * Public Domain/MIT
+ * @returns a UUID as a string
+ */
+export default function generateUUID() {
   var d = new Date().getTime();//Timestamp
   var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {

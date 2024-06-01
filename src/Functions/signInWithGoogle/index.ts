@@ -16,3 +16,9 @@ export async function signInWithGoogle() {
 
   }
 }
+
+export async function configure() {
+  GoogleSignin.configure({
+    iosClientId: '94813812988-lhtl01ojo9jchu3h8sbvr97uk9p1ajum.apps.googleusercontent.com'
+  });  
+}

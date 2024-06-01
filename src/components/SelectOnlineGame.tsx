@@ -115,9 +115,10 @@ export default function SelectOnlineGame({onClose}:{onClose: () => void}){
     }
     const invitationNum = await getInvitationsCount()
     const result = await getOnlineGames(searchMode, currentFriends)
-    if (result !== loadingState.failed && invitationNum !== loadingState.failed) {
+    console.log(invitationNum.result !== loadingState.failed, invitationNum)
+    if (result !== loadingState.failed && invitationNum.result !== loadingState.failed) {
       setGames(result)
-      setNumInvitations(invitationNum)
+      setNumInvitations(invitationNum.data)
     }
   }
 
@@ -263,7 +264,7 @@ export default function SelectOnlineGame({onClose}:{onClose: () => void}){
             <Text>Load</Text>
           </DefaultButton>
           <DefaultButton
-            onPress={() => createNew()}
+            onPress={() => {createNew()}}
             style={{
               margin: 5,
               marginBottom: 15,

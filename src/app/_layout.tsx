@@ -14,12 +14,9 @@ import { Slot, SplashScreen } from 'expo-router';
 import { useFonts } from 'expo-font';
 import Head from "expo-router/head"
 import useShareStatus from '../hooks/useShareStatus';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { configure } from '../functions/signInWithGoogle';
 
-GoogleSignin.configure({
-  iosClientId: '94813812988-lhtl01ojo9jchu3h8sbvr97uk9p1ajum.apps.googleusercontent.com'
-});
-
+configure()
 /**
  * The Main Component for the app that loads fonts and handels dimensions
  * @returns A react function component

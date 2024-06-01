@@ -5,7 +5,7 @@
   Online game functions.
 */
 import { auth, db } from '../firebase';
-import { and, collection, doc, getCountFromServer, getDocs, getDocsFromServer, or, orderBy, query, runTransaction, updateDoc, where } from "firebase/firestore"
+import { and, collection, doc, getCountFromServer, getDocsFromServer, or, orderBy, query, runTransaction, updateDoc, where } from "firebase/firestore"
 import { loadingState } from '../Types';
 
 enum gridStateMode{
@@ -84,7 +84,7 @@ export async function createNewGame(gameSate: DimentionalType, playerMode: gridS
         transaction.set(doc(db, "Games", randomId.toString()), {
           currentTurn: playerMode,
           date: date.toISOString(),
-          gameOver: false,
+          gameOver: gridStateMode.Open,
           gameStateValue: firebaseData.activeValues,
           gameStateInner: firebaseData.innerValues,
           gameStateActive: firebaseData.innerValueActive,
@@ -213,6 +213,8 @@ export async function joinGame(gameId: string, currentUserId: string): Promise<b
 
 /**
  * Gets the online tic tac toe games that are avaliable to the user
+ * @param joinRule The join rule of the game
+ * @param currentFriends The current friends of the user as an array of ids.
  * @returns An array of games or a failed state
  */
 export async function getOnlineGames(joinRule: joinRules, currentFriends: string[]): Promise<GameType[] | loadingState.failed> {
@@ -265,6 +267,10 @@ export async function getOnlineGames(joinRule: joinRules, currentFriends: string
 }
 
 
+/**
+ * Get the online stats of the logged in user
+ * @returns A failed state or the online stats of the user
+ */
 export async function getOnlineGameStats(): Promise<loadingState.failed | OnlineStatsType> {
   let uid = auth.currentUser?.uid
   if (uid !== undefined) {
@@ -306,16 +312,28 @@ export async function getOnlineGameStats(): Promise<loadingState.failed | Online
  * Gets the count of invitations
  * @returns A failed state or a number
  */
-export async function getInvitationsCount(): Promise<loadingState.failed | number> {
+export async function getInvitationsCount(): Promise<{
+  result: loadingState.failed
+} | {
+  result: loadingState.success,
+  data: number
+}> {
   try {
     let uid = auth.currentUser?.uid
     if (uid === undefined) {
-      return loadingState.failed
+      return {
+        result: loadingState.failed
+      }
     }
     const q = query(collection(db, "Games"), where("invitations", "array-contains", uid))
     const countResult = await getCountFromServer(q)
-    return countResult.data().count
-  } catch {
-    return loadingState.failed
+    return {
+      result: loadingState.success,
+      data: countResult.data().count 
+    }
+  } catch (error) {
+    return {
+      result: loadingState.failed
+    }
   }
 }

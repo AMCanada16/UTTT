@@ -1,3 +1,8 @@
+/*
+  UTTT
+  Andrew Mainella
+  May 31 2024
+*/
 import AppleSignin from 'react-apple-signin-auth';
 
 /** Apple Signin button */
