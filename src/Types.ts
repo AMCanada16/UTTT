@@ -14,6 +14,12 @@ export enum loadingState {
   notStarted
 }
 
+export enum Colors {
+  main = "#5E17EB",
+  pink = "#ff9c9c",
+  blue = "#5ce1e6"
+}
+
 export const joinRulesArray = ["public", "friends", "invitation"] as const
 
 //Types

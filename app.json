@@ -19,17 +19,6 @@
       "@react-native-google-signin/google-signin",
       "expo-apple-authentication",
       "expo-router",
-      [
-        "expo-font",
-        {
-          "fonts": [
-            "./assets/Fonts/RussoOne.ttf",
-            "./assets/Fonts/Ultimate.ttf",
-            "./assets/Fonts/BarlowCondensed.ttf",
-            "./assets/Fonts/Glitch.ttf"
-          ]
-        }
-      ],
       "expo-notifications"
     ],
     "ios": {
@@ -80,7 +69,8 @@
           }
         ]
       },
-      "googleServicesFile": "./GoogleService-Info.plist"
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "buildNumber": "13"
     },
     "android": {
       "adaptiveIcon": {

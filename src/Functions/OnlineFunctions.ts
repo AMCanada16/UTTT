@@ -151,7 +151,7 @@ export function getDimentionalFromData(gameStateInner: number[], gameStateValueD
         gridTypeFirst.push(gridTypeSecond)
       }
       const activeValue = innerValueActive.find((e) => {
-        return e.firstIndex === i && e.secondIndex === index
+        return e.firstIndex === i/27 && e.secondIndex === index/9
       })
       rootTypeSecond.push({
         value: gridTypeFirst,

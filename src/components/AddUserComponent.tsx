@@ -74,6 +74,7 @@ export default function UsernameComponent({
           margin: 5,
           flexDirection: 'row'
         }}
+        disabled={usernameState !== loadingState.success}
       >
         {usernameState === loadingState.loading ?
           <Text>The username needs to be longer than 2 characters</Text>:null

@@ -11,7 +11,7 @@ PODS:
     - ExpoModulesCore
   - EXConstants (16.0.2):
     - ExpoModulesCore
-  - EXNotifications (0.28.4):
+  - EXNotifications (0.28.6):
     - ExpoModulesCore
   - Expo (51.0.9):
     - ExpoModulesCore
@@ -36,7 +36,7 @@ PODS:
   - ExpoGL (14.0.2):
     - ExpoModulesCore
     - ReactCommon/turbomodule/core
-  - ExpoHead (3.5.14):
+  - ExpoHead (3.5.15):
     - ExpoModulesCore
   - ExpoKeepAwake (13.0.2):
     - ExpoModulesCore
@@ -1581,7 +1581,7 @@ SPEC CHECKSUMS:
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   EXApplication: c08200c34daca7af7fd76ac4b9d606077410e8ad
   EXConstants: 409690fbfd5afea964e5e9d6c4eb2c2b59222c59
-  EXNotifications: 5a9200d67f71f8d2b3d71d7067605e5769032f3f
+  EXNotifications: 483358c34f653873daf1e050d09af7600f02f89f
   Expo: 6381470c669c3f31c8ac0ebd8e88686f925146ad
   ExpoAdapterGoogleSignIn: 8b749750f4b43e884a89d5c5c8a64ae21854e84d
   ExpoAppleAuthentication: 7af0b493e820dc0b22150cb9531fc1c31dc4fbfd
@@ -1591,7 +1591,7 @@ SPEC CHECKSUMS:
   ExpoFileSystem: 80bfe850b1f9922c16905822ecbf97acd711dc51
   ExpoFont: c84702079267ae51161c20bb8b925670907ffa2f
   ExpoGL: a2d717e4b7279a075d7dff04d8d2471cb404ad2c
-  ExpoHead: 28ccee5977648d15f6a62b9a680a4bd169a1515b
+  ExpoHead: 8eb4deb289c2fdd8bb624f996cd31414cd07f38a
   ExpoKeepAwake: 3b8815d9dd1d419ee474df004021c69fdd316d08
   ExpoModulesCore: 828d63de45d4fbacabe2963fc406a8e9daeed992
   ExpoNetwork: 0d2c2504d56096fe8be3930d5c70cb3390dac5bf

@@ -11,6 +11,7 @@ import useFriends from '../hooks/useFriends';
 import OnlineComponent from './OnlineComponent';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import useIsConnected from '../hooks/useIsConnected';
+import useIsAuth from '../hooks/useIsAuth';
 
 function FriendButtonComponent({
   friend
@@ -114,6 +115,7 @@ export default function FriendsPage() {
   const friends = useFriends(search, isFriends, page)
   const isConnected = useIsConnected()
   const router = useRouter()
+  const isAuth = useIsAuth()
 
   useEffect(() => {
     if (friends.friendsCount < 1) {
@@ -135,7 +137,7 @@ export default function FriendsPage() {
     )
   }
 
-  if (auth.currentUser === null) {
+  if (!isAuth.isLoading && !isAuth.isAuth) {
     return <Redirect href={"/UTTT/account"}/>
   }
 

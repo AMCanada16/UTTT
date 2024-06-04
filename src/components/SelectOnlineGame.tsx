@@ -16,6 +16,7 @@ import UsernameComponent from "./AddUserComponent"
 import { getFriends } from "../functions/UserFunctions"
 import { DeleteText } from "./AccountPage"
 import { deleteDoc, doc } from "firebase/firestore"
+import useIsAuth from "../hooks/useIsAuth"
 
 function DeleteGame({
   deleting,
@@ -84,12 +85,13 @@ export default function SelectOnlineGame({onClose}:{onClose: () => void}){
   const [gameId, setGameID] = useState<string>("")
   const {height, width} = useSelector((state: RootState) => state.dimensions)
   const [games, setGames] = useState<GameType[]>([])
-  const [isAuth, setIsAuth] = useState(false)
+  const [gamesState, setGamesState] = useState<loadingState>(loadingState.loading)
   const usernameExists = useUsernameExists().exists
   const [searchMode, setSearchMode] = useState<joinRules>("public")
   const isConnected = useIsConnected()
   const [deleting, setDeleting] = useState<string>("")
   const [numInvitations, setNumInvitations] = useState<number>(0);
+  const {isAuth, isLoading} = useIsAuth()
 
   async function createNew() {
     const uid = auth.currentUser?.uid
@@ -102,10 +104,12 @@ export default function SelectOnlineGame({onClose}:{onClose: () => void}){
   }
 
   async function loadGames() {
+    setGamesState(loadingState.loading)
     let uid = auth.currentUser?.uid
     let currentFriends: string[] = []
     if (searchMode !== "invitation") {
       if (uid === undefined) {
+        setGamesState(loadingState.failed)
         return
       }
       const friendResult = await getFriends(uid)
@@ -115,10 +119,12 @@ export default function SelectOnlineGame({onClose}:{onClose: () => void}){
     }
     const invitationNum = await getInvitationsCount()
     const result = await getOnlineGames(searchMode, currentFriends)
-    console.log(invitationNum.result !== loadingState.failed, invitationNum)
     if (result !== loadingState.failed && invitationNum.result !== loadingState.failed) {
       setGames(result)
       setNumInvitations(invitationNum.data)
+      setGamesState(loadingState.success)
+    } else {
+      setGamesState(loadingState.failed)
     }
   }
 
@@ -127,35 +133,35 @@ export default function SelectOnlineGame({onClose}:{onClose: () => void}){
   }, [searchMode])
 
   useEffect(() =>{
-    const unlisten = auth.onAuthStateChanged(
-      authUser => {
-        if (authUser !== null) {
-          loadGames()
-          setIsAuth(true)
-        } else {
-          setGames([])
-          setIsAuth(false)
-        }
-      },
-    );
-    return () => {
-      unlisten();
+    if (isAuth) {
+      loadGames()
+    } else {
+      setGames([])
     }
- }, []);
+  }, [isAuth]);
 
- if (!isConnected) {
-  return (
-    <View style={{width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25, alignContent: 'center', alignItems: 'center', justifyContent: 'center'}}>
-      <Pressable style={{position: 'absolute', top: (width <= 560) ? 25:35, left: (width <= 560) ? 25:35}} onPress={() => {
-        router.push("/")
-      }}>
-        <CloseIcon width={30} height={30}/>
-      </Pressable>
-      <OfflineIcon width={30} height={30}/>
-      <Text>Offline</Text>
-    </View>
-  )
-}
+  if (!isConnected) {
+    return (
+      <View style={{width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25, alignContent: 'center', alignItems: 'center', justifyContent: 'center'}}>
+        <Pressable style={{position: 'absolute', top: (width <= 560) ? 25:35, left: (width <= 560) ? 25:35}} onPress={() => {
+          router.push("/")
+        }}>
+          <CloseIcon width={30} height={30}/>
+        </Pressable>
+        <OfflineIcon width={30} height={30}/>
+        <Text>Offline</Text>
+      </View>
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <View style={{width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25, alignContent: 'center', alignItems: 'center', justifyContent: 'center'}}>
+        <ActivityIndicator />
+        <Text>Loading</Text>
+      </View>
+    )
+  }
 
   if (!isAuth) {
     return <OnlineAuthenticationComponent onClose={onClose}/>
@@ -218,36 +224,46 @@ export default function SelectOnlineGame({onClose}:{onClose: () => void}){
           }}
           style={{margin: 5, marginBottom: 10, borderWidth: 1, borderColor: 'black'}}
         />
-        <FlatList
-          data={games}
-          renderItem={(game) => (
-            <DefaultButton
-              style={{margin: 5, flexDirection: 'row'}}
-              onPress={() => {
-                router.push("/UTTT/online/" + game.item.gameId)
-              }}
-            >
-              <Text style={{marginRight: 5, marginVertical: 3}}>{game.item.gameId}</Text>
-              <Text style={{marginVertical: 3}}>{new Date(game.item.date).toLocaleString('en-CA', {
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric'
-              })}</Text>
-              {game.item.gameType === 'online' && game.item.owner === auth.currentUser?.uid ?
-                <Pressable style={{marginLeft: 'auto'}} onPress={() => {
-                  setDeleting(game.item.gameId)
-                }}>
-                  <TrashIcon width={20} height={20}/>
-                </Pressable>:null
-              }
-            </DefaultButton>
-          )}
-          ListEmptyComponent={() => (
-            <Text style={{textAlign: 'center', fontSize: width * 0.05, fontFamily: "RussoOne"}}>There are no results!</Text>
-          )}
-        />
+        {gamesState === loadingState.loading ? 
+          <View style={{flex: 1}}>
+            <ActivityIndicator/>
+          </View>:null}
+        {gamesState === loadingState.failed ? 
+          <View style={{flex: 1}}>
+            <Text style={{textAlign: 'center', fontSize: width * 0.05, fontFamily: "RussoOne"}}>Failed to load games</Text>
+          </View>:null}
+        {gamesState === loadingState.success ?
+          <FlatList
+            data={games}
+            renderItem={(game) => (
+              <DefaultButton
+                style={{margin: 5, flexDirection: 'row'}}
+                onPress={() => {
+                  router.push("/UTTT/online/" + game.item.gameId)
+                }}
+              >
+                <Text style={{marginRight: 5, marginVertical: 3}}>{game.item.gameId}</Text>
+                <Text style={{marginVertical: 3}}>{new Date(game.item.date).toLocaleString('en-CA', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric',
+                  hour: 'numeric',
+                  minute: 'numeric'
+                })}</Text>
+                {game.item.gameType === 'online' && game.item.owner === auth.currentUser?.uid ?
+                  <Pressable style={{marginLeft: 'auto'}} onPress={() => {
+                    setDeleting(game.item.gameId)
+                  }}>
+                    <TrashIcon width={20} height={20}/>
+                  </Pressable>:null
+                }
+              </DefaultButton>
+            )}
+            ListEmptyComponent={() => (
+              <Text style={{textAlign: 'center', fontSize: width * 0.05, fontFamily: "RussoOne"}}>There are no results!</Text>
+            )}
+          />:null
+        }
         <View style={{flexDirection: 'row', marginBottom: 15}}>
           <DefaultButton
             onPress={() => {

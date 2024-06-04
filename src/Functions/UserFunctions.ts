@@ -68,12 +68,15 @@ export async function updatePublic(uid: string, isPublic: string): Promise<boole
  */
 export async function addUser(uid: string, username: string): Promise<boolean> {
   try {
-    await setDoc(doc(db, "Users", uid), {
-      username,
-      friends: [],
-      requests: []
-    })
-    return true
+    if (await checkIfUsernameValid(username) === loadingState.success) {
+      await setDoc(doc(db, "Users", uid), {
+        username,
+        friends: [],
+        requests: []
+      })
+      return true
+    }
+    return false
   } catch {
     return false
   }

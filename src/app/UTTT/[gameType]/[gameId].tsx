@@ -80,6 +80,10 @@ function MainGame({game}:{game: GameType}) {
     }
   }, [width, height])
 
+  useEffect(() => {
+    console.log(game)
+  }, [game])
+
   return (
     <View key={"FirstRow"} style={[styles.firstRow, {
       height: gameLength,

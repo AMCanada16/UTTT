@@ -14,6 +14,7 @@ import OnlineStatics from './OnlineStatics'
 import useUsername from '../hooks/useUsernameExists'
 import useIsConnected from '../hooks/useIsConnected'
 import { useRouter } from 'expo-router'
+import useIsAuth from '../hooks/useIsAuth'
 
 export function DeleteText({
   secondsLeft,
@@ -203,7 +204,6 @@ function SignOutButton() {
 export default function AccountPage() {
   const {height, width} = useSelector((state: RootState) => state.dimensions)
   const [editingUsername, setEditingUsername] = useState<string>("")
-  const [isAuth, setIsAuth] = useState(false)
   const username = useUsername()
   const [isUpdatingUsername, setIsUpdatingUsername] = useState<boolean>(false)
   const [usernameState, setUsernameState] = useState<loadingState>(loadingState.loading)
@@ -211,6 +211,7 @@ export default function AccountPage() {
   const isConnected = useIsConnected()
   const [pageHeight, setPageHeight] = useState<number>(0)
   const router = useRouter()
+  const {isAuth, isLoading} = useIsAuth()
 
   async function loadUpdateUsername() {
     let uid = auth.currentUser?.uid
@@ -235,27 +236,23 @@ export default function AccountPage() {
   }
 
   useEffect(() => {
-    check()
-  }, [editingUsername])
+    if (isAuth) {
+      check()
+    }
+  }, [editingUsername, isAuth])
 
   useEffect(() => {
     setEditingUsername(username.username)
   }, [username.username])
 
-  useEffect(() =>{
-    const unlisten = auth.onAuthStateChanged(
-      authUser => {
-        if (authUser !== null) {
-          setIsAuth(true)
-        } else {
-          setIsAuth(false)
-        }
-      },
-    );
-    return () => {
-      unlisten();
-    }
-  }, []);
+  if (isLoading) {
+    return (
+      <View style={{width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25, alignContent: 'center', alignItems: 'center', justifyContent: 'center'}}>
+        <ActivityIndicator />
+        <Text>Loading</Text>
+      </View>
+    )
+  }
 
   if (!isConnected) {
     return (
@@ -384,7 +381,11 @@ export default function AccountPage() {
         </View>
         <OnlineStatics />
         <DefaultButton onPress={() => {
-          router.push("/UTTT/friends")
+          if (Platform.OS === "web") {
+            router.push("/UTTT/friends")
+          } else {
+            router.replace("/UTTT/friends")
+          }
         }}
           style={{
             marginBottom: 5,

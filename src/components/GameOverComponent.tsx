@@ -2,19 +2,20 @@ import { View, Text, Pressable } from 'react-native'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
-import { gridStateMode } from '../Types'
+import { Colors, gridStateMode } from '../Types'
 import DefaultButton from './DefaultButton'
 import { ChevronLeft, CircleIcon, XIcon } from './Icons'
 import { useRouter } from 'expo-router'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 function getFontSize(width: number, height: number) {
   if (width <= 560) {
-    return width * 0.18
+    return Math.round(width * 0.18)
   }
   if (width < 950) {
-    return width * 0.1
+    return Math.round(width * 0.1)
   }
-  return height * 0.2
+  return Math.round(height * 0.2)
 }
 
 export default function GameOverComponent({
@@ -25,8 +26,9 @@ export default function GameOverComponent({
   const {height, width} = useSelector((state: RootState) => state.dimensions)
   const winner = useSelector((state: RootState) => state.gameState.gameOver)
   const router = useRouter()
+  const insets = useSafeAreaInsets()
   return (
-    <View style={{position: 'absolute', width: width * ((width <= 560) ? 0.95:0.8), height: height * ((width <= 560) ? 0.95:0.8), top: 'auto', bottom: 'auto', left: 'auto', right: 'auto', backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
+    <View style={{position: 'absolute', width: width * ((width <= 560) ? 0.95:0.8), height: (height * ((width <= 560) ? 0.95:0.8)) - insets.top - insets.bottom, top: 'auto', bottom: 'auto', left: 'auto', right: 'auto', backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
       <Text
         style={{margin: 10, fontSize: getFontSize(width, height), fontFamily: "Ultimate", textAlign: 'center'}}
       >Game Over</Text>
@@ -42,7 +44,7 @@ export default function GameOverComponent({
         { (winner === gridStateMode.X) ?
           <View style={{height: 50, alignItems: 'center'}}>
             <View>
-              <XIcon width={50} height={50} style={{position: 'absolute'}} color="#ff9c9c"/>
+              <XIcon width={50} height={50} style={{position: 'absolute'}} color={Colors.blue}/>
               <Text style={{marginLeft: 55, marginVertical: 12, fontFamily: 'RussoOne', fontSize: 26}}>Won the Game</Text>
             </View>
           </View>:null
