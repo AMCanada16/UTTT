@@ -59,7 +59,7 @@ export function WelcomePage({
         <Text numberOfLines={1} selectable={false} style={{fontFamily: "Ultimate", fontSize: Math.round((width > 560) ? 150:((width * 0.255) - 10)), color: "#fffc00", transform: [{translateX: 1}, {translateY: 4}], position: "absolute", zIndex: -3, textAlign: 'center'}}>ULTIMATE</Text>
       </View>
       <Text style={{flexDirection: "row", textAlign: 'center'}}>
-        <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: Math.round((width > 390) ? 50:(width * 0.13) - 10), color: "#ff9c9c", textShadowColor: "#FF5757", textShadowRadius: 25, textAlign: 'center'}}>TICK </Text>
+        <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: Math.round((width > 390) ? 50:(width * 0.13) - 10), color: "#ff9c9c", textShadowColor: "#FF5757", textShadowRadius: 25, textAlign: 'center'}}>TIC </Text>
         <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: Math.round((width > 390) ? 50:(width * 0.13) - 10), color: "#a0f4f7", textShadowColor: "#5CE1E6", textShadowRadius: 25, textAlign: 'center'}}>TAC </Text>
         <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: Math.round((width > 390) ? 50:(width * 0.13) - 10), color: "#ff9c9c", textShadowColor: "#FF5757", textShadowRadius: 25, textAlign: 'center'}}>TOE </Text>
       </Text>

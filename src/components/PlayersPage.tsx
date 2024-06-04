@@ -4,7 +4,7 @@
   PlayersPage.tsx
   A page to show the players in a game.
 */
-import { View, Text, Pressable, FlatList, TextInput } from 'react-native'
+import { View, Text, Pressable, FlatList, TextInput, KeyboardAvoidingView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
@@ -19,52 +19,70 @@ import useInvitations from '../hooks/useInvitations'
 import { doc, updateDoc } from 'firebase/firestore'
 import { useRouter } from 'expo-router'
 
-function Invitations() {
+function Invitations({
+  height
+}:{
+  height: number
+}) {
   const [isInvitationModeFriends, setIsInvitationModeFriends] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("")
   const users = useInvitations(search, isInvitationModeFriends)
   const game = useSelector((state: RootState) => state.gameState)
+  const [topHeight, setTopHeight] = useState<number>(0)
 
   if (game.gameType !== "online") {
     return null
   }
 
   return (
-    <View style={{
-      marginBottom: 15,
-      marginHorizontal: 5,
-      flex: 1
-    }}>
-      <Text style={{
-        fontWeight: 'bold',
-        fontSize: 20,
-        marginLeft: 5
-      }}>Invite Players</Text>
-      <SegmentedControl
-        values={['Friends', 'All']}
-        selectedIndex={isInvitationModeFriends ? 0:1}
-        onChange={(e) => {
-          if (e.nativeEvent.selectedSegmentIndex === 0) {
-            setIsInvitationModeFriends(true)
-          } else {
-            setIsInvitationModeFriends(false)
-          }
-        }}
-        style={{margin: 5, marginBottom: 10, borderWidth: 1, borderColor: 'black'}}
-      />
-      <TextInput
-        value={search}
-        onChangeText={setSearch}
-        style={{
-          backgroundColor: 'white',
-          borderWidth: 1,
-          borderColor: 'black',
-          marginBottom: 5,
-          padding: 5,
-          borderRadius: 5,
-          fontSize: 16
-        }}
-      />
+    <KeyboardAvoidingView
+      style={{
+        marginBottom: 15,
+        marginHorizontal: 5,
+        backgroundColor: 'white',
+        borderRadius: 5,
+        paddingTop: 5,
+        height
+      }}
+      behavior='position'
+      contentContainerStyle={{
+        backgroundColor: "rgba(255,255,255, 0.95)",
+        borderRadius: 5,
+        paddingTop: 5
+      }}
+    >
+      <View onLayout={(e) => {setTopHeight(e.nativeEvent.layout.height)}}>
+        <Text style={{
+          fontWeight: 'bold',
+          fontSize: 20,
+          marginLeft: 5
+        }}>Invite Players</Text>
+        <SegmentedControl
+          values={['Friends', 'All']}
+          selectedIndex={isInvitationModeFriends ? 0:1}
+          onChange={(e) => {
+            if (e.nativeEvent.selectedSegmentIndex === 0) {
+              setIsInvitationModeFriends(true)
+            } else {
+              setIsInvitationModeFriends(false)
+            }
+          }}
+          style={{margin: 5, marginBottom: 10, borderWidth: 1, borderColor: 'black'}}
+        />
+        <TextInput
+          value={search}
+          onChangeText={setSearch}
+          style={{
+            backgroundColor: 'white',
+            borderWidth: 1,
+            borderColor: 'black',
+            marginBottom: 5,
+            padding: 5,
+            borderRadius: 5,
+            fontSize: 16
+          }}
+        />
+      </View>
       <FlatList
         data={users.users}
         renderItem={(user) => (
@@ -100,10 +118,10 @@ function Invitations() {
           </DefaultButton>
         )}
         style={{
-          height: 6000
+          height: height - topHeight
         }}
       />
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -119,6 +137,7 @@ export default function PlayersPage({
   const joinRule = useSelector((state: RootState) => state.gameState.joinRule)
   const gameId = useSelector((state: RootState) => state.gameState.gameId)
   const router = useRouter()
+  const [invitationHeight, setInvitationHeight] = useState<number>(0)
 
   async function loadUsers() {
     let newPlayers: gameUserType[] = []
@@ -153,74 +172,76 @@ export default function PlayersPage({
   }
 
   return (
-    <View style={{position: 'absolute', width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, top: 'auto', bottom: 'auto', left: 'auto', right: 'auto', backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
-      {players.length >= 2 ?
-        <Pressable style={{marginTop: 25, marginLeft: 25}} onPress={() => {
-          onClose()
-        }}>
-          <CloseIcon width={30} height={30}/>
-        </Pressable>:
-        <Pressable style={{marginTop: (width <= 560) ? 15:25, marginLeft: (width <= 560) ? 15:25}} onPress={() => {
-          router.replace("/UTTT/online")
-        }}>
-          <ChevronLeft width={30} height={30}/>
-        </Pressable>
-      }
-      <Text
-        style={{margin: 10, marginTop: 0, fontSize: 80, fontFamily: "Ultimate", textAlign: 'center'}}
-      >Players</Text>
-      <Text style={{marginLeft: 5}}>Game Open To...</Text>
-      <SegmentedControl
-        values={['Public', 'Friends', 'Invitations']}
-        selectedIndex={joinRulesArray.indexOf(joinRule)}
-        onChange={(e) => {
-          if (e.nativeEvent.selectedSegmentIndex === 0) {
-            updateDoc(doc(db, "Games", gameId), {
-              joinRule: 'public'
-            })
-          } else if (e.nativeEvent.selectedSegmentIndex === 1) {
-            updateDoc(doc(db, "Games", gameId), {
-              joinRule: 'friends'
-            })
-          } else {
-            updateDoc(doc(db, "Games", gameId), {
-              joinRule: 'invitation'
-            })
-          }
-        }}
-        style={{margin: 5, marginBottom: 10, borderWidth: 1, borderColor: 'black'}}
-      />
-      <View style={{
-        height: 90
-      }}>
-        <FlatList
-          data={players}
-          renderItem={(player) => (
-            <DefaultButton style={{
-              flexDirection: 'row',
-              marginHorizontal: 5,
-              marginBottom: 5
-            }}>
-              <Text style={{marginRight: 'auto'}}>{player.item.username}</Text>
-              {player.item.userId !== auth.currentUser?.uid ?
-                <OnlineComponent uid={player.item.userId}/>:<Text>You</Text>
-              }
-              {player.item.userId !== auth.currentUser?.uid && players[0].userId === auth.currentUser?.uid ?
-                <Pressable onPress={() => {
-                            
-                }}>
-                  <TrashIcon width={20} height={20}/>
-                </Pressable>:null
-              }
-            </DefaultButton>
-          )}
-          style={{
-            height: 90,
-            marginBottom: 0
+    <View style={{position: 'absolute', width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, top: 'auto', bottom: 'auto', left: 'auto', right: 'auto', backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25, overflow: 'hidden'}}>
+      <View onLayout={(e) =>  setInvitationHeight((height * 0.8) - e.nativeEvent.layout.height)}>
+        {players.length >= 2 ?
+          <Pressable style={{marginTop: 25, marginLeft: 25}} onPress={() => {
+            onClose()
+          }}>
+            <CloseIcon width={30} height={30}/>
+          </Pressable>:
+          <Pressable style={{marginTop: (width <= 560) ? 15:25, marginLeft: (width <= 560) ? 15:25}} onPress={() => {
+            router.replace("/UTTT/online")
+          }}>
+            <ChevronLeft width={30} height={30}/>
+          </Pressable>
+        }
+        <Text
+          style={{margin: 10, marginTop: 0, fontSize: 80, fontFamily: "Ultimate", textAlign: 'center'}}
+        >Players</Text>
+        <Text style={{marginLeft: 5}}>Game Open To...</Text>
+        <SegmentedControl
+          values={['Public', 'Friends', 'Invitations']}
+          selectedIndex={joinRulesArray.indexOf(joinRule)}
+          onChange={(e) => {
+            if (e.nativeEvent.selectedSegmentIndex === 0) {
+              updateDoc(doc(db, "Games", gameId), {
+                joinRule: 'public'
+              })
+            } else if (e.nativeEvent.selectedSegmentIndex === 1) {
+              updateDoc(doc(db, "Games", gameId), {
+                joinRule: 'friends'
+              })
+            } else {
+              updateDoc(doc(db, "Games", gameId), {
+                joinRule: 'invitation'
+              })
+            }
           }}
+          style={{margin: 5, marginBottom: 10, borderWidth: 1, borderColor: 'black'}}
         />
+        <View style={{
+          height: 90
+        }}>
+          <FlatList
+            data={players}
+            renderItem={(player) => (
+              <DefaultButton style={{
+                flexDirection: 'row',
+                marginHorizontal: 5,
+                marginBottom: 5
+              }}>
+                <Text style={{marginRight: 'auto'}}>{player.item.username}</Text>
+                {player.item.userId !== auth.currentUser?.uid ?
+                  <OnlineComponent uid={player.item.userId}/>:<Text>You</Text>
+                }
+                {player.item.userId !== auth.currentUser?.uid && players[0].userId === auth.currentUser?.uid ?
+                  <Pressable onPress={() => {
+                              
+                  }}>
+                    <TrashIcon width={20} height={20}/>
+                  </Pressable>:null
+                }
+              </DefaultButton>
+            )}
+            style={{
+              height: 90,
+              marginBottom: 0,
+            }}
+          />
+        </View>
       </View>
-      <Invitations />
+      <Invitations height={invitationHeight}/>
     </View>
   )
 }

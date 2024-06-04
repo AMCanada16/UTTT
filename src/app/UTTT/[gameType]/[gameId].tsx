@@ -188,7 +188,7 @@ export default function UltimateTicTacToe() {
           <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 555) ? 150:(width * 0.255), color: "#fc00ff", transform: [{translateX: -2}, {translateY: 2}], position: "absolute", zIndex: -2, marginTop: insets.top}}>ULTIMATE</Text>
           <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 555) ? 150:(width * 0.255), color: "#fffc00", transform: [{translateX: 1}, {translateY: 4}], position: "absolute", zIndex: -3, marginTop: insets.top}}>ULTIMATE</Text>
         </View>
-        <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: (width > 555) ? 50:(width * 0.09), color: "#ff9c9c", textShadowColor: "#FF5757", textShadowRadius: 25, position: "relative", marginTop: insets.top}}>TICK </Text>
+        <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: (width > 555) ? 50:(width * 0.09), color: "#ff9c9c", textShadowColor: "#FF5757", textShadowRadius: 25, position: "relative", marginTop: insets.top}}>TIC </Text>
         <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: (width > 555) ? 50:(width * 0.09), color: "#a0f4f7", textShadowColor: "#5CE1E6", textShadowRadius: 25, position: "relative", marginTop: insets.top}}>TAC </Text>
         <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: (width > 555) ? 50:(width * 0.09), color: "#ff9c9c", textShadowColor: "#FF5757", textShadowRadius: 25, position: "relative", marginTop: insets.top}}>TOE </Text>
       </View>

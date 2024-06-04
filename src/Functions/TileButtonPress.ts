@@ -247,25 +247,27 @@ export async function TileButtonPress(
       setGridState(newGridState, onlineGameId)
     } else {
       newGridState = setValue(newGridState, firstIndex, secondIndex, playerMode)
-      setGameOver(checkIfGameOver(newGridState, playerMode, firstIndex, secondIndex), onlineGameId)
+      const isGameOver = checkIfGameOver(newGridState, playerMode, firstIndex, secondIndex)
+      setGameOver(isGameOver, onlineGameId)
       setGridState(newGridState, onlineGameId)
       if (newGrid === bigTileIndex){
         setSelectedGrid(0, onlineGameId)
       }
-    }
-
-    for(var indexOne = 0; index < 3; index++){
-      var complete = true
-      for(var index = 0; index < 3; index++){
-        if (newGridState.value[indexOne][index] === gridStateMode.Open){
-          complete = false
-          break              
+      if (isGameOver === gridStateMode.Open) {
+        for(var indexOne = 0; index < 3; index++){
+          var complete = true
+          for(var index = 0; index < 3; index++){
+            if (newGridState.value[indexOne][index] === gridStateMode.Open){
+              complete = false
+              break              
+            }
+          }
+          if (!complete){
+            break
+          } else {
+            setGameOver(gridStateMode.Full)
+          }
         }
-      }
-      if (!complete){
-        break
-      } else {
-        setGameOver(gridStateMode.Full)
       }
     }
   }
