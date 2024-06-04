@@ -12,6 +12,3 @@ export async function signInWithGoogle() {
 
   }
 }
-
-export async function configure() {
-}
