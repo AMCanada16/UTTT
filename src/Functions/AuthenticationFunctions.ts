@@ -39,6 +39,7 @@ export async function signOut(): Promise<boolean> {
   }
 }
 
+
 export async function deleteUser(): Promise<boolean> {
   try {
     const user = auth.currentUser

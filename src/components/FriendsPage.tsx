@@ -111,7 +111,7 @@ export default function FriendsPage() {
   const {height, width} = useSelector((state: RootState) => state.dimensions)
   const [search, setSearch] = useState<string>("")
   const [isFriends, setIsFriends] = useState<boolean>(false)
-  const [page, setPgae] = useState<number>(0)
+  const [page, setPage] = useState<number>(0)
   const friends = useFriends(search, isFriends, page)
   const isConnected = useIsConnected()
   const router = useRouter()
