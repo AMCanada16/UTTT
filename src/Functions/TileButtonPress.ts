@@ -6,8 +6,7 @@ import store from "../redux/store"
 import { gridStateMode } from "../Types"
 import { perdictMoveGame } from "./Ai/common";
 import { setCurrentTurn, setGridState, setGameOver, setSelectedGrid } from "./gameActions";
-
-
+import { checkIfGameOver } from "./TileButtonPressFunctions";
 
 function setGameTile(original: DimentionalType, firstIndex: number, secondIndex: number, thirdIndex: number, forthIndex: number, currentTurn: gridStateMode) {
   let newValue = [...original.inner[firstIndex][secondIndex].value]
@@ -56,52 +55,6 @@ function setValue(original: DimentionalType, firstIndex: number, secondIndex: nu
     ...original,
     value: newValue
   }
-}
-
-function checkIfGameOver(gridState: DimentionalType, playerMode: gridStateMode, firstIndex: number, secondIndex: number): gridStateMode{
-  var change: boolean = false
-  for(var index = 0; index < 3; index++){//Check Horizontal
-    if (gridState.value[firstIndex][index] === playerMode){
-      if (index === 2){
-        //It's A Match
-        change = true
-      }
-    } else {
-      break
-    }
-  }
-  for(var index = 0; index < 3; index++){//Check Vertical
-    if (gridState.value[index][secondIndex] === playerMode) {
-      if (index === 2){
-        change = true
-      } 
-    } else {
-      break
-    } 
-  }
-  for(var index = 0; index < 3; index++){//Check Diagnal Left Right
-    if (gridState.value[index][index] === playerMode) {
-      if (index === 2){
-        change = true
-      }
-    } else {
-      break
-    }
-  }
-  for(var index = 0; index < 3; index++){//Check Diagnal Right Left
-    if (gridState.value[2-index][index] === playerMode) {
-      if (index === 2){
-        change = true
-      }
-    } else {
-      break
-    }
-  }
-  
-  if (change) {
-    return playerMode
-  }
-  return gridStateMode.Open
 }
 
 export async function TileButtonPress(
@@ -247,7 +200,7 @@ export async function TileButtonPress(
       setGridState(newGridState, onlineGameId)
     } else {
       newGridState = setValue(newGridState, firstIndex, secondIndex, playerMode)
-      const isGameOver = checkIfGameOver(newGridState, playerMode, firstIndex, secondIndex)
+      const isGameOver = checkIfGameOver(newGridState.value, playerMode, firstIndex, secondIndex)
       setGameOver(isGameOver, onlineGameId)
       setGridState(newGridState, onlineGameId)
       if (newGrid === bigTileIndex){

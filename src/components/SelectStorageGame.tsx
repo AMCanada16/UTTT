@@ -58,8 +58,11 @@ function DeleteGame({
           <DefaultButton
             style={{flexDirection: 'row', marginBottom: 5, backgroundColor:  (secondsLeft !== 0) ? "gray":"red",  justifyContent: 'center'}}
             onPress={() => {
-              deleteGame()
+              if (secondsLeft === 0) {
+                deleteGame()
+              }
             }}
+            disabled={secondsLeft !== 0}
           >
             <DeleteText secondsLeft={secondsLeft} deleteState={deleteState} game/>
           </DefaultButton>
