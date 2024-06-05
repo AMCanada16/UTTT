@@ -15,9 +15,7 @@ import { useEffect } from "react";
  * @returns The app
  */
 export default function AppContainer() {
-
   useEffect(() => {
-    console.log("Configuring Google Signin")
     GoogleSignin.configure({
       iosClientId: '94813812988-lhtl01ojo9jchu3h8sbvr97uk9p1ajum.apps.googleusercontent.com'
     });  

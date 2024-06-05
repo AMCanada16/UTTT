@@ -46,7 +46,6 @@ function useGameOnline(gameId: string) {
   useEffect(() => {
     const unsub = onSnapshot(doc(db, "Games", gameId ? gameId.replace(/ /g,''):""), async (doc) => {
       if (doc.exists()){
-        console.log("SANP")
         const data = doc.data();
         const result: GameType = {
           currentTurn: data["currentTurn"],
