@@ -54,7 +54,7 @@ export async function addGame(gameType: "ai"|"friend"): Promise<string> {
     } else {
       const randomId = Math.floor(1000000 + Math.random() * 9000000)
       var gameData: GameType = {
-        currentTurn: 0,
+        currentTurn: gridStateMode.X,
         date: new Date().toISOString(),
         gameOver: gridStateMode.Open,
         data: emptyGame,

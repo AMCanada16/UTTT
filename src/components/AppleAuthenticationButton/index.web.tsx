@@ -7,6 +7,7 @@ import { OAuthProvider, signInWithCredential } from 'firebase/auth';
 import { useMemo } from 'react';
 import AppleSignin from 'react-apple-signin-auth';
 import { auth } from '../../firebase';
+import { sha256 } from 'js-sha256';
 
 /** Apple Signin button */
 export default function AppleAuthenticationButton() {
@@ -18,7 +19,7 @@ export default function AppleAuthenticationButton() {
       scope: 'email',
       redirectURI: 'https://archimedes4-games.web.app/account',
       state: 'signin',
-      nonce: Math.random().toString(36).substring(2, 10),
+      nonce: sha256(nonce),
       usePopup: true,
     }}
     uiType="dark"
@@ -34,6 +35,7 @@ export default function AppleAuthenticationButton() {
         await signInWithCredential(auth, credential);
         // signed in
       } catch (e: unknown) {
+        console.log(e)
         if (typeof e === 'object' && e !== null && 'code' in e && e.code === 'ERR_REQUEST_CANCELED') {
           // handle that the user canceled the sign-in flow
         } else {

@@ -65,6 +65,8 @@ PODS:
     - Yoga
   - ExpoNetwork (6.0.1):
     - ExpoModulesCore
+  - ExpoSecureStore (13.0.2):
+    - ExpoModulesCore
   - EXSplashScreen (0.27.4):
     - DoubleConversion
     - ExpoModulesCore
@@ -1341,6 +1343,7 @@ DEPENDENCIES:
   - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
   - ExpoNetwork (from `../node_modules/expo-network/ios`)
+  - ExpoSecureStore (from `../node_modules/expo-secure-store/ios`)
   - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
@@ -1451,6 +1454,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-modules-core"
   ExpoNetwork:
     :path: "../node_modules/expo-network/ios"
+  ExpoSecureStore:
+    :path: "../node_modules/expo-secure-store/ios"
   EXSplashScreen:
     :path: "../node_modules/expo-splash-screen/ios"
   FBLazyVector:
@@ -1595,6 +1600,7 @@ SPEC CHECKSUMS:
   ExpoKeepAwake: 3b8815d9dd1d419ee474df004021c69fdd316d08
   ExpoModulesCore: 828d63de45d4fbacabe2963fc406a8e9daeed992
   ExpoNetwork: 0d2c2504d56096fe8be3930d5c70cb3390dac5bf
+  ExpoSecureStore: 060cebcb956b80ddae09821610ac1aa9e1ac74cd
   EXSplashScreen: d439ca817211886dc80a00f3761e3b6d861d7205
   FBLazyVector: 898d14d17bf19e2435cafd9ea2a1033efe445709
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120

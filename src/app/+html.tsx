@@ -9,6 +9,7 @@ export default function Root({ children }: PropsWithChildren) {
   return (
     <html lang="en">
       <head>
+        
         {/* THis is here */}
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -58,6 +59,7 @@ export default function Root({ children }: PropsWithChildren) {
           name="twitter:image"
           content={`${host}/UTTT-og.png`}
         />
+        <meta name="google-site-verification" content="ti_kHzehKCoxJ-dIkDcOWjuU4q2pkk4veP8gQo5EDjw" />
       </head>
       <body>{children}</body>
     </html>

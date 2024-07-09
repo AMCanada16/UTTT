@@ -15,11 +15,12 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "plugins": [  
+    "plugins": [
       "@react-native-google-signin/google-signin",
       "expo-apple-authentication",
       "expo-router",
-      "expo-notifications"
+      "expo-notifications",
+      "expo-secure-store"
     ],
     "ios": {
       "supportsTablet": true,
