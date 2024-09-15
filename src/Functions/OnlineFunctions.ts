@@ -226,14 +226,15 @@ export async function getOnlineGames(joinRule: joinRules, currentFriends: string
     let games: GameType[] = []
     let q = query(collection(db, "Games"), or(
       and(where("joinRule", "==", "invitations"), where("invitations", "array-contains", uid)),
-      where("joinRule", "==", "public")
+      where("joinRule", "==", "public"),
+      where('owner', '==', uid)
     ), orderBy("gameId"))
     if (joinRule === 'public' && currentFriends.length !== 0) {
       q = query(collection(db, "Games"), or(
         and(where("joinRule", "==", "invitations"), where("invitations", "array-contains", uid)),
         and(where("joinRule", "==", "friends"), where('owner', 'in', currentFriends)),
-        and(where("joinRule", "==", "friends"), where('owner', '==', uid)),
-        where("joinRule", "==", "public")
+        where("joinRule", "==", "public"),
+        where('owner', '==', uid)
       ), orderBy("gameId"))
     }
     if (joinRule === 'invitation') {

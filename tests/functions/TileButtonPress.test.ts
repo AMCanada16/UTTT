@@ -1,4 +1,3 @@
-import { G } from "react-native-svg";
 import { gridStateMode } from "../../src/Types";
 //import { twoDtoOneDValue } from "../../src/functions/Ai/common";
 import { checkIfGameOver } from "../../src/functions/TileButtonPressFunctions";

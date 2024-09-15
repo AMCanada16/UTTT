@@ -50,13 +50,13 @@ export default function GameOverComponent({
           </View>:null
         }
         { (winner === gridStateMode.Full) ?
-           <Text style={{marginVertical: 12, fontFamily: 'RussoOne', fontSize: 26}}>DRAW</Text>:null
+          <Text style={{marginVertical: 12, fontFamily: 'RussoOne', fontSize: 26}}>DRAW</Text>:null
         }
       </View>
       <DefaultButton onPress={() => {
         router.push('/')
       }} style={{flexDirection: 'row', margin: 5}}>
-        <ChevronLeft width={20} height={20}/>
+        <ChevronLeft width={20} height={20} style={{marginVertical: 'auto'}}/>
         <Text style={{marginVertical: 3}}>Back</Text>
       </DefaultButton>
       <DefaultButton onPress={() => {

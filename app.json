@@ -20,7 +20,8 @@
       "expo-apple-authentication",
       "expo-router",
       "expo-notifications",
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-dev-client"
     ],
     "ios": {
       "supportsTablet": true,

@@ -4,10 +4,10 @@
   18 November 2023
   Welcome.tsx
 */
-import { View, Text, Image, Modal } from "react-native";
+import { View, Text, Image } from "react-native";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { useGlobalSearchParams, usePathname, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import AccountPage from "../components/AccountPage";
 import BottomComponent from "../components/BottomComponent";
 import FriendsPage from "../components/FriendsPage";

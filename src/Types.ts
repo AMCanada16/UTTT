@@ -20,6 +20,7 @@ export enum Colors {
   blue = "#5ce1e6"
 }
 
+// Make sure to update these rules in the iMessage app.
 export const joinRulesArray = ["public", "friends", "invitation"] as const
 
 //Types

@@ -121,8 +121,15 @@ export async function getFriends(uid: string): Promise<{
   }
 }
 
+/**
+ * 
+ * @param uid 
+ * @param approveUid 
+ * @returns 
+ */
 export async function approveFriendRequest(uid: string, approveUid: string) {
   try {
+    // This needs to be a transaction so that both users exist and update their friends at the same time.
     await runTransaction(db, async (transaction) => {
       const usersRequestsResult = await transaction.get(doc(db, "Users", uid))
       if (usersRequestsResult.exists()) {

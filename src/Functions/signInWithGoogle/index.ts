@@ -13,6 +13,6 @@ export async function signInWithGoogle() {
       await signInWithCredential(auth, credential);
     }
   } catch (error) {
-
+    console.log(error)
   }
 }
