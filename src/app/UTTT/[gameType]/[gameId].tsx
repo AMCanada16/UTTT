@@ -12,7 +12,7 @@ import { View, Text, StyleSheet, Pressable, ActivityIndicator } from "react-nati
 import BigTileTextAnimation from "../../../components/BigTileTextAnimation"
 import Striketrough from "../../../components/Striketrough"
 import TileButton from "../../../components/TileButton"
-import { ChevronLeft, CloseIcon, CopiedIcon, CopyIcon, OfflineIcon, PersonIcon, ResetIcon } from "../../../components/Icons"
+import { ChevronLeft, CloseIcon, CopiedIcon, CopyIcon, OfflineIcon, PersonIcon } from "../../../components/Icons"
 import * as Clipboard from 'expo-clipboard';
 import { Redirect, useGlobalSearchParams, useRouter } from "expo-router"
 import useGame from "../../../hooks/useGame"
@@ -81,7 +81,7 @@ function MainGame({game}:{game: GameType}) {
   }, [width, height])
 
   return (
-    <View key={"FirstRow"} style={[styles.firstRow, {
+    <View key={"Container"} style={[styles.firstRow, {
       height: gameLength,
       width: gameLength
     }]}>
@@ -216,6 +216,9 @@ export default function UltimateTicTacToe() {
             <Text>Show game over</Text>
           </Pressable>:null
         }
+        <Pressable onPress={() => {console.log(game.data.inner)}}>
+          <Text>Test</Text>
+        </Pressable>
       </View>
       { (game.gameOver !== gridStateMode.Open && isShowingGameOver === true) ?
         <GameOverComponent onClose={() => setIsShowingGameOver(false)}/>:null
