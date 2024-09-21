@@ -4,7 +4,7 @@
   18 November 2023
   UltimateTicTacToe.tsx
 */
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { gridStateMode } from "../../../Types"
 import { useSelector } from "react-redux"
 import { RootState } from "../../../redux/store"
@@ -24,45 +24,38 @@ import useIsConnected from "../../../hooks/useIsConnected"
 import { trainModel } from "../../../functions/Ai"
 
 //Renders root type
-function InnerGame({firstIndex, secondIndex, root, game, gameLength}:{firstIndex: number, secondIndex: number, root: RootType, game: GameType, gameLength: number}) {
+function InnerGame({game, gridIndex, gameLength}:{game: GameType, gridIndex: number, gameLength: number}) {
+  const active = useMemo(() => {
+    const foundActive = game.data.active.find((active) => active.gridIndex === gridIndex)
+    return foundActive
+  }, [game])
   return (
-    <View key={"SecondCol" + firstIndex + " " + secondIndex} style={{
+    <View key={`Grid_${gridIndex}`} style={{
       width: gameLength * 0.32,
       height: gameLength * 0.32,
-      overflow: 'hidden',
-      marginBottom: (secondIndex === 2) ? 0:gameLength * 0.02
+      overflow: 'hidden'
     }}> 
-      {root.value.map((secondRow: gridStateMode[], thirdIndex) => (
-        <View key={`Row_${thirdIndex}`} style={{
-          flexDirection: 'row', height: (gameLength * 0.32)/3
-          }}>
-          { thirdIndex !== 0 ?
-            <View style={{backgroundColor: 'black', width: gameLength * 0.32, height: 5, borderRadius: 15, position: 'absolute', bottom: '98%'}}/>:null
-          }
-          { thirdIndex === 0 ?
-            <>
-              <View style={{backgroundColor: 'black', width: 5, height: (gameLength * 0.32 - 3), borderRadius: 15, position: 'absolute', left: (gameLength * 0.32 - 10)/3}}/>
-              <View style={{backgroundColor: 'black', width: 5, height: (gameLength * 0.32 - 3), borderRadius: 15, position: 'absolute', left: ((gameLength * 0.32 - 10)/3 * 2 + 5)}}/>
-            </>:null
-          }
-          {secondRow.map((secondColumn: gridStateMode, forthIndex) => (
-            <View key={"Block" + firstIndex + " " + secondIndex + " " + thirdIndex + " " + forthIndex} style={{
-              width: (gameLength * 0.32 - 10)/3,
-              height: (gameLength * 0.32 - 10)/3,
-              marginRight: (forthIndex !== 2) ? 5:0,
-              marginBottom: (thirdIndex !== 2) ? 5:0
-            }}>
-              <TileButton value={secondColumn} firstIndex={firstIndex} secondIndex={secondIndex} thirdIndex={thirdIndex} forthIndex={forthIndex} currentTurn={game.currentTurn}/>
-            </View>
-          ))}
-        </View>
-      ))}
-      {(game.data.inner[firstIndex][secondIndex].active) ? 
-        <Striketrough gridState={game.data} firstIndex={firstIndex} secondIndex={secondIndex} />:null
+      <View style={{flexDirection: 'row'}}>
+        <TileButton tileIndex={0} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game}/>
+        <TileButton tileIndex={1} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game}/>
+        <TileButton tileIndex={2} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game}/>
+      </View>
+      <View style={{flexDirection: 'row'}}>
+        <TileButton tileIndex={3} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game}/>
+        <TileButton tileIndex={4} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game}/>
+        <TileButton tileIndex={5} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game}/>
+      </View>
+      <View style={{flexDirection: 'row'}}>
+        <TileButton tileIndex={6} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game}/>
+        <TileButton tileIndex={7} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game}/>
+        <TileButton tileIndex={8} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game}/>
+      </View>
+      {(active !== undefined) ? 
+        <Striketrough active={active}  />:null
       }
-      {(game.data.value[firstIndex][secondIndex] === gridStateMode.O || game.data.value[firstIndex][secondIndex] === gridStateMode.X) ? 
+      {(game.data.value[gridIndex] === gridStateMode.o || game.data.value[gridIndex] === gridStateMode.x) ? 
         <View style={styles.dimentionTileContainer}>
-          <BigTileTextAnimation mode={(game.data.value[firstIndex][secondIndex] === gridStateMode.O) ? "O":(game.data.value[firstIndex][secondIndex] === gridStateMode.X) ? "X":" "}/>
+          <BigTileTextAnimation mode={(game.data.value[gridIndex] === gridStateMode.o) ? "O":(game.data.value[gridIndex] === gridStateMode.x) ? "X":" "}/>
         </View>:null}
     </View>
   )
@@ -85,19 +78,21 @@ function MainGame({game}:{game: GameType}) {
       height: gameLength,
       width: gameLength
     }]}>
-      {game.data.inner.map((firstRow: RootType[], firstIndex) => (
-        <View key={"FirstCol" + firstIndex} style={{
-          width: gameLength * 0.32,
-          height: gameLength,
-          marginRight: (firstIndex === 2) ? 0:gameLength * 0.02
-        }}>
-          {
-            firstRow.map((root: RootType, secondIndex) => (
-              <InnerGame key={`Mini_Game_${firstIndex}_${secondIndex}`} game={game} root={root} firstIndex={firstIndex} secondIndex={secondIndex} gameLength={gameLength}/>
-            ))
-          }
-        </View>
-      ))}
+      <View style={{flexDirection: 'row'}}>
+        <InnerGame game={game} gridIndex={0} gameLength={gameLength}/>
+        <InnerGame game={game} gridIndex={1} gameLength={gameLength}/>
+        <InnerGame game={game} gridIndex={2} gameLength={gameLength}/>
+      </View>
+      <View style={{flexDirection: 'row'}}>
+        <InnerGame game={game} gridIndex={3} gameLength={gameLength}/>
+        <InnerGame game={game} gridIndex={4} gameLength={gameLength}/>
+        <InnerGame game={game} gridIndex={5} gameLength={gameLength}/>
+      </View>
+      <View style={{flexDirection: 'row'}}>
+        <InnerGame game={game} gridIndex={6} gameLength={gameLength}/>
+        <InnerGame game={game} gridIndex={7} gameLength={gameLength}/>
+        <InnerGame game={game} gridIndex={8} gameLength={gameLength}/>
+      </View>
     </View>
   )
 }
@@ -205,13 +200,13 @@ export default function UltimateTicTacToe() {
           <ChevronLeft width={16} height={16}/>
           <Text style={{marginLeft: 2}}>Back</Text>
         </Pressable>
-        {(game.gameType === 'online' && game.gameOver === gridStateMode.Open) ?
+        {(game.gameType === 'online' && game.gameOver === gridStateMode.open) ?
           <Pressable onPress={() => setIsShowingPlayers(true)} style={{flexDirection: 'row', backgroundColor: 'white', borderRadius: 15, padding: 10, marginTop: 5, marginLeft: 5}}>
             <PersonIcon width={16} height={16}/>
             <Text style={{marginLeft: 2}}>Players</Text>
           </Pressable>:null
         }
-        {(game.gameOver !== gridStateMode.Open && isShowingGameOver === false) ?
+        {(game.gameOver !== gridStateMode.open && isShowingGameOver === false) ?
           <Pressable onPress={() => setIsShowingGameOver(true)} style={{flexDirection: 'row', backgroundColor: 'white', borderRadius: 15, padding: 10, marginTop: 5, marginLeft: 5}}>
             <Text>Show game over</Text>
           </Pressable>:null
@@ -220,10 +215,10 @@ export default function UltimateTicTacToe() {
           <Text>Test</Text>
         </Pressable>
       </View>
-      { (game.gameOver !== gridStateMode.Open && isShowingGameOver === true) ?
+      { (game.gameOver !== gridStateMode.open && isShowingGameOver === true) ?
         <GameOverComponent onClose={() => setIsShowingGameOver(false)}/>:null
       }
-      { (game.gameType === 'online' && (isShowingPlayers || game.users.length < 2) && game.gameOver === gridStateMode.Open)?
+      { (game.gameType === 'online' && (isShowingPlayers || game.users.length < 2) && game.gameOver === gridStateMode.open)?
         <PlayersPage accounts={game.users} onClose={() => {setIsShowingPlayers(false)}}/>:null
       }
     </View>

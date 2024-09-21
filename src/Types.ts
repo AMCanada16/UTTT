@@ -1,9 +1,9 @@
 //Enums
 export enum gridStateMode{
-  Open,
-  X,
-  O,
-  Full
+  open,
+  x,
+  o,
+  full
 }
 
 export enum loadingState {
@@ -61,6 +61,7 @@ declare global{
     users?: never
     joinRule?: never
   }
+
   type GameTypeBase = {
     currentTurn: gridStateMode,
     date: string,
@@ -69,27 +70,21 @@ declare global{
     selectedGrid: number,
     gameId: string
   }
+
   type GameType = GameTypeBase & gameTypes
 
-  type DimentionalType = {
-    inner: RootType[][]
-    value: gridStateMode[][]
-    active?: {
-      xOne: number,
-      xTwo: number,
-      yOne: number,
-      yTwo: number
-    }
+  type activeType = {
+    xOne: number,
+    xTwo: number,
+    yOne: number,
+    yTwo: number,
+    gridIndex: number
   }
-  
-  type RootType = {
-    value: gridStateMode[][] //represents grid. in 
-    active?: {
-      xOne: number,
-      xTwo: number,
-      yOne: number,
-      yTwo: number
-    }
+
+  type DimentionalType = {
+    inner: gridStateMode[]
+    value: gridStateMode[]
+    active: activeType[]
   }
 
   type OnlineStatsType = {
@@ -101,24 +96,17 @@ declare global{
 
 //Constants
 export const emptyGame: DimentionalType = {
-  inner: [[{
-    value: [  [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],   [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],   [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open]]
-  }, {
-    value: [  [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],   [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],   [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open]]
-  }, {
-    value: [  [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],   [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],   [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open]]
-  }], [{
-    value: [  [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],   [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],   [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open]]
-  }, {
-    value: [  [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],   [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],   [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open]]
-  }, {
-    value: [  [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],   [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],   [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open]]
-  }], [{
-    value: [  [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],   [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],   [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open]]
-  }, {
-    value: [  [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],   [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],   [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open]]
-  }, {
-    value: [  [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],   [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],   [gridStateMode.Open, gridStateMode.Open, gridStateMode.Open]]
-  }]],
-  value: [[gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],[gridStateMode.Open, gridStateMode.Open, gridStateMode.Open],[gridStateMode.Open, gridStateMode.Open, gridStateMode.Open]]
+  inner: [
+    gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open,
+    gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open,
+    gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open,
+    gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open,
+    gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open,
+    gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open,
+    gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open,
+    gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open,
+    gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open
+  ],
+  value: [gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open],
+  active: []
 }

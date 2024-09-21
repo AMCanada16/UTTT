@@ -5,7 +5,7 @@
 import { doc, onSnapshot } from "firebase/firestore"
 import { useEffect, useState } from "react"
 import { auth, db } from "../firebase"
-import { getDimentionalFromData, joinGame } from "../functions/OnlineFunctions"
+import { joinGame } from "../functions/OnlineFunctions"
 import { useSelector } from "react-redux"
 import store, { RootState } from "../redux/store"
 import { loadStorageGame, updateStorageGame } from "../functions/StorageFunctions"
@@ -51,7 +51,7 @@ function useGameOnline(gameId: string) {
         const result: GameType = {
           currentTurn: data["currentTurn"],
           date: data["date"],
-          data: getDimentionalFromData(data["gameStateInner"], data["gameStateValue"], data["gameStateActive"]),
+          data: data["data"],
           gameOver: data["gameOver"],
           selectedGrid: data["selectedGrid"],
           gameType: "online",

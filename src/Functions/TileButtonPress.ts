@@ -2,238 +2,227 @@
   UTTT
   Andrew Mainella
 */
-import store from "../redux/store"
-import { gridStateMode } from "../Types"
-import { perdictMoveGame } from "./Ai/common";
-import { setCurrentTurn, setGridState, setGameOver, setSelectedGrid } from "./gameActions";
-import { checkIfGameOver } from "./TileButtonPressFunctions";
+import { gridStateMode, loadingState } from "../Types"
+import { setGameOver} from "./gameActions";
 
-function setGameTile(original: DimentionalType, firstIndex: number, secondIndex: number, thirdIndex: number, forthIndex: number, currentTurn: gridStateMode) {
-  let newValue = [...original.inner[firstIndex][secondIndex].value]
-  let newValueOne = [...newValue[thirdIndex]]
-  newValueOne[forthIndex] = currentTurn
-
-  newValue[thirdIndex] = newValueOne
-  let newInner = [...original.inner]
-  let newInnerOne = [...original.inner[firstIndex]]
-  newInnerOne[secondIndex] = {
-    ...newInner[firstIndex][secondIndex],
-    value: newValue
-  }
-  newInner[firstIndex] = newInnerOne
-  return {
-    ...original,
-    inner: newInner
-  }
+function getLRBaseIndex(index: number) {
+	return index - (index % 27) + ((Math.floor((index % 9)/3.0)) * 3)
 }
 
-function setActive(original: DimentionalType, firstIndex: number, secondIndex: number, active?: {
-  xOne: number;
-  xTwo: number;
-  yOne: number;
-  yTwo: number;
-} | undefined) {
-  let newInner = [...original.inner]
-  let newInnerOne = [...original.inner[firstIndex]]
-  newInnerOne[secondIndex] = {
-    ...newInner[firstIndex][secondIndex],
-    active
-  }
-  newInner[firstIndex] = newInnerOne
-  return {
-    ...original,
-    inner: newInner
-  }
-}
 
-function setValue(original: DimentionalType, firstIndex: number, secondIndex: number, value: gridStateMode) {
-  let newValue = [...original.value]
-  let newValueOne = [...original.value[firstIndex]]
-  newValueOne[secondIndex] = value
-  newValue[firstIndex] = newValueOne
-  return {
-    ...original,
-    value: newValue
-  }
-}
-
-export async function TileButtonPress(
-  firstIndex: number, 
-  secondIndex: number,
-  thirdIndex: number, 
-  forthIndex: number,
-  ai?: boolean
-) {
+export default function TileButtonPress(
+  index: number,
+	tileIndex: number,
+	gridIndex: number,
+  game: GameType
+): {
+  result: loadingState.failed
+} | {
+  result: loadingState.success;
+  data: GameType;
+} {
+  var newGame = game
   // check if the game is current
-  if (store.getState().gameState.gameOver !== gridStateMode.Open) {
-    return
-  }
-  const onlineGameId = (store.getState().gameState.gameType === 'online') ? store.getState().gameState.gameId:undefined
-  const playerMode = store.getState().gameState.currentTurn
-  const newGrid = (thirdIndex === 0) ? (forthIndex === 0) ? 1:(forthIndex === 1) ? 2:3: (thirdIndex === 1) ?  (forthIndex === 0) ? 4:(forthIndex === 1) ? 5:6: (forthIndex === 0) ? 7:(forthIndex === 1) ? 8:9
-  const bigTileIndex = (firstIndex === 0) ? (secondIndex === 0) ? 1:(secondIndex === 1) ? 4:7:(firstIndex === 1) ? (secondIndex === 0) ? 2:(secondIndex === 1) ? 5:8:(secondIndex === 0) ? 3:(secondIndex=== 1) ? 6:9
-
-  var newGridState: DimentionalType = {...store.getState().gameState.data}
-  const isNewGridPositionFull = newGridState.value[forthIndex][thirdIndex] === gridStateMode.O || newGridState.value[forthIndex][thirdIndex] === gridStateMode.X || newGridState.value[forthIndex][thirdIndex] === gridStateMode.Full
-  //updating
-  if (playerMode === gridStateMode.X || playerMode === gridStateMode.O){
-    newGridState = setGameTile(newGridState, firstIndex, secondIndex, thirdIndex, forthIndex, playerMode)
-    if (isNewGridPositionFull){
-      setSelectedGrid(0, onlineGameId)
-    } else {
-      setSelectedGrid(newGrid, onlineGameId)
+  if (game.gameOver != gridStateMode.open) {
+    return  {
+      result: loadingState.failed
     }
+  }
+  // define the default variables used
+  let currentTurn = game.currentTurn
+
+  //update the data
+  if (currentTurn == gridStateMode.x || currentTurn == gridStateMode.o){
+    newGame.data.inner[index] = currentTurn
+    
     // A boolean if a square has become x or o (if so we need to check for win)
     var change: boolean = false
-    for(var index = 0; index < 3; index++){//Check Horizontal
-      if (newGridState.inner[firstIndex][secondIndex].value[thirdIndex][index] === playerMode){
-        if (index === 2){
-          //It's A Match
-          change = true
-          if (forthIndex > 1){
-            newGridState = setActive(newGridState, firstIndex, secondIndex, {
-              xOne: 0,
-              xTwo: 2,
-              yOne: thirdIndex,
-              yTwo: thirdIndex
-            })
-          } else {
-            newGridState = setActive(newGridState, firstIndex, secondIndex, {
-              xOne: 2,
-              xTwo: 0,
-              yOne: thirdIndex,
-              yTwo: thirdIndex
-            })
-          }
-        }
-      } else {
+    
+    //Check Horizontal
+    for (let x = 0; x < 3; x += 1) {
+      let baseIndex = index - (index % 3)
+      let check = newGame.data.inner[baseIndex]
+      if (newGame.data.inner[baseIndex + x] != check) {
         break
       }
-    }
-    for(var index = 0; index < 3; index++){//Check Vertical
-      if (newGridState.inner[firstIndex][secondIndex].value[index][forthIndex] === playerMode) {
-        if (index === 2){
-          change = true
-          if (thirdIndex > 1){
-            newGridState = setActive(newGridState, firstIndex, secondIndex, {
-              xOne: forthIndex,
-              xTwo: forthIndex,
-              yOne: 2,
-              yTwo: 0
-            })
-          } else {
-            newGridState = setActive(newGridState, firstIndex, secondIndex, {
-              xOne: forthIndex,
-              xTwo: forthIndex,
-              yOne: 0,
-              yTwo: 2
-            })
-          }
-        } 
-      } else {
-        break
-      }
-    }
-    for(var index = 0; index < 3; index++){//Check Diagnal Left Right
-      if (newGridState.inner[firstIndex][secondIndex].value[index][index] === playerMode) {
-        if (index === 2){
-          change = true
-          if (forthIndex > 1){
-            //Line moves left to right
-            newGridState = setActive(newGridState, firstIndex, secondIndex, {
-              xOne: 0,
-              xTwo: 2,
-              yOne: 0,
-              yTwo: 2
-            })
-          } else {
-            //Line moves right to left
-            newGridState = setActive(newGridState, firstIndex, secondIndex, {
-              xOne: 2,
-              xTwo: 0,
-              yOne: 2,
-              yTwo: 0
-            })
-          }
-        }
-      } else {
-        break
-      }
-    }
-    for(var index = 0; index < 3; index++){//Check Diagnal Right Left
-      if (newGridState.inner[firstIndex][secondIndex].value[2-index][index] === playerMode) {
-        //Checking is right 
-        if (index === 2){
-          change = true
-          newGridState = setActive(newGridState, firstIndex, secondIndex, {
-            xOne: 2,
-            xTwo: 0,
-            yOne: 0,
-            yTwo: 2
-          })
-        }
-      } else {
-        break
-      }
-    }
+      if (x == 2) {
+        change = true
+        let secondIndex: number = Math.floor(index/27.0)
+        let y: number = Math.floor(index/9.0) - (secondIndex * 3)
 
+        newGame.data.value[gridIndex] = currentTurn
+        newGame.data.active = [...newGame.data.active,
+          {
+            xOne: 0,
+            xTwo: 2,
+            yOne: y,
+            yTwo: y,
+            gridIndex
+          }]
+        // TODO handle active
+      }
+    }
+    
+    //Check Vertical
+    for (let y = 0; y < 3; y += 1) {
+      //		The index - Anything above it in it's row
+      let baseIndex = index - (Math.floor((index % 27)/9.0) * 9)
+      let check = newGame.data.inner[baseIndex]
+      // TODO fit bottom
+      if (newGame.data.inner[baseIndex + (y * 9)] != check) {
+        break
+      }
+      if (y == 2) {
+        // TODO handle active
+        change = true
+        let secondIndex: number = Math.floor(index/27.0)
+        let xPos: number = (index % 3)
+
+        newGame.data.value[gridIndex] = currentTurn
+        newGame.data.active = [...newGame.data.active,
+          {
+            xOne: xPos,
+            xTwo: xPos,
+            yOne: 0,
+            yTwo: 2,
+            gridIndex
+        }]
+      }
+    }
+    
+    //Check Diagnal Left Right
+    let lrBaseIndex = getLRBaseIndex(index)
+    if (newGame.data.inner[lrBaseIndex] == newGame.data.inner[lrBaseIndex + 10] && newGame.data.inner[lrBaseIndex + 10] == newGame.data.inner[lrBaseIndex + 20] && newGame.data.inner[lrBaseIndex] != gridStateMode.open) {
+      change = true
+      newGame.data.value[gridIndex] = currentTurn
+      newGame.data.active = [...newGame.data.active,
+        {
+          xOne: 0,
+          xTwo: 2,
+          yOne: 0,
+          yTwo: 2,
+          gridIndex
+        }]
+    }
+    
+    //Check Diagnal Right Left
+    let rlBaseIndex = getLRBaseIndex(index) + 2
+    if (newGame.data.inner[rlBaseIndex] == newGame.data.inner[rlBaseIndex + 8] && newGame.data.inner[rlBaseIndex + 8] == newGame.data.inner[rlBaseIndex + 16] && newGame.data.inner[rlBaseIndex] != gridStateMode.open) {
+      change = true
+      newGame.data.value[gridIndex] = currentTurn
+      newGame.data.active = [...newGame.data.active,
+        {
+          xOne: 2,
+          xTwo: 0,
+          yOne: 2,
+          yTwo: 0,
+          gridIndex
+        }]
+    }
     if (!change){
       //Checks if the sqaure is full meaning the tic tac toe has ended in a draw
-      for(var indexOne = 0; index < 3; index++){
-        var complete = true
-        for(var index = 0; index < 3; index++){
-          if (newGridState.inner[firstIndex][secondIndex].value[indexOne][index] === gridStateMode.Open){
-            complete = false
-            break              
-          }
-        }
-        if (!complete){
-          break
-        } else if (index === 2){
-          change = true
-          newGridState = setValue(newGridState, firstIndex, secondIndex, gridStateMode.Full)
-          if (newGrid === bigTileIndex){
-            setSelectedGrid(0, onlineGameId)//TO DO fix this
-          }
-        }
-      }
-      setGridState(newGridState, onlineGameId)
-    } else {
-      newGridState = setValue(newGridState, firstIndex, secondIndex, playerMode)
-      const isGameOver = checkIfGameOver(newGridState.value, playerMode, firstIndex, secondIndex)
-      setGameOver(isGameOver, onlineGameId)
-      setGridState(newGridState, onlineGameId)
-      if (newGrid === bigTileIndex){
-        setSelectedGrid(0, onlineGameId)
-      }
-      if (isGameOver === gridStateMode.Open) {
-        for(var indexOne = 0; index < 3; index++){
-          var complete = true
-          for(var index = 0; index < 3; index++){
-            if (newGridState.value[indexOne][index] === gridStateMode.Open){
-              complete = false
-              break              
-            }
-          }
-          if (!complete){
+      var full = true
+      // This is the index in the top left of the square
+      let lrIndex = getLRBaseIndex(index)
+      for (let x = 0; x < 3; x += 1) {
+        for (let y = 0; y < 3; y += 1){
+          if (newGame.data.inner[(lrIndex + x) + (y * 9)] == gridStateMode.open) {
+            full = false
             break
-          } else {
-            setGameOver(gridStateMode.Full)
           }
         }
+        if (!full) {
+          break
+        }
+      }
+      if (full) {
+        newGame.data.value[tileIndex] = gridStateMode.full
+        change = true
       }
     }
+    if (change) {
+      var isGameOver = false
+      /*
+        GridIndex
+        | 0 1 2 | rowIndex 0
+        | 3 4 5 | rowIndex 1
+        | 6 7 8 | rowIndex 2
+        --------
+          0 1 2
+        Columns
+        
+      */
+      let rowIndex = Math.floor(gridIndex/3.0)
+      let columnIndex = gridIndex % 3
+      
+      // Check full game horizontal
+      for (let x = 0; x < 3; x += 1) {
+        if (newGame.data.value[(rowIndex * 3) + x] != newGame.data.value[(rowIndex * 3)]) {
+          break
+        }
+        if (x == 2) {
+          isGameOver = true
+        }
+      }
+      
+      // Check full game vert
+      for (let y = 0; y < 3; y += 1) {
+        if (newGame.data.value[(y * 3) + columnIndex] != newGame.data.value[(y * 3) + columnIndex]) {
+          break
+        }
+        if (y == 2) {
+          isGameOver = true
+        }
+      }
+      
+      // Check full game left right
+      if (newGame.data.value[0] == newGame.data.value[4] && newGame.data.value[4] == newGame.data.value[8] && newGame.data.value[8] != gridStateMode.open) {
+        isGameOver = true
+      }
+      
+      // Check full game right left
+      if (newGame.data.value[2] == newGame.data.value[4] && newGame.data.value[4] == newGame.data.value[6] && newGame.data.value[6] != gridStateMode.open) {
+        isGameOver = true
+      }
+      
+      // is full game full?
+      var full = true
+      for (let x = 0; x < 3; x += 1) {
+        for (let y = 0; y < 3; y += 1) {
+          if (newGame.data.value[x + (y * 3)] == gridStateMode.open) {
+            full = false
+            break
+          }
+        }
+        if (!full) {
+          break
+        }
+      }
+      
+      if (full) {
+        newGame.gameOver = gridStateMode.full
+      }
+      
+      if (isGameOver) {
+        //setGameOver(currentTurn, newGame) TODO fix
+      }
+    }
+  }
+  
+  if (newGame.data.value[tileIndex] != gridStateMode.open) {
+    newGame.selectedGrid = 0
+  } else {
+    newGame.selectedGrid = tileIndex
   }
 
   // Set the new plater mode
-  if (playerMode === gridStateMode.O){
-    setCurrentTurn(gridStateMode.X, onlineGameId)
-  } else if (playerMode === gridStateMode.X) {
-    setCurrentTurn(gridStateMode.O, onlineGameId)
+  if (currentTurn == gridStateMode.o){
+    newGame.currentTurn = gridStateMode.x
+  } else if (currentTurn == gridStateMode.x) {
+    newGame.currentTurn = gridStateMode.o
   }
-
-  if (store.getState().gameState.gameType === 'ai' && ai !== true) {
-    let result = await perdictMoveGame(store.getState().gameState)
-    TileButtonPress(result.firstIndex, result.secondIndex, result.thirdIndex, result.fourthIndex, result.ai)
+  return {
+    result: loadingState.success,
+    data: newGame
   }
 }

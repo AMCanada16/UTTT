@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import {Svg, Line} from "react-native-svg"
 import {View} from "react-native"
 
@@ -7,12 +7,12 @@ import {View} from "react-native"
  * @param gridState The 
  * @returns 
  */
-export default function Striketrough({gridState, firstIndex, secondIndex}:{gridState: DimentionalType, firstIndex: number, secondIndex: number}) {
+export default function Striketrough({active}:{active: activeType}) {
   const [length, setLength] = useState<number>(0)
-  const xOne = gridState.inner[firstIndex][secondIndex].active!.xOne
-  const xTwo = gridState.inner[firstIndex][secondIndex].active!.xTwo
-  const yOne = gridState.inner[firstIndex][secondIndex].active!.yOne
-  const yTwo = gridState.inner[firstIndex][secondIndex].active!.yTwo
+  const xOne = useMemo(() => {return active.xOne}, [active])
+  const xTwo = useMemo(() => {return active.xTwo}, [active])
+  const yOne = useMemo(() => {return active.yOne}, [active])
+  const yTwo = useMemo(() => {return active.yTwo}, [active])
 
   return (
     <View style={{width: "100%", height: "100%", position: 'absolute'}} onLayout={(e) => {setLength(e.nativeEvent.layout.height)}}>

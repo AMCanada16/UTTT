@@ -38,9 +38,9 @@ export async function addGame(gameType: "ai"|"friend"): Promise<string> {
         iterations++
       }
       var gameData: GameType = {
-        currentTurn: gridStateMode.X,
+        currentTurn: gridStateMode.x,
         date: new Date().toISOString(),
-        gameOver: gridStateMode.Open,
+        gameOver: gridStateMode.open,
         data: emptyGame,
         selectedGrid: 0,
         gameType,
@@ -54,9 +54,9 @@ export async function addGame(gameType: "ai"|"friend"): Promise<string> {
     } else {
       const randomId = Math.floor(1000000 + Math.random() * 9000000)
       var gameData: GameType = {
-        currentTurn: gridStateMode.X,
+        currentTurn: gridStateMode.x,
         date: new Date().toISOString(),
-        gameOver: gridStateMode.Open,
+        gameOver: gridStateMode.open,
         data: emptyGame,
         selectedGrid: 0,
         gameType,

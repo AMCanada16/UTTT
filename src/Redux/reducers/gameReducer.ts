@@ -4,11 +4,11 @@ import { gridStateMode } from '../../Types';
 const initalState: GameType = {
   currentTurn: 0,
   date: new Date().toISOString(),
-  gameOver: gridStateMode.Open,
+  gameOver: gridStateMode.open,
   data: {
     inner: [],
     value: [],
-    active: undefined
+    active: []
   },
   selectedGrid: 0,
   gameType: 'ai',

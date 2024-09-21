@@ -8,7 +8,6 @@ import { gameSlice } from "../redux/reducers/gameReducer";
 import store from "../redux/store";
 import { auth, db } from "../firebase";
 import { gridStateMode } from "../Types";
-import { getDatafromDimentionalGrid } from "./OnlineFunctions";
 
 /**
  * Set the selected grid of the game
@@ -36,7 +35,7 @@ export function setGameOver(gameOver: gridStateMode, gameId?: string) {
   //TODO error
   if (gameId !== undefined) {
     let uid = auth.currentUser?.uid
-    if (gameOver === gridStateMode.Open && uid !== undefined) {
+    if (gameOver === gridStateMode.open && uid !== undefined) {
       updateDoc(doc(db, "Games", gameId), {
         gameOver: gameOver,
         userWon: uid
@@ -58,11 +57,8 @@ export function setGameOver(gameOver: gridStateMode, gameId?: string) {
  */
 export function setGridState(gridState: DimentionalType, gameId?: string) {
   if (gameId !== undefined) {
-    const firebaseData = getDatafromDimentionalGrid(gridState)
     updateDoc(doc(db, "Games", gameId), {
-      gameStateValue: firebaseData.activeValues,
-      gameStateInner: firebaseData.innerValues,
-      gameStateActive: firebaseData.innerValueActive
+      data: gridState
     })
   } else {
     store.dispatch(gameSlice.actions.setGameState(gridState))
