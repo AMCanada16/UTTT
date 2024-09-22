@@ -3,10 +3,20 @@
   Andrew Mainella
 */
 import { gridStateMode, loadingState } from "../Types"
-import { setGameOver} from "./gameActions";
 
 function getLRBaseIndex(index: number) {
 	return index - (index % 27) + ((Math.floor((index % 9)/3.0)) * 3)
+}
+
+function setValue(value: gridStateMode, index: number, game: GameType): GameType {
+  let newGame = {...game}
+  let newValue = [...newGame.data.value]
+  newValue[index] = value
+  newGame.data = {
+    ...newGame.data,
+    value: newValue
+  }
+  return newGame
 }
 
 
@@ -21,7 +31,7 @@ export default function TileButtonPress(
   result: loadingState.success;
   data: GameType;
 } {
-  var newGame = game
+  let newGame = {...game}
   // check if the game is current
   if (game.gameOver != gridStateMode.open) {
     return  {
@@ -32,9 +42,13 @@ export default function TileButtonPress(
   let currentTurn = game.currentTurn
 
   //update the data
-  if (currentTurn == gridStateMode.x || currentTurn == gridStateMode.o){
-    newGame.data.inner[index] = currentTurn
-    
+  if (currentTurn == gridStateMode.x || currentTurn == gridStateMode.o) {
+    let newInner = [...newGame.data.inner]
+    newInner[index] = currentTurn
+    newGame.data = {
+      ...newGame.data,
+      inner: newInner
+    }
     // A boolean if a square has become x or o (if so we need to check for win)
     var change: boolean = false
     
@@ -50,7 +64,7 @@ export default function TileButtonPress(
         let secondIndex: number = Math.floor(index/27.0)
         let y: number = Math.floor(index/9.0) - (secondIndex * 3)
 
-        newGame.data.value[gridIndex] = currentTurn
+        newGame = setValue(currentTurn, gridIndex, newGame)
         newGame.data.active = [...newGame.data.active,
           {
             xOne: 0,
@@ -78,7 +92,7 @@ export default function TileButtonPress(
         let secondIndex: number = Math.floor(index/27.0)
         let xPos: number = (index % 3)
 
-        newGame.data.value[gridIndex] = currentTurn
+        newGame = setValue(currentTurn, gridIndex, newGame)
         newGame.data.active = [...newGame.data.active,
           {
             xOne: xPos,
@@ -94,7 +108,7 @@ export default function TileButtonPress(
     let lrBaseIndex = getLRBaseIndex(index)
     if (newGame.data.inner[lrBaseIndex] == newGame.data.inner[lrBaseIndex + 10] && newGame.data.inner[lrBaseIndex + 10] == newGame.data.inner[lrBaseIndex + 20] && newGame.data.inner[lrBaseIndex] != gridStateMode.open) {
       change = true
-      newGame.data.value[gridIndex] = currentTurn
+      newGame = setValue(currentTurn, gridIndex, newGame)
       newGame.data.active = [...newGame.data.active,
         {
           xOne: 0,
@@ -109,13 +123,13 @@ export default function TileButtonPress(
     let rlBaseIndex = getLRBaseIndex(index) + 2
     if (newGame.data.inner[rlBaseIndex] == newGame.data.inner[rlBaseIndex + 8] && newGame.data.inner[rlBaseIndex + 8] == newGame.data.inner[rlBaseIndex + 16] && newGame.data.inner[rlBaseIndex] != gridStateMode.open) {
       change = true
-      newGame.data.value[gridIndex] = currentTurn
+      newGame = setValue(currentTurn, gridIndex, newGame)
       newGame.data.active = [...newGame.data.active,
         {
           xOne: 2,
           xTwo: 0,
-          yOne: 2,
-          yTwo: 0,
+          yOne: 0,
+          yTwo: 2,
           gridIndex
         }]
     }
@@ -136,7 +150,7 @@ export default function TileButtonPress(
         }
       }
       if (full) {
-        newGame.data.value[tileIndex] = gridStateMode.full
+        newGame = setValue(gridStateMode.full, gridIndex, newGame)
         change = true
       }
     }
@@ -178,6 +192,7 @@ export default function TileButtonPress(
       // Check full game left right
       if (newGame.data.value[0] == newGame.data.value[4] && newGame.data.value[4] == newGame.data.value[8] && newGame.data.value[8] != gridStateMode.open) {
         isGameOver = true
+        console.log('OVER LEFT RIGHT')
       }
       
       // Check full game right left
@@ -204,15 +219,19 @@ export default function TileButtonPress(
       }
       
       if (isGameOver) {
-        //setGameOver(currentTurn, newGame) TODO fix
+        newGame.gameOver = currentTurn
+        if (newGame.gameType === 'online') {
+          // TODO handle
+        }
       }
     }
   }
   
+  console.log(newGame.data.value, tileIndex)
   if (newGame.data.value[tileIndex] != gridStateMode.open) {
     newGame.selectedGrid = 0
   } else {
-    newGame.selectedGrid = tileIndex
+    newGame.selectedGrid = (tileIndex + 1)
   }
 
   // Set the new plater mode

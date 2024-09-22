@@ -31,25 +31,36 @@ function InnerGame({game, gridIndex, gameLength}:{game: GameType, gridIndex: num
   }, [game])
   return (
     <View key={`Grid_${gridIndex}`} style={{
-      width: gameLength * 0.32,
-      height: gameLength * 0.32,
-      overflow: 'hidden'
+      width: gameLength/3 - 8,
+      height: gameLength/3 - 8,
+      overflow: 'hidden',
+      margin: 4
     }}> 
       <View style={{flexDirection: 'row'}}>
-        <TileButton tileIndex={0} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game}/>
-        <TileButton tileIndex={1} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game}/>
-        <TileButton tileIndex={2} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game}/>
+        <TileButton tileIndex={0} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game} gameLength={gameLength}/>
+        <View style={{width: 4}}/>
+        <TileButton tileIndex={1} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game} gameLength={gameLength}/>
+        <View style={{width: 4}}/>
+        <TileButton tileIndex={2} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game} gameLength={gameLength}/>
       </View>
+      <View style={{height: 4, width: gameLength/3 - 8, backgroundColor: 'black'}}/>
       <View style={{flexDirection: 'row'}}>
-        <TileButton tileIndex={3} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game}/>
-        <TileButton tileIndex={4} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game}/>
-        <TileButton tileIndex={5} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game}/>
+        <TileButton tileIndex={3} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game} gameLength={gameLength}/>
+        <View style={{width: 4}}/>
+        <TileButton tileIndex={4} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game} gameLength={gameLength}/>
+        <View style={{width: 4}}/>
+        <TileButton tileIndex={5} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game} gameLength={gameLength}/>
       </View>
+      <View style={{height: 4, width: gameLength/3 - 8, backgroundColor: 'black'}}/>
       <View style={{flexDirection: 'row'}}>
-        <TileButton tileIndex={6} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game}/>
-        <TileButton tileIndex={7} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game}/>
-        <TileButton tileIndex={8} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game}/>
+        <TileButton tileIndex={6} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game} gameLength={gameLength}/>
+        <View style={{width: 4}}/>
+        <TileButton tileIndex={7} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game} gameLength={gameLength}/>
+        <View style={{width: 4}}/>
+        <TileButton tileIndex={8} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game} gameLength={gameLength}/>
       </View>
+      <View style={{height: gameLength/3 - 8, width: 4, backgroundColor: 'black', position: 'absolute', left: (gameLength/3 -16)/3, zIndex: 2}}/>
+      <View style={{height: gameLength/3 - 8, width: 4, backgroundColor: 'black', position: 'absolute', left: ((gameLength/3 -16)/3 * 2) + 4, zIndex: 2, bottom: 0}}/>
       {(active !== undefined) ? 
         <Striketrough active={active}  />:null
       }
@@ -74,10 +85,10 @@ function MainGame({game}:{game: GameType}) {
   }, [width, height])
 
   return (
-    <View key={"Container"} style={[styles.firstRow, {
+    <View key={"Container"} style={{
       height: gameLength,
       width: gameLength
-    }]}>
+    }}>
       <View style={{flexDirection: 'row'}}>
         <InnerGame game={game} gridIndex={0} gameLength={gameLength}/>
         <InnerGame game={game} gridIndex={1} gameLength={gameLength}/>

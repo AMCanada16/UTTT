@@ -17,7 +17,7 @@ if (typeof window !== 'undefined') {
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export default function TextAnimation({length, mode, colored}:{length: number, mode: "X"|"O", colored: boolean}) {
-  const r = useSharedValue(length);
+  const r = useSharedValue(Math.max(0, length));
 
   useEffect(() => {
     r.value = 0;
@@ -34,8 +34,8 @@ export default function TextAnimation({length, mode, colored}:{length: number, m
   // highlight-end
 
   return (
-    <View style={[styles.container]}>
-      <Svg style={{width: length, height: length, zIndex: 1, borderRadius: (mode === "X") ? 0:length, overflow: 'hidden'}}>
+    <>
+      <Svg style={{width: Math.max(0, length), height: Math.max(0, length), zIndex: 1, borderRadius: (mode === "X") ? 0:length, overflow: 'hidden'}}>
         <AnimatedCircle
           cx="50%"
           cy="50%"
@@ -44,10 +44,10 @@ export default function TextAnimation({length, mode, colored}:{length: number, m
         />
       </Svg>
       { (mode === "X") ?
-        <XIcon width={length} height={length} style={{position: 'absolute'}} color="#5ce1e6"/>:
-        <CircleIcon width={length} height={length} style={{position: 'absolute'}} color="#ff9c9c"/>
+        <XIcon width={Math.max(0, length)} height={Math.max(0, length)} style={{position: 'absolute'}} color="#5ce1e6"/>:
+        <CircleIcon width={Math.max(0, length)} height={Math.max(0, length)} style={{position: 'absolute'}} color="#ff9c9c"/>
       }
-    </View>
+    </>
   );
 }
 

@@ -30,7 +30,7 @@ export default function checkIfFilled(game: GameType, index: number, gridIndex: 
     // There is no constaint on the selected grid
     return false
   }
-  if (gridIndex === currentGame.selectedGrid) {
+  if ((gridIndex + 1) === currentGame.selectedGrid) {
     // The selected grid is the same as the current grid
     return false
   }

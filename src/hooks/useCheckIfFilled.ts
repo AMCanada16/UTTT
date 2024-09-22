@@ -10,12 +10,6 @@ export default function useCheckIfFilled(
   const [filled, setFilled] = useState<boolean>(false)
   useEffect(() => {
     setFilled(checkIfFilled(game, index, gridIndex))
-    const unsubscribe = store.subscribe(() => {
-      setFilled(checkIfFilled(game, index, gridIndex))
-    })
-    return () => {
-      unsubscribe()
-    }
-  }, [])
+  }, [game])
   return filled
 }
