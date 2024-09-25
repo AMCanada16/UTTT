@@ -1,3 +1,8 @@
+/*
+  UTTT
+  Andrew Mainella
+  22 September 2024
+*/
 import useUserOnline from "../hooks/useUserOnline"
 import { OfflineIcon, OnlineIcon } from "./Icons"
 

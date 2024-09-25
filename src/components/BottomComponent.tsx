@@ -1,3 +1,8 @@
+/*
+  UTTT
+  Andrew Mainella
+  22 September 2024
+*/
 import { View, Text, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'expo-router'

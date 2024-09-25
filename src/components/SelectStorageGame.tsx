@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { RootState } from "../redux/store";
 import { useRouter } from "expo-router";
 import { Pressable, View, Text, FlatList, Modal } from "react-native";
-import { ChevronLeft, CloseIcon, TrashIcon } from "./Icons";
+import { CheckMarkIcon, ChevronLeft, CircleIcon, CloseIcon, TrashIcon } from "./Icons";
 import DefaultButton from "./DefaultButton";
 import { DeleteText } from "./AccountPage";
 import { loadingState } from "../Types";
@@ -12,10 +12,12 @@ import { deleteGame as deleteStorageGame } from "../functions/StorageFunctions";
 
 function DeleteGame({
   deleting,
+  selectedDelete,
   onBack
 }:{
   deleting: string;
-  onBack: (gameId: string) => void
+  selectedDelete: string[]
+  onBack: (result: loadingState) => void
 }) {
   const {height, width} = useSelector((state: RootState) => state.dimensions)
   const [deleteState, setDeleteState] = useState<loadingState>(loadingState.notStarted)
@@ -23,13 +25,28 @@ function DeleteGame({
 
   async function deleteGame() {
     setDeleteState(loadingState.loading)
-    const result = await deleteStorageGame(deleting)
-    if (result === loadingState.success) {
-      setDeleteState(loadingState.success)
-      setDeleteState(loadingState.notStarted)
-      onBack(deleting)
+    if (deleting === "array") {
+      let failed = false
+      for (const x of selectedDelete) {
+        const result = await deleteStorageGame(x)
+        if (result !== loadingState.success) {
+          failed = true
+          setDeleteState(loadingState.failed)
+        }
+      }
+      if (!failed) {
+        // Success
+        setDeleteState(loadingState.notStarted)
+        onBack(loadingState.success)
+      }
     } else {
-      setDeleteState(loadingState.failed)
+      const result = await deleteStorageGame(deleting)
+      if (result === loadingState.success) {
+        setDeleteState(loadingState.notStarted)
+        onBack(loadingState.success)
+      } else {
+        setDeleteState(loadingState.failed)
+      }
     }
   }
   
@@ -66,7 +83,7 @@ function DeleteGame({
           >
             <DeleteText secondsLeft={secondsLeft} deleteState={deleteState} game/>
           </DefaultButton>
-          <DefaultButton style={{flexDirection: 'row'}} onPress={() => onBack("")}>
+          <DefaultButton style={{flexDirection: 'row'}} onPress={() => onBack(loadingState.notStarted)}>
             <ChevronLeft width={20} height={20}/>
             <Text style={{marginVertical: 3}}>Go Back</Text>
           </DefaultButton>
@@ -81,6 +98,8 @@ export default function SelectStorageGames({isFriend, onClose}:{isFriend: boolea
   const [games, setGames] = useState<GameType[]>([])
   const {height, width} = useSelector((state: RootState) => state.dimensions)
   const [deleting, setDeleting] = useState<string>("")
+  const [isDeleting, setIsDeleting] = useState<boolean>(false)
+  const [selectedDelete, setSelectedDelete] = useState<string[]>([])
 
   async function getGameData(){
     if (isFriend){
@@ -107,18 +126,43 @@ export default function SelectStorageGames({isFriend, onClose}:{isFriend: boolea
 
   return(
     <>
-      <DeleteGame deleting={deleting} onBack={(e) => {
-        setDeleting("")
-        if (e !== "") {
-          let newGames = [...games].filter((x) => {return x.gameId !== e})
-          setGames(newGames)
+      <DeleteGame deleting={deleting} selectedDelete={selectedDelete} onBack={(e) => {
+        if (e = loadingState.success) {
+          setDeleting("")
+          if (deleting === "array") {
+            let newGames = [...games].filter((x) => {return !selectedDelete.includes(x.gameId)})
+            setGames(newGames)
+          } else {
+            let newGames = [...games].filter((x) => {return deleting !== x.gameId})
+            setGames(newGames)
+            setIsDeleting(false)
+          }
+        } else {
+          setDeleting("")
         }
       }} />
       <View style={{width: width * ((width <= 560) ? 0.95:0.8), backgroundColor: "rgba(255,255,255, 0.95)", height: height * 0.8, borderRadius: 25}}>
-        <Pressable style={{marginTop: (width <= 560) ? 15:25, marginLeft: (width <= 560) ? 15:25}} onPress={() => {onClose()}}>
-          <CloseIcon width={30} height={30}/>
-        </Pressable>
-        <Text style={{textAlign: 'center', fontWeight: 'bold', marginTop: 2, fontSize: 25}}>Load Game</Text>
+        <View style={{marginTop: (width <= 560) ? 15:25, marginHorizontal: (width <= 560) ? 15:25, flexDirection: 'row', marginBottom: 15, justifyContent: 'center'}}>
+          <Pressable onPress={() => {onClose()}} style={{position: 'absolute', left: 0}}>
+            <CloseIcon width={30} height={30}/>
+          </Pressable>
+          <Text style={{textAlign: 'center', fontWeight: 'bold', fontSize: 25}}>Load Game</Text>
+          {isDeleting ?
+            <View style={{position: 'absolute', right: 0, flexDirection: 'row'}}>
+              <Pressable onPress={() => {setIsDeleting(false)}}>
+                <CloseIcon width={25} height={25}/>
+              </Pressable>
+              <Pressable style={{marginLeft: 5, width: 25, height: 25, justifyContent: 'center', alignItems: 'center'}} onPress={() => {
+                setDeleting("array")
+              }}>
+                <CheckMarkIcon width={20} height={20}/>
+              </Pressable>
+            </View>:
+            <Pressable onPress={() => {setIsDeleting(true)}} style={{right: 0, position: 'absolute'}}>
+              <TrashIcon width={20} height={20}/>
+            </Pressable> 
+          }
+        </View>
         <FlatList
           data={games}
           renderItem={(game) => (
@@ -140,8 +184,24 @@ export default function SelectStorageGames({isFriend, onClose}:{isFriend: boolea
                 hour: 'numeric',
                 minute: 'numeric'
               })}</Text>
-              <Pressable style={{marginLeft: 'auto'}} onPress={() => {setDeleting(game.item.gameId)}}>
-                <TrashIcon width={20} height={20}/>
+              <Pressable style={{marginLeft: 'auto', marginVertical: 'auto'}} hitSlop={(isDeleting) ? 5:20} onPress={() => {
+                if (isDeleting === false) {
+                  setDeleting(game.item.gameId)
+                } else if (selectedDelete.includes(game.item.gameId)) {
+                  setSelectedDelete([...selectedDelete].filter((x) => {return x !== game.item.gameId}))
+                } else {
+                  setSelectedDelete([...selectedDelete, game.item.gameId])
+                }
+              }}>
+                { (isDeleting && !(selectedDelete.includes(game.item.gameId))) ?
+                  <CircleIcon width={20} height={20}/>:null
+                }
+                { (isDeleting && selectedDelete.includes(game.item.gameId)) ?
+                  <View style={{width: 20, height: 20, borderRadius: 20, backgroundColor: 'gray', borderWidth: 2}}/>:null
+                }
+                { (!isDeleting) ?
+                  <TrashIcon width={20} height={20}/>:null
+                }
               </Pressable>
             </DefaultButton>
           )}

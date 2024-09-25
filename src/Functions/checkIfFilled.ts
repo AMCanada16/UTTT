@@ -1,3 +1,8 @@
+/*
+  UTTT
+  Andrew Mainella
+  September 2024
+*/
 import { auth } from "../firebase"
 import store from "../redux/store"
 import { gridStateMode } from "../Types"

@@ -1,3 +1,8 @@
+/*
+  UTTT
+  Andrew Mainella
+  22 September 2024
+*/
 import type { PropsWithChildren } from 'react';
 
 // This file is web-only and used to configure the root HTML for every

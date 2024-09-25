@@ -3,6 +3,9 @@
   Andrew Mainella
 */
 import { gridStateMode, loadingState } from "../Types"
+import { perdict } from "./Ai"
+import indexToGridIndex from "./indexToGridIndex"
+import indexToTileIndex from "./indexToGridIndex"
 
 function getLRBaseIndex(index: number) {
 	return index - (index % 27) + ((Math.floor((index % 9)/3.0)) * 3)
@@ -20,17 +23,17 @@ function setValue(value: gridStateMode, index: number, game: GameType): GameType
 }
 
 
-export default function TileButtonPress(
+export default async function TileButtonPress(
   index: number,
 	tileIndex: number,
 	gridIndex: number,
   game: GameType
-): {
+): Promise<{
   result: loadingState.failed
 } | {
   result: loadingState.success;
   data: GameType;
-} {
+}> {
   let newGame = {...game}
   // check if the game is current
   if (game.gameOver != gridStateMode.open) {
@@ -176,28 +179,31 @@ export default function TileButtonPress(
         }
         if (x == 2) {
           isGameOver = true
+          console.log("OVER HORIZONTAL")
         }
       }
       
       // Check full game vert
       for (let y = 0; y < 3; y += 1) {
-        if (newGame.data.value[(y * 3) + columnIndex] != newGame.data.value[(y * 3) + columnIndex]) {
+        if (newGame.data.value[columnIndex] !== newGame.data.value[(y * 3) + columnIndex]) {
           break
         }
-        if (y == 2) {
+        if (y === 2) {
           isGameOver = true
+          console.log("OVER VET")
         }
       }
       
       // Check full game left right
-      if (newGame.data.value[0] == newGame.data.value[4] && newGame.data.value[4] == newGame.data.value[8] && newGame.data.value[8] != gridStateMode.open) {
+      if (newGame.data.value[0] === newGame.data.value[4] && newGame.data.value[4] === newGame.data.value[8] && newGame.data.value[8] !== gridStateMode.open) {
         isGameOver = true
         console.log('OVER LEFT RIGHT')
       }
       
       // Check full game right left
-      if (newGame.data.value[2] == newGame.data.value[4] && newGame.data.value[4] == newGame.data.value[6] && newGame.data.value[6] != gridStateMode.open) {
+      if (newGame.data.value[2] === newGame.data.value[4] && newGame.data.value[4] === newGame.data.value[6] && newGame.data.value[6] !== gridStateMode.open) {
         isGameOver = true
+        console.log("OVER RIGHT LEFT")
       }
       
       // is full game full?
@@ -227,7 +233,6 @@ export default function TileButtonPress(
     }
   }
   
-  console.log(newGame.data.value, tileIndex)
   if (newGame.data.value[tileIndex] != gridStateMode.open) {
     newGame.selectedGrid = 0
   } else {
@@ -240,6 +245,21 @@ export default function TileButtonPress(
   } else if (currentTurn == gridStateMode.x) {
     newGame.currentTurn = gridStateMode.o
   }
+
+  if (newGame.gameType === 'ai' && newGame.currentTurn === gridStateMode.o) {
+    const result = await perdict(newGame.data.inner)
+    console.log(result)
+    //const index = result.findIndex((e, i) => {e !== newGame.data.inner[i]})
+    if (index === -1 ) {
+      return {
+        result: loadingState.failed
+      }
+    }
+    const aiTileIndex = indexToTileIndex(index)
+    const aiGridIndex  = indexToGridIndex(index)
+    return TileButtonPress(index, aiTileIndex, aiGridIndex, newGame)
+  }
+
   return {
     result: loadingState.success,
     data: newGame

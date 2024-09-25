@@ -1,3 +1,8 @@
+/*
+  UTTT
+  Andrew Mainella
+  22 September 2024
+*/
 import { View, Text, Pressable, FlatList, ListRenderItemInfo, ActivityIndicator, TextInput, Platform } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { auth } from '../firebase';

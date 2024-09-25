@@ -33,7 +33,6 @@ function useGameLocal(gameId: string) {
   }, [cachedGame, gameId])
 
   useEffect(() => {
-    console.log(game)
     if (game !== undefined) {
       updateStorageGame(game)
     }

@@ -1,3 +1,8 @@
+/*
+  UTTT
+  Andrew Mainella
+  22 September 2024
+*/
 import React from 'react'
 import { View, Text, DimensionValue } from 'react-native'
 

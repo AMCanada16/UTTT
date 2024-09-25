@@ -1,9 +1,14 @@
-import { View, Text, Pressable, ActivityIndicator, TextInput, Platform, Modal, ScrollView } from 'react-native'
+/*
+  UTTT
+  Andrew Mainella
+  22 September 2024
+*/
+import { View, Text, Pressable, ActivityIndicator, TextInput, Platform, Modal } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
 import { deleteUser, signOut } from '../functions/AuthenticationFunctions'
-import { checkIfUsernameValid, getUsername, updateUsername } from '../functions/UserFunctions'
+import { checkIfUsernameValid, updateUsername } from '../functions/UserFunctions'
 import { auth } from '../firebase'
 import DefaultButton from './DefaultButton'
 import OnlineAuthenticationComponent from './OnlineAuthenticationComponent'

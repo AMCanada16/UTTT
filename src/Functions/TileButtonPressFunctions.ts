@@ -52,5 +52,5 @@ export function checkIfGameOver(gridState: gridStateMode[][], playerMode: gridSt
   if (change) {
     return playerMode
   }
-  return gridStateMode.Open
+  return gridStateMode.open
 }

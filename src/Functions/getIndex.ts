@@ -1,3 +1,7 @@
+/*
+  UTTT
+  Andrew Mainella
+*/
 export default function getIndex(tileIndex: number, gridIndex: number): number {
   let upperCount: number = Math.floor(((gridIndex/3))) * 27
   let yCount: number = Math.floor(tileIndex/3) * 9

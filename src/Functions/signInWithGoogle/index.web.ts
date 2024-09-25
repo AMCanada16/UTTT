@@ -1,5 +1,9 @@
-import { GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
-import { auth } from "../../firebase";
+/*
+  UTTT
+  Andrew Mainella
+  22 September 2024
+*/
+import { GoogleAuthProvider } from "firebase/auth";
 
 /**
  * A function to call the redirect to sign in with google
@@ -7,7 +11,6 @@ import { auth } from "../../firebase";
 export async function signInWithGoogle() {
   try {
     const provider = new GoogleAuthProvider();
-    signInWithRedirect(auth, provider);
   } catch (error) {
 
   }

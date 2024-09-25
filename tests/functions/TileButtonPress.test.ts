@@ -12,23 +12,23 @@ import { checkIfGameOver } from "../../src/functions/TileButtonPressFunctions";
 
 test('Checks if the game is over', () => {
   expect(checkIfGameOver([
-    [gridStateMode.X,gridStateMode.X,gridStateMode.O],
-    [gridStateMode.X,gridStateMode.X,0],
-    [gridStateMode.O,0,gridStateMode.X]
-  ], gridStateMode.X, 0, 0)).toEqual(gridStateMode.X)
+    [gridStateMode.x,gridStateMode.x,gridStateMode.o],
+    [gridStateMode.x,gridStateMode.x,0],
+    [gridStateMode.o,0,gridStateMode.x]
+  ], gridStateMode.x, 0, 0)).toEqual(gridStateMode.x)
   expect(checkIfGameOver([
-    [gridStateMode.X,gridStateMode.X,gridStateMode.O],
-    [gridStateMode.X,gridStateMode.O,gridStateMode.Open],
-    [gridStateMode.O,gridStateMode.Open,gridStateMode.X]
-  ], gridStateMode.O, 0, 0)).toEqual(gridStateMode.O)
+    [gridStateMode.x,gridStateMode.x,gridStateMode.o],
+    [gridStateMode.x,gridStateMode.o,gridStateMode.open],
+    [gridStateMode.o,gridStateMode.open,gridStateMode.x]
+  ], gridStateMode.o, 0, 0)).toEqual(gridStateMode.o)
   expect(checkIfGameOver([
-    [gridStateMode.X,gridStateMode.X,gridStateMode.O],
-    [gridStateMode.X,gridStateMode.O,gridStateMode.X],
-    [gridStateMode.O,gridStateMode.X,gridStateMode.X]
-  ], gridStateMode.O, 0, 0)).toEqual(gridStateMode.O)
+    [gridStateMode.x,gridStateMode.x,gridStateMode.o],
+    [gridStateMode.x,gridStateMode.o,gridStateMode.x],
+    [gridStateMode.o,gridStateMode.x,gridStateMode.x]
+  ], gridStateMode.o, 0, 0)).toEqual(gridStateMode.o)
   expect(checkIfGameOver([
-    [gridStateMode.X,gridStateMode.O,gridStateMode.X],
-    [gridStateMode.O,gridStateMode.O,gridStateMode.O],
-    [gridStateMode.O,gridStateMode.X,gridStateMode.X]
-  ], gridStateMode.O, 1, 1)).toEqual(gridStateMode.O)
+    [gridStateMode.x,gridStateMode.o,gridStateMode.x],
+    [gridStateMode.o,gridStateMode.o,gridStateMode.o],
+    [gridStateMode.o,gridStateMode.x,gridStateMode.x]
+  ], gridStateMode.o, 1, 1)).toEqual(gridStateMode.o)
 })

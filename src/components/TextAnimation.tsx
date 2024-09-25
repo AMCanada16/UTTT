@@ -1,5 +1,10 @@
+/*
+  UTTT
+  Andrew Mainella
+  22 September 2024
+*/
 import React, { useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedProps,

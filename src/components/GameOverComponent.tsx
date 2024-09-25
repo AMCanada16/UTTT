@@ -1,4 +1,9 @@
-import { View, Text, Pressable } from 'react-native'
+/*
+  UTTT
+  Andrew Mainella
+  22 September 2024
+*/
+import { View, Text } from 'react-native'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
