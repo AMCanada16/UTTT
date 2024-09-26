@@ -222,9 +222,6 @@ export default function UltimateTicTacToe() {
             <Text>Show game over</Text>
           </Pressable>:null
         }
-        <Pressable onPress={() => {console.log(game.data.inner)}}>
-          <Text>Test</Text>
-        </Pressable>
       </View>
       { (game.gameOver !== gridStateMode.open && isShowingGameOver === true) ?
         <GameOverComponent onClose={() => setIsShowingGameOver(false)}/>:null

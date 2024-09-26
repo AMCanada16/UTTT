@@ -8,8 +8,10 @@ import store from "../redux/store"
 import { gridStateMode } from "../Types"
 
 /**
- * @param index
- * @returns 
+ * Returns tue if the tile is filled meaning it is not open.
+ * @param game The current game state
+ * @param index The index of the tile to be checked
+ * @returns a boolean
  */
 export default function checkIfFilled(game: GameType, index: number, gridIndex: number) {
   const currentGame = store.getState().gameState

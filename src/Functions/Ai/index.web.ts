@@ -4,6 +4,9 @@
   22 September 2024
 */
 import * as tf from '@tensorflow/tfjs';
+import { input, output } from './data';
+import checkIfFilled from '../checkIfFilled';
+import indexToGridIndex from '../indexToGridIndex';
 
 let model: tf.LayersModel | undefined
 
@@ -52,7 +55,7 @@ function createModel() {
   return model
 }
 
-export async function perdict(old: number[]) {
+export async function perdict(old: number[], game: GameType) {
   let newOld = old.map((e) => {
     if (e === 2) {
       return 1
@@ -76,7 +79,7 @@ export async function perdict(old: number[]) {
   let highest = 0
   let highestIndex = 0
   for (let index = 0; index < array[0].length; index += 1) {
-    if (array[0][index] > highest && old[index] === 0) {
+    if (array[0][index] > highest && !checkIfFilled(game, index, indexToGridIndex(index))) {
       highest = array[0][index]
       highestIndex = index
     }
@@ -88,11 +91,9 @@ export async function perdict(old: number[]) {
 export const trainModel = async () => {
   try {
     await tf.ready()
-    const xGames = [[0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
-    const yGames = [[0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
   
-    const stackedX = tf.tensor2d(xGames);
-    const stackedY = tf.tensor2d(yGames);
+    const stackedX = tf.tensor2d(input);
+    const stackedY = tf.tensor2d(output);
   
     let currentModel = await getModel()
     await currentModel.fit(stackedX, stackedY, {

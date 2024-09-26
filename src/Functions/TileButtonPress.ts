@@ -2,6 +2,8 @@
   UTTT
   Andrew Mainella
 */
+import { aiHistorySlice } from "../redux/reducers/aiHistoryReducer"
+import store from "../redux/store"
 import { gridStateMode, loadingState } from "../Types"
 import { perdict } from "./Ai"
 import indexToGridIndex from "./indexToGridIndex"
@@ -247,17 +249,59 @@ export default async function TileButtonPress(
   }
 
   if (newGame.gameType === 'ai' && newGame.currentTurn === gridStateMode.o) {
-    const result = await perdict(newGame.data.inner)
-    console.log(result)
-    //const index = result.findIndex((e, i) => {e !== newGame.data.inner[i]})
-    if (index === -1 ) {
+    let outArr = [...newGame.data.inner]
+    outArr[index] = gridStateMode.full
+    console.log(`[${outArr}]`)
+
+    const result = await perdict([...newGame.data.inner], newGame)
+    console.log(`[${result.slice(0, 9)}]`)
+    console.log(`[${result.slice(9, 18)}]`)
+    console.log(`[${result.slice(18, 27)}]`)
+    console.log(`[${result.slice(27, 36)}]`)
+    console.log(`[${result.slice(36, 45)}]`)
+    console.log(`[${result.slice(45, 54)}]`)
+    console.log(`[${result.slice(54, 63)}]`)
+    console.log(`[${result.slice(63, 72)}]`)
+    console.log(`[${result.slice(72, 81)}]`)
+    const indexPre = result.findIndex((e, i) => {return e !== newGame.data.inner[i] &&  newGame.data.inner[i] !== gridStateMode.full})
+    if (indexPre === -1) {
       return {
         result: loadingState.failed
       }
     }
-    const aiTileIndex = indexToTileIndex(index)
-    const aiGridIndex  = indexToGridIndex(index)
-    return TileButtonPress(index, aiTileIndex, aiGridIndex, newGame)
+    const aiTileIndex = indexToTileIndex(indexPre)
+    const aiGridIndex  = indexToGridIndex(indexPre)
+    return TileButtonPress(indexPre, aiTileIndex, aiGridIndex, newGame)
+  }
+
+  let outArr = [...newGame.data.inner]
+
+  if (game.currentTurn === gridStateMode.o) {
+    outArr[index] = gridStateMode.full
+    store.dispatch(aiHistorySlice.actions.pushInput(outArr))
+  } else {
+    store.dispatch(aiHistorySlice.actions.pushOutput(outArr))
+  }
+
+  if (newGame.gameOver !== gridStateMode.open) {
+    console.log(store.getState().aiHistory.input.length, store.getState().aiHistory.output.length)
+    let resultI = ""
+    let resultO = ""
+    const inputs = store.getState().aiHistory.input
+    for (let index = 0; index < inputs.length; index += 1) {
+      resultI += (`\n[${inputs[index]}]${(index == inputs.length - 1) ? "":","}`)
+    }
+
+    const outputs = store.getState().aiHistory.output
+    for (let index = 0; index < outputs.length; index += 1) {
+      resultO += (`\n[${outputs[index]}]${(index == outputs.length - 1) ? "":","}`)
+    }
+    console.log(`
+      Inputs:
+      ${resultI}
+      Outputs:
+      ${resultO}
+    `)
   }
 
   return {
