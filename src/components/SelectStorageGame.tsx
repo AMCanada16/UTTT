@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { addGame, getStorageGames } from "../functions/StorageFunctions";
 import { useEffect, useState } from "react";
-import { RootState } from "../redux/store";
+import store, { RootState } from "../redux/store";
 import { useRouter } from "expo-router";
 import { Pressable, View, Text, FlatList, Modal } from "react-native";
 import { CheckMarkIcon, ChevronLeft, CircleIcon, CloseIcon, TrashIcon } from "./Icons";
@@ -9,6 +9,7 @@ import DefaultButton from "./DefaultButton";
 import { DeleteText } from "./AccountPage";
 import { loadingState } from "../Types";
 import { deleteGame as deleteStorageGame } from "../functions/StorageFunctions";
+import { aiHistorySlice } from "../redux/reducers/aiHistoryReducer";
 
 function DeleteGame({
   deleting,
@@ -169,6 +170,7 @@ export default function SelectStorageGames({isFriend, onClose}:{isFriend: boolea
             <DefaultButton
               style={{margin: 5, flexDirection: 'row'}}
               onPress={() => {
+                store.dispatch(aiHistorySlice.actions.clearCache())
                 if (isFriend) {
                   router.push("/UTTT/friend/" + game.item.gameId)
                 } else {

@@ -4,7 +4,6 @@
   September 2024
 */
 import { auth } from "../firebase"
-import store from "../redux/store"
 import { gridStateMode } from "../Types"
 
 /**
@@ -13,19 +12,18 @@ import { gridStateMode } from "../Types"
  * @param index The index of the tile to be checked
  * @returns a boolean
  */
-export default function checkIfFilled(game: GameType, index: number, gridIndex: number) {
-  const currentGame = store.getState().gameState
+export default function checkIfFilled(game: GameType, index: number, gridIndex: number, ai?: boolean) {
   const value = game.data.inner[index]
-  const bigValue = currentGame.data.value[gridIndex]
+  const bigValue = game.data.value[gridIndex]
   let uid = auth.currentUser?.uid
-  if (currentGame.gameType === 'online' && uid !== undefined) {
-    const currentUser = currentGame.users.find((e) => {return e.userId === uid})
-    if (currentUser !== undefined && currentGame.currentTurn !== currentUser.player) {
+  if (game.gameType === 'online' && uid !== undefined) {
+    const currentUser = game.users.find((e) => {return e.userId === uid})
+    if (currentUser !== undefined && game.currentTurn !== currentUser.player) {
       // It is the other users turn
       return true
     }
   }
-  if (currentGame.gameType === 'ai' && currentGame.currentTurn === gridStateMode.o) {
+  if (game.gameType === 'ai' && game.currentTurn === gridStateMode.o && ai !== true) {
     // It is currently the ais turn
     return true
   }
@@ -33,11 +31,11 @@ export default function checkIfFilled(game: GameType, index: number, gridIndex: 
     // The tile or grid zone is already filled
     return true
   }
-  if (currentGame.selectedGrid === 0) {
+  if (game.selectedGrid === 0) {
     // There is no constaint on the selected grid
     return false
   }
-  if ((gridIndex + 1) === currentGame.selectedGrid) {
+  if ((gridIndex + 1) === game.selectedGrid) {
     // The selected grid is the same as the current grid
     return false
   }

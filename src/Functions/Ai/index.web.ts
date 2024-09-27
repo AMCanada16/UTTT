@@ -79,11 +79,12 @@ export async function perdict(old: number[], game: GameType) {
   let highest = 0
   let highestIndex = 0
   for (let index = 0; index < array[0].length; index += 1) {
-    if (array[0][index] > highest && !checkIfFilled(game, index, indexToGridIndex(index))) {
+    if (array[0][index] > highest && !checkIfFilled(game, index, indexToGridIndex(index), true)) {
       highest = array[0][index]
       highestIndex = index
     }
   }
+  console.log(highestIndex)
   newArray[highestIndex] = 2
   return newArray
 }

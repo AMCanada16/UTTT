@@ -18,6 +18,10 @@ export const aiHistorySlice = createSlice({
     },
     pushOutput: (state, action: PayloadAction<gridStateMode[]>) => {
       state.output.push(action.payload)
+    },
+    clearCache: (state) => {
+      state.input = []
+      state.output = []
     }
   }
 })

@@ -7,7 +7,7 @@ import store from "../redux/store"
 import { gridStateMode, loadingState } from "../Types"
 import { perdict } from "./Ai"
 import indexToGridIndex from "./indexToGridIndex"
-import indexToTileIndex from "./indexToGridIndex"
+import indexToTileIndex from "./indexToTileIndex"
 
 function getLRBaseIndex(index: number) {
 	return index - (index % 27) + ((Math.floor((index % 9)/3.0)) * 3)
@@ -248,21 +248,11 @@ export default async function TileButtonPress(
     newGame.currentTurn = gridStateMode.o
   }
 
-  if (newGame.gameType === 'ai' && newGame.currentTurn === gridStateMode.o) {
+  if (newGame.gameType === 'ai' && newGame.currentTurn === gridStateMode.o && newGame.gameOver === gridStateMode.open) {
     let outArr = [...newGame.data.inner]
     outArr[index] = gridStateMode.full
-    console.log(`[${outArr}]`)
-
+ 
     const result = await perdict([...newGame.data.inner], newGame)
-    console.log(`[${result.slice(0, 9)}]`)
-    console.log(`[${result.slice(9, 18)}]`)
-    console.log(`[${result.slice(18, 27)}]`)
-    console.log(`[${result.slice(27, 36)}]`)
-    console.log(`[${result.slice(36, 45)}]`)
-    console.log(`[${result.slice(45, 54)}]`)
-    console.log(`[${result.slice(54, 63)}]`)
-    console.log(`[${result.slice(63, 72)}]`)
-    console.log(`[${result.slice(72, 81)}]`)
     const indexPre = result.findIndex((e, i) => {return e !== newGame.data.inner[i] &&  newGame.data.inner[i] !== gridStateMode.full})
     if (indexPre === -1) {
       return {
@@ -281,6 +271,12 @@ export default async function TileButtonPress(
     store.dispatch(aiHistorySlice.actions.pushInput(outArr))
   } else {
     store.dispatch(aiHistorySlice.actions.pushOutput(outArr))
+  }
+
+  if (store.getState().aiHistory.input.length !== store.getState().aiHistory.output.length) {
+    console.log("OUT OF SYNC" + store.getState().aiHistory.input.length + " " + store.getState().aiHistory.output.length)
+  } else {
+    console.log("SYNC")
   }
 
   if (newGame.gameOver !== gridStateMode.open) {
