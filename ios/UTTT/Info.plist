@@ -39,17 +39,38 @@
           <string>com.googleusercontent.apps.94813812988-lhtl01ojo9jchu3h8sbvr97uk9p1ajum</string>
         </array>
       </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>exp+uttt</string>
+        </array>
+      </dict>
     </array>
     <key>CFBundleVersion</key>
     <string>13</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
+    <key>NSAllowsArbitraryLoads</key>
+    <true/>
     <key>NSAppTransportSecurity</key>
     <dict>
-      <key>NSAllowsArbitraryLoads</key>
-      <false/>
-      <key>NSAllowsLocalNetworking</key>
-      <true/>
+      <key>NSExceptionDomains</key>
+      <dict>
+        <key>exp.direct</key>
+        <dict>
+          <key>NSIncludesSubdomains</key>
+          <true/>
+          <key>NSExceptionAllowsInsecureHTTPLoads</key>
+          <true/>
+        </dict>
+        <key>128.189.128.248</key>
+        <dict>
+          <key>NSIncludesSubdomains</key>
+          <true/>
+          <key>NSExceptionAllowsInsecureHTTPLoads</key>
+          <true/>
+        </dict>
+      </dict>
     </dict>
     <key>NSCameraUsageDescription</key>
     <string>Allow $(PRODUCT_NAME) to access your camera</string>

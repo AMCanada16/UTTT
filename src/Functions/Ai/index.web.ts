@@ -46,7 +46,7 @@ function createModel() {
     })
   );
 
-  const learningRate = 0.005;
+  const learningRate = 0.001;
   model.compile({
     optimizer: tf.train.adam(learningRate),
     loss: "categoricalCrossentropy",

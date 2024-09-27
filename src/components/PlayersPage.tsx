@@ -120,6 +120,9 @@ function Invitations({
         style={{
           height: height - topHeight
         }}
+        ListFooterComponent={() => (
+          <View style={{height: 15}}/>
+        )}
       />
     </KeyboardAvoidingView>
   )

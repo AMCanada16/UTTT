@@ -99,7 +99,7 @@ export default function SelectOnlineGame({onClose}:{onClose: () => void}){
   async function createNew() {
     const uid = auth.currentUser?.uid
     if (uid !== undefined) {
-      const result = await createNewGame(emptyGame, gridStateMode.X, uid)
+      const result = await createNewGame(emptyGame, gridStateMode.x, uid)
       if (result !== null){
         router.push("/UTTT/online/"+result)
       }
@@ -127,6 +127,7 @@ export default function SelectOnlineGame({onClose}:{onClose: () => void}){
       setNumInvitations(invitationNum.data)
       setGamesState(loadingState.success)
     } else {
+      console.log(invitationNum, result)
       setGamesState(loadingState.failed)
     }
   }

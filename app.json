@@ -21,7 +21,8 @@
       "expo-router",
       "expo-notifications",
       "expo-secure-store",
-      "expo-dev-client"
+      "expo-dev-client",
+      "expo-font"
     ],
     "ios": {
       "supportsTablet": true,
@@ -70,6 +71,22 @@
             ]
           }
         ]
+      },
+      "infoPlist": {
+        "NSAllowsArbitraryLoads":true,
+        "CFBundleAllowMixedLocalizations": true,
+        "NSAppTransportSecurity": {
+          "NSExceptionDomains": {
+            "exp.direct": {
+              "NSIncludesSubdomains": true,
+              "NSExceptionAllowsInsecureHTTPLoads": true,
+            },
+            "128.189.128.248": {
+              "NSIncludesSubdomains": true,
+              "NSExceptionAllowsInsecureHTTPLoads": true,
+            },
+          },
+        },
       },
       "googleServicesFile": "./GoogleService-Info.plist",
       "buildNumber": "13"

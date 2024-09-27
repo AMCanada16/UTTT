@@ -107,6 +107,7 @@ export async function getOnlineGames(joinRule: joinRules, currentFriends: string
   try {
     let uid = auth.currentUser?.uid
     if (uid === undefined) {
+      console.log("undef")
       return loadingState.failed
     }
     let games: GameType[] = []
@@ -149,6 +150,7 @@ export async function getOnlineGames(joinRule: joinRules, currentFriends: string
     })
     return games
   } catch (e) {
+    console.log(e)
     return loadingState.failed
   }
 }
@@ -188,10 +190,12 @@ export async function getOnlineGameStats(): Promise<loadingState.failed | Online
         activeGames,
         gamesWon
       }
-    } catch {
+    } catch (error) {
+      console.log(error)
       return loadingState.failed
     }
   }
+  console.log("Unide")
   return loadingState.failed
 }
 

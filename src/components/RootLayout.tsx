@@ -14,6 +14,7 @@ import { Slot, SplashScreen } from 'expo-router';
 import { useFonts } from 'expo-font';
 import Head from "expo-router/head"
 import useShareStatus from '../hooks/useShareStatus';
+import GoogleProvider from './GoogleProvider';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -74,7 +75,9 @@ function App() {
 export default function AppContainer() {
   return (
     <Provider store={store}>
-      <App />
+      <GoogleProvider>
+        <App />
+      </GoogleProvider>
     </Provider>
   )
 }

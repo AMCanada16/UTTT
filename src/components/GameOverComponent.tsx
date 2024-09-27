@@ -38,7 +38,7 @@ export default function GameOverComponent({
         style={{margin: 10, fontSize: getFontSize(width, height), fontFamily: "Ultimate", textAlign: 'center'}}
       >Game Over</Text>
       <View>
-        { (winner === gridStateMode.O) ?
+        { (winner === gridStateMode.o) ?
           <View style={{height: 50, alignItems: 'center'}}>
             <View>
               <CircleIcon width={50} height={50} style={{position: 'absolute'}} color="#ff9c9c"/>
@@ -46,7 +46,7 @@ export default function GameOverComponent({
             </View>
           </View>:null
         }
-        { (winner === gridStateMode.X) ?
+        { (winner === gridStateMode.x) ?
           <View style={{height: 50, alignItems: 'center'}}>
             <View>
               <XIcon width={50} height={50} style={{position: 'absolute'}} color={Colors.blue}/>
@@ -54,7 +54,7 @@ export default function GameOverComponent({
             </View>
           </View>:null
         }
-        { (winner === gridStateMode.Full) ?
+        { (winner === gridStateMode.full) ?
           <Text style={{marginVertical: 12, fontFamily: 'RussoOne', fontSize: 26}}>DRAW</Text>:null
         }
       </View>
