@@ -102,7 +102,7 @@ export default function UsernameComponent({
         }}
       >
         <SignOutIcon width={20} height={20}/>
-        <Text style={{textAlign: "center", justifyContent: 'center'}}>Sign Out</Text>
+        <Text style={{textAlign: "center", justifyContent: 'center', marginVertical: 'auto'}}>Sign Out</Text>
       </DefaultButton>
     </View>
   )

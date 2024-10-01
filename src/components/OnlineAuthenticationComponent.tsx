@@ -12,7 +12,7 @@ import { RootState } from '../redux/store'
 import { signInAnonymously } from '../functions/AuthenticationFunctions'
 import AppleAuthenticationButton from './AppleAuthenticationButton'
 import DefaultButton from './DefaultButton'
-import GoogleAuthenticationButton from './GoogleAuthenticationButton/index.web'
+import GoogleAuthenticationButton from './GoogleAuthenticationButton'
 
 
 export default function OnlineAuthenticationComponent({

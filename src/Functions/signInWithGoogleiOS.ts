@@ -10,7 +10,7 @@ import { auth } from "../firebase";
 /**
  * A function to call the redirect to sign in with google
  */
-export async function signInWithGoogle() {
+export default async function signInWithGoogleiOS() {
   try {
     if (await GoogleSignin.hasPlayServices()){
       const userInfo = await GoogleSignin.signIn();

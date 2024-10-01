@@ -5,7 +5,7 @@
 import { aiHistorySlice } from "../redux/reducers/aiHistoryReducer"
 import store from "../redux/store"
 import { gridStateMode, loadingState } from "../Types"
-import { perdict } from "./Ai"
+import { perdict } from "./Ai/common"
 import indexToGridIndex from "./indexToGridIndex"
 import indexToTileIndex from "./indexToTileIndex"
 

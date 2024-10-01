@@ -6,13 +6,10 @@
 import { Pressable, useWindowDimensions, View } from "react-native"
 import { GoogleIcon } from "../Icons"
 import { Text } from "react-native"
+import signInWithGoogleiOS from "../../functions/signInWithGoogleiOS"
 
 export default function GoogleAuthenticationButton() {
   const {width} = useWindowDimensions()
-  function signInWithGoogleiOS() {
-    throw new Error("Function not implemented.")
-  }
-
   return (
     <Pressable 
       style={{

@@ -8,7 +8,7 @@ import { useEffect, useMemo, useState } from "react"
 import { gridStateMode } from "../../../Types"
 import { useSelector } from "react-redux"
 import { RootState } from "../../../redux/store"
-import { View, Text, StyleSheet, Pressable, ActivityIndicator } from "react-native"
+import { View, Text, StyleSheet, Pressable, ActivityIndicator, useWindowDimensions } from "react-native"
 import BigTileTextAnimation from "../../../components/BigTileTextAnimation"
 import Striketrough from "../../../components/Striketrough"
 import TileButton from "../../../components/TileButton"
@@ -29,38 +29,46 @@ function InnerGame({game, gridIndex, gameLength}:{game: GameType, gridIndex: num
     const foundActive = game.data.active.find((active) => active.gridIndex === gridIndex)
     return foundActive
   }, [game])
+  const {width} = useWindowDimensions()
+  const borderWidth = useMemo(() => {
+    if (width >= 575) {
+      return 4
+    } else {
+      return 4 * (width/575)
+    }
+  }, [width])
   return (
     <View key={`Grid_${gridIndex}`} style={{
-      width: gameLength/3 - 8,
-      height: gameLength/3 - 8,
+      width: gameLength/3 - (borderWidth * 2),
+      height: gameLength/3 - (borderWidth * 2),
       overflow: 'hidden',
       margin: 4
     }}> 
       <View style={{flexDirection: 'row'}}>
         <TileButton tileIndex={0} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game} gameLength={gameLength}/>
-        <View style={{width: 4}}/>
+        <View style={{width: borderWidth}}/>
         <TileButton tileIndex={1} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game} gameLength={gameLength}/>
-        <View style={{width: 4}}/>
+        <View style={{width: borderWidth}}/>
         <TileButton tileIndex={2} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game} gameLength={gameLength}/>
       </View>
-      <View style={{height: 4, width: gameLength/3 - 8, backgroundColor: 'black'}}/>
+      <View style={{height: borderWidth, width: gameLength/3 - (borderWidth * 2), backgroundColor: 'black'}}/>
       <View style={{flexDirection: 'row'}}>
         <TileButton tileIndex={3} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game} gameLength={gameLength}/>
-        <View style={{width: 4}}/>
+        <View style={{width: borderWidth}}/>
         <TileButton tileIndex={4} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game} gameLength={gameLength}/>
-        <View style={{width: 4}}/>
+        <View style={{width: borderWidth}}/>
         <TileButton tileIndex={5} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game} gameLength={gameLength}/>
       </View>
-      <View style={{height: 4, width: gameLength/3 - 8, backgroundColor: 'black'}}/>
+      <View style={{height: borderWidth, width: gameLength/3 - (borderWidth * 2), backgroundColor: 'black'}}/>
       <View style={{flexDirection: 'row'}}>
         <TileButton tileIndex={6} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game} gameLength={gameLength}/>
-        <View style={{width: 4}}/>
+        <View style={{width: borderWidth}}/>
         <TileButton tileIndex={7} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game} gameLength={gameLength}/>
-        <View style={{width: 4}}/>
+        <View style={{width: borderWidth}}/>
         <TileButton tileIndex={8} gridIndex={gridIndex} currentTurn={game.currentTurn} game={game} gameLength={gameLength}/>
       </View>
-      <View style={{height: gameLength/3 - 8, width: 4, backgroundColor: 'black', position: 'absolute', left: (gameLength/3 -16)/3, zIndex: 2}}/>
-      <View style={{height: gameLength/3 - 8, width: 4, backgroundColor: 'black', position: 'absolute', left: ((gameLength/3 -16)/3 * 2) + 4, zIndex: 2, bottom: 0}}/>
+      <View style={{height: gameLength/3 - (2 * borderWidth), width: borderWidth, backgroundColor: 'black', position: 'absolute', left: (gameLength/3 - (4 * borderWidth))/3, zIndex: 2}}/>
+      <View style={{height: gameLength/3 - (2 * borderWidth), width: borderWidth, backgroundColor: 'black', position: 'absolute', left: ((gameLength/3 - (4 * borderWidth))/3 * 2) + borderWidth, zIndex: 2, bottom: 0}}/>
       {(active !== undefined) ? 
         <Striketrough active={active}  />:null
       }
@@ -185,10 +193,10 @@ export default function UltimateTicTacToe() {
     <View style={{width: width, height: height, backgroundColor: "#5E17EB", alignItems: 'center', justifyContent: 'center', margin: "auto"}}>
       <View style={{position: "absolute", height: 150, top: 0, left: 0, flexDirection: "row"}}>
         <View style={{position: "relative", height: 150, marginLeft: "5%"}}>
-          <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 555) ? 150:(width * 0.255), color: 'black', opacity: 0.8, position: "absolute", marginTop: insets.top}}>ULTIMATE</Text>
-          <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 555) ? 150:(width * 0.255), color: "#00fffc", transform: [{translateX: -2}, {translateY: -1}], position: "absolute", zIndex: -1, marginTop: insets.top}}>ULTIMATE</Text>
-          <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 555) ? 150:(width * 0.255), color: "#fc00ff", transform: [{translateX: -2}, {translateY: 2}], position: "absolute", zIndex: -2, marginTop: insets.top}}>ULTIMATE</Text>
-          <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 555) ? 150:(width * 0.255), color: "#fffc00", transform: [{translateX: 1}, {translateY: 4}], position: "absolute", zIndex: -3, marginTop: insets.top}}>ULTIMATE</Text>
+          <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 555) ? 150:(width * 0.24), color: 'black', opacity: 0.8, position: "absolute", marginTop: insets.top}}>ULTIMATE</Text>
+          <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 555) ? 150:(width * 0.24), color: "#00fffc", transform: [{translateX: -2}, {translateY: -1}], position: "absolute", zIndex: -1, marginTop: insets.top}}>ULTIMATE</Text>
+          <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 555) ? 150:(width * 0.24), color: "#fc00ff", transform: [{translateX: -2}, {translateY: 2}], position: "absolute", zIndex: -2, marginTop: insets.top}}>ULTIMATE</Text>
+          <Text selectable={false} style={{fontFamily: "Ultimate", fontSize: (width > 555) ? 150:(width * 0.24), color: "#fffc00", transform: [{translateX: 1}, {translateY: 4}], position: "absolute", zIndex: -3, marginTop: insets.top}}>ULTIMATE</Text>
         </View>
         <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: (width > 555) ? 50:(width * 0.09), color: "#ff9c9c", textShadowColor: "#FF5757", textShadowRadius: 25, position: "relative", marginTop: insets.top}}>TIC </Text>
         <Text selectable={false} style={{fontFamily: "RussoOne", fontSize: (width > 555) ? 50:(width * 0.09), color: "#a0f4f7", textShadowColor: "#5CE1E6", textShadowRadius: 25, position: "relative", marginTop: insets.top}}>TAC </Text>

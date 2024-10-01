@@ -4,7 +4,7 @@
   22 September 2024
 */
 import { useMemo } from "react"
-import { Pressable } from "react-native"
+import { Pressable, useWindowDimensions } from "react-native"
 import TextAnimation from "./TextAnimation"
 import TileButtonPress from "../functions/TileButtonPress"
 import { gridStateMode, loadingState } from "../Types"
@@ -30,14 +30,22 @@ export default function TileButton(
     return game.data.inner[index]
   }, [index, game])
   const filled = useCheckIfFilled(game, index, gridIndex);
-
+  const {width} = useWindowDimensions()
+  const borderWidth = useMemo(() => {
+    if (width >= 575) {
+      return 4
+    } else {
+      return 4 * (width/575)
+    }
+  }, [width])
+  
   return(
     <Pressable
       disabled={filled}
       style={{
         backgroundColor: filled ? '#5E17EB':(currentTurn === gridStateMode.o) ? '#ff9c9c':'#5ce1e6',
-        width: (gameLength/3 - 16)/3,
-        height: (gameLength/3 - 16)/3,
+        width: (gameLength/3 - (borderWidth * 4))/3,
+        height: (gameLength/3 - (borderWidth * 4))/3,
         borderRadius: (filled === false && currentTurn === gridStateMode.o) ? 99:undefined
       }}
       onPress={async () => {
@@ -49,7 +57,7 @@ export default function TileButton(
       }}
     >
       { (value === gridStateMode.x || value === gridStateMode.o) ?
-        <TextAnimation mode={(value === gridStateMode.x) ? "X":"O"} length={(gameLength/3 - 16)/3} colored={false} />:null
+        <TextAnimation mode={(value === gridStateMode.x) ? "X":"O"} length={(gameLength/3 - (borderWidth * 4))/3} colored={false} />:null
       }
     </Pressable>
   )
