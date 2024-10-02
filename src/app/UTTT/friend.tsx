@@ -6,6 +6,6 @@
 import React from 'react'
 import { WelcomePage } from '..'
 
-export default function index() {
+export default function friend() {
   return <WelcomePage gameType='friend' />
 }

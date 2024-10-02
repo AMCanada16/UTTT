@@ -50,17 +50,23 @@ export async function createNewGame(gameSate: DimentionalType, playerMode: gridS
 /**
  * A function that updates an online game given a game type
  * @param gameState the state of the current game
+ * @returns a loading state if it failed
  */
-export function updateGame(gameState: GameType){
-  updateDoc(doc(db, "Games", gameState.gameId), {
-    currentTurn: gameState.currentTurn,
-    date: new Date().toISOString(),
-    gameOver: gameState.gameOver,
-    data: gameState.data,
-    selectedGird: gameState.selectedGrid,
-    gameType: gameState.gameType,
-    gameId: gameState.gameId
-  })
+export async function updateGame(gameState: GameType): Promise<loadingState.failed | loadingState.success> {
+  try {
+    await updateDoc(doc(db, "Games", gameState.gameId), {
+      currentTurn: gameState.currentTurn,
+      date: new Date().toISOString(),
+      gameOver: gameState.gameOver,
+      data: gameState.data,
+      selectedGird: gameState.selectedGrid,
+      gameType: gameState.gameType,
+      gameId: gameState.gameId
+    })
+    return loadingState.success
+  } catch {
+    return loadingState.failed
+  }
 }
 
 /**

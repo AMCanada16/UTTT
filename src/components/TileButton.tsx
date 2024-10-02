@@ -6,12 +6,10 @@
 import { useMemo } from "react"
 import { Pressable, useWindowDimensions } from "react-native"
 import TextAnimation from "./TextAnimation"
-import TileButtonPress from "../functions/TileButtonPress"
+import tileButtonPress from "../functions/tileButtonPress"
 import { gridStateMode, loadingState } from "../Types"
 import useCheckIfFilled from "../hooks/useCheckIfFilled"
 import getIndex from "../functions/getIndex"
-import store from "../redux/store"
-import { gameSlice } from "../redux/reducers/gameReducer"
 
 export default function TileButton(
   {tileIndex, gridIndex, currentTurn, game, gameLength}:
@@ -49,10 +47,9 @@ export default function TileButton(
         borderRadius: (filled === false && currentTurn === gridStateMode.o) ? 99:undefined
       }}
       onPress={async () => {
-        const result = await TileButtonPress(index, tileIndex, gridIndex, game)
-        if (result.result === loadingState.success) {
-          // dispatch the new game state
-          store.dispatch(gameSlice.actions.setGame(result.data))
+        const result = await tileButtonPress(index, tileIndex, gridIndex, game)
+        if (result !== loadingState.success) {
+          // TODO handle error
         }
       }}
     >
