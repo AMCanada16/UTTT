@@ -14,7 +14,7 @@ import DefaultButton from '../DefaultButton'
 import OnlineAuthenticationComponent from '../OnlineAuthenticationComponent'
 import { loadingState } from '../../Types'
 import UsernameComponent from '../AddUserComponent'
-import { ChevronLeft, CloseIcon, FriendIcon, OfflineIcon, OnlineIcon, TrashIcon } from '../Icons'
+import { ChevronLeft, CloseIcon, FriendIcon, OfflineIcon, OnlineIcon, PencilIcon, TrashIcon } from '../Icons'
 import OnlineStatics from '../OnlineStatics'
 import useUsername from '../../hooks/useUsernameExists'
 import useIsConnected from '../../hooks/useIsConnected'
@@ -311,7 +311,10 @@ export default function AccountPage() {
                 {(usernameState === loadingState.loading) ?
                   <ActivityIndicator/>:null
                 }
-                {((usernameState === loadingState.success || username.username === editingUsername) && usernameState !== loadingState.loading) ?
+                {((usernameState === loadingState.success || username.username === editingUsername) && usernameState !== loadingState.loading && width < 576) ?
+                  <PencilIcon width={20} height={20}/>:null
+                }
+                 {((usernameState === loadingState.success || username.username === editingUsername) && usernameState !== loadingState.loading && width >= 576) ?
                   <Text style={{marginVertical: 3}}>Update Username</Text>:null
                 }
                 {(usernameState === loadingState.failed) ?
