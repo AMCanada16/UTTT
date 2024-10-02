@@ -5,9 +5,6 @@
 import { aiHistorySlice } from "../redux/reducers/aiHistoryReducer"
 import store from "../redux/store"
 import { gridStateMode, loadingState } from "../Types"
-import { perdict } from "./Ai/common"
-import indexToGridIndex from "./indexToGridIndex"
-import indexToTileIndex from "./indexToTileIndex"
 
 function getLRBaseIndex(index: number) {
 	return index - (index % 27) + ((Math.floor((index % 9)/3.0)) * 3)

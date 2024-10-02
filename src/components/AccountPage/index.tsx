@@ -6,20 +6,21 @@
 import { View, Text, Pressable, ActivityIndicator, TextInput, Platform, Modal } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { RootState } from '../redux/store'
-import { deleteUser, signOut } from '../functions/AuthenticationFunctions'
-import { checkIfUsernameValid, updateUsername } from '../functions/UserFunctions'
-import { auth } from '../firebase'
-import DefaultButton from './DefaultButton'
-import OnlineAuthenticationComponent from './OnlineAuthenticationComponent'
-import { loadingState } from '../Types'
-import UsernameComponent from './AddUserComponent'
-import { ChevronLeft, CloseIcon, FriendIcon, OfflineIcon, OnlineIcon, SignOutIcon, TrashIcon } from './Icons'
-import OnlineStatics from './OnlineStatics'
-import useUsername from '../hooks/useUsernameExists'
-import useIsConnected from '../hooks/useIsConnected'
+import { RootState } from '../../redux/store'
+import { deleteUser } from '../../functions/AuthenticationFunctions'
+import { checkIfUsernameValid, updateUsername } from '../../functions/UserFunctions'
+import { auth } from '../../firebase'
+import DefaultButton from '../DefaultButton'
+import OnlineAuthenticationComponent from '../OnlineAuthenticationComponent'
+import { loadingState } from '../../Types'
+import UsernameComponent from '../AddUserComponent'
+import { ChevronLeft, CloseIcon, FriendIcon, OfflineIcon, OnlineIcon, TrashIcon } from '../Icons'
+import OnlineStatics from '../OnlineStatics'
+import useUsername from '../../hooks/useUsernameExists'
+import useIsConnected from '../../hooks/useIsConnected'
 import { useRouter } from 'expo-router'
-import useIsAuth from '../hooks/useIsAuth'
+import useIsAuth from '../../hooks/useIsAuth'
+import SignOutButton from './SignOutButton'
 
 export function DeleteText({
   secondsLeft,
@@ -161,48 +162,6 @@ function ConfirmingDelete({
         </DefaultButton>
       </View>
     </View>
-  )
-}
-
-function SignOutButton() {
-  const [signOutLoading, setSignOutLoading] = useState<boolean>(false)
-  const [signOutFailed, setSignOutFailed] = useState<boolean>(false)
-  
-  async function loadSignOut() {
-    setSignOutLoading(true)
-    let result = await signOut()
-    if (!result) {
-      setSignOutFailed(true)
-    }
-    setSignOutLoading(false)
-  }
-
-  if (signOutFailed) {
-    return (
-      <View>
-        <Text>Failed</Text>
-      </View>
-    )
-  }
-
-  if (signOutLoading) {
-    return (
-      <View>
-        <Text>Loading</Text>
-      </View>
-    )
-  }
-
-  return (
-    <DefaultButton
-      onPress={() => loadSignOut()}
-      style={{marginBottom: 5, flexDirection: 'row'}}
-    >
-      <SignOutIcon width={19} height={19}/>
-      <Text style={{
-        fontSize: 16
-      }}>Sign Out</Text>
-    </DefaultButton>
   )
 }
 

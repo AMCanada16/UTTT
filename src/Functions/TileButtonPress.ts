@@ -10,12 +10,15 @@
     Also, this function will first make a move the user makes. Then it will update the state and let the ai move. It will then finally wait for the ai to make the final move.
 */
 
+import { gameSlice } from "../redux/reducers/gameReducer";
+import store from "../redux/store";
 import { gridStateMode, loadingState } from "../Types";
 import { perdict } from "./Ai/common";
 import indexToGridIndex from "./indexToGridIndex";
 import indexToTileIndex from "./indexToTileIndex";
 import { updateGame } from "./OnlineFunctions";
 import pickTile from "./pickTile";
+import { updateStorageGame } from "./StorageFunctions";
 
 /**
  * 
@@ -46,7 +49,11 @@ export default async function tileButtonPress(
   }
 
   if (newGame.gameType !== 'online') {
-    const saveResult = await updateGame(newGame)
+    const saveResult = await updateStorageGame(newGame)
+    if (saveResult !== loadingState.success) {
+      return loadingState.failed
+    }
+    store.dispatch(gameSlice.actions.setGame(newGame))
   }
 
   // Handle ai gameplay
@@ -65,7 +72,13 @@ export default async function tileButtonPress(
     if (aiResult.result !== loadingState.success) {
       return loadingState.failed
     }
-    return loadingState.success
+
+    const saveResult = await updateStorageGame(aiResult.data)
+    if (saveResult !== loadingState.success) {
+      return loadingState.failed
+    }
+    store.dispatch(gameSlice.actions.setGame(aiResult.data))
   }
+
   return loadingState.success
 }
