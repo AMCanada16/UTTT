@@ -132,7 +132,6 @@ export default function SelectOnlineGame({onClose}:{onClose: () => void}){
       setNumInvitations(invitationNum.data)
       setGamesState(loadingState.success)
     } else {
-      console.log(invitationNum, result)
       setGamesState(loadingState.failed)
     }
   }

@@ -2,11 +2,11 @@
   Ultimate Tic Tac Toe
   Andrew Mainella
   May 6 2023
-  SVGXml.tsx
+  AppleAuthenticationButton.tsx
   This is a placeholder file and should not be complied on production.
 */
 
 
-declare const SVGXml: React.FC;
+declare const AppleAuthenticationButton: React.FC;
 
-export = SVGXml;
+export = AppleAuthenticationButton;

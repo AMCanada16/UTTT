@@ -4,7 +4,7 @@
   18 November 2023
   Welcome.tsx
 */
-import { View, Text } from "react-native";
+import { View, Text, Image } from "react-native";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { useRouter } from "expo-router";
@@ -15,7 +15,51 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import SelectOnlineGame from "../components/SelectOnlineGame"
 import SelectStorageGames from "../components/SelectStorageGame";
 import { Colors } from "../Types";
-import { Image } from "expo-image"
+import { useMemo } from "react";
+import { useAssets } from 'expo-asset';
+
+function getImageLength(width: number, height: number) {
+  if (width < height) {
+    if (width <= 1000) {
+      return (width * 0.9)/3 - 10
+    }
+    return (width * 0.8)/3 - 10
+  }
+  return (height * 0.8)/3 - 10
+} 
+
+
+const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+
+function WelcomeImages() {
+  const {height, width} = useSelector((state: RootState) => state.dimensions)
+  const imageLength = useMemo(() => {return getImageLength(width, height)} , [width, height])
+
+  //const [assets, error] = useAssets([require("../../assets/UTTT-Demo-Start.gif"), require("../../assets/UTTT-Demo-End.gif"), require("../../assets/UTTT-Demo-Ai.gif")]);
+  
+  if (imageLength === 0) { //|| assets === undefined || assets.length !== 3 || error !== undefined) {
+    return null
+  }
+  
+
+  return (
+    <View style={{flexDirection: 'row'}}>
+      <View style={{marginHorizontal: 5, marginLeft: (width - ((imageLength * 3) + 25))/2}}>
+        <Image source={require("../../assets/UTTT-Demo-Start.gif")} style={{width: imageLength, height: imageLength, overflow: 'hidden'}} />
+        <Text style={{textAlign: 'center', color: 'white', fontSize: Math.round(width * 0.01)}}>Play Tic Tac Toe inside Tic Tac Toe.</Text>
+      </View>
+      <View style={{marginHorizontal: 5}}>
+        <Image source={require("../../assets/UTTT-Demo-End.gif")} style={{width: imageLength, height: imageLength, overflow: 'hidden'}} />
+        <Text style={{textAlign: 'center', color: 'white', fontSize: Math.round(width * 0.01)}}>Win the big game to win.</Text>
+      </View>
+      <View style={{marginHorizontal: 5}}>
+        <Image source={require("../../assets/UTTT-Demo-Ai.gif")} style={{width: imageLength, height: imageLength, overflow: 'hidden'}} />
+        <Text style={{textAlign: 'center', color: 'white', fontSize: Math.round(width * 0.01)}}>Play Against AI</Text>
+      </View>
+    </View>
+  )
+}
 
 function Overlay({gameType}:{gameType: "online" | "ai" | "friend" | "friends" | "account"}) {
   const router = useRouter()
@@ -30,16 +74,6 @@ function Overlay({gameType}:{gameType: "online" | "ai" | "friend" | "friends" | 
   }
   return <Text>{gameType}</Text>
 }
-
-function getImageLength(width: number, height: number) {
-  if (width < height) {
-    if (width <= 1000) {
-      return (width * 0.9)/3 - 10
-    }
-    return (width * 0.8)/3 - 10
-  }
-  return (height * 0.8)/3 - 10
-} 
 
 export function WelcomePage({
   gameType
@@ -66,20 +100,7 @@ export function WelcomePage({
       </Text>
       <View>
         <Text style={{marginLeft: '5%', marginTop: 10, marginBottom: 10, color: 'white', marginRight: "5%", textAlign: (width > 1000) ? 'center':undefined}}>Ultimate Tic Tac Toe takes tic tac toe to the next level. Battle it out with your friends or AI. Online gameplay is also avaliable.</Text>
-        <View style={{flexDirection: 'row'}}>
-          <View style={{marginHorizontal: 5, marginLeft: (width - ((getImageLength(width, height) * 3) + 25))/2}}>
-            <Image source={require("../../assets/UTTT-Demo-Start.gif")} style={{width: getImageLength(width, height), height: getImageLength(width, height), overflow: 'hidden'}}/>
-            <Text style={{textAlign: 'center', color: 'white', fontSize: Math.round(width * 0.01)}}>Play Tic Tac Toe inside Tic Tac Toe.</Text>
-          </View>
-          <View style={{marginHorizontal: 5}}>
-            <Image source={require("../../assets/UTTT-Demo-End.gif")} style={{width: getImageLength(width, height), height: getImageLength(width, height), overflow: 'hidden'}}/>
-            <Text style={{textAlign: 'center', color: 'white', fontSize: Math.round(width * 0.01)}}>Win the big game to win.</Text>
-          </View>
-          <View style={{marginHorizontal: 5}}>
-            <Image source={require("../../assets/UTTT-Demo-Ai.gif")} style={{width: getImageLength(width, height), height: getImageLength(width, height), overflow: 'hidden'}}/>
-            <Text style={{textAlign: 'center', color: 'white', fontSize: Math.round(width * 0.01)}}>Play Against AI</Text>
-          </View>
-        </View>
+        <WelcomeImages />
       </View>
       <BottomComponent />
       <View style={{width,height, alignContent: 'center', alignItems: 'center', justifyContent: 'center', position: 'absolute'}} pointerEvents='box-none'>

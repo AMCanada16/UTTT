@@ -55,15 +55,3 @@ export default function TextAnimation({length, mode, colored}:{length: number, m
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    alignContent: 'center'
-  },
-  svg: {
-    position: "absolute"
-  },
-});

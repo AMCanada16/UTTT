@@ -3,6 +3,10 @@ import { auth, db } from "../firebase";
 import { loadingState } from "../Types";
 import { Unsubscribe, doc, onSnapshot } from "firebase/firestore";
 
+/**
+ * 
+ * @returns Thig function checks the the username does exist.
+ */
 export default function useUsername(): {
   exists: loadingState;
   username: string;

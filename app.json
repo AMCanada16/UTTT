@@ -22,7 +22,13 @@
       "expo-notifications",
       "expo-secure-store",
       "expo-dev-client",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-asset",
+        {
+          "assets": ["assets/UTTT-Demo-Start.gif", "assets/UTTT-Demo-End.gif", "assets/UTTT-Demo-Ai.gif"]
+        }
+      ]
     ],
     "ios": {
       "supportsTablet": true,

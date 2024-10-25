@@ -5,7 +5,6 @@ import { Timestamp } from 'firebase/firestore';
 
 export default function useShareStatus() {
   useEffect(() => {
-    let pastUid = ""
     const unlisten = auth.onAuthStateChanged(
       authUser => {
         if (authUser !== null) {
@@ -18,16 +17,6 @@ export default function useShareStatus() {
             online: false,
             lastSeen: Timestamp.now()
           });
-          pastUid = authUser.uid
-        } else {
-          if (pastUid !== "") {
-            const onlineRef = ref(database, `/status/${pastUid}`) 
-            set(onlineRef, {
-              online: false,
-              lastSeen: Timestamp.now()
-            });
-            pastUid = ""
-          }
         }
       },
     );

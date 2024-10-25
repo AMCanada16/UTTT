@@ -178,7 +178,6 @@ export default function pickTile(
         }
         if (x == 2) {
           isGameOver = true
-          console.log("OVER HORIZONTAL")
         }
       }
       
@@ -189,7 +188,6 @@ export default function pickTile(
         }
         if (y === 2) {
           isGameOver = true
-          console.log("OVER VET")
         }
       }
       
@@ -252,14 +250,7 @@ export default function pickTile(
     store.dispatch(aiHistorySlice.actions.pushOutput(outArr))
   }
 
-  if (store.getState().aiHistory.input.length !== store.getState().aiHistory.output.length) {
-    console.log("OUT OF SYNC" + store.getState().aiHistory.input.length + " " + store.getState().aiHistory.output.length)
-  } else {
-    console.log("SYNC")
-  }
-
   if (newGame.gameOver !== gridStateMode.open) {
-    console.log(store.getState().aiHistory.input.length, store.getState().aiHistory.output.length)
     let resultI = ""
     let resultO = ""
     const inputs = store.getState().aiHistory.input
@@ -271,12 +262,6 @@ export default function pickTile(
     for (let index = 0; index < outputs.length; index += 1) {
       resultO += (`\n[${outputs[index]}]${(index == outputs.length - 1) ? "":","}`)
     }
-    console.log(`
-      Inputs:
-      ${resultI}
-      Outputs:
-      ${resultO}
-    `)
   }
 
   return {
