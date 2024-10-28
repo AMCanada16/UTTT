@@ -1,22 +1,10 @@
-/*
-  Ultimate Tic Tac Toe
-  Andrew Mainella
-  18 November 2023
-  Welcome.tsx
-*/
-import { View, Text, Image } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { useRouter } from "expo-router";
-import AccountPage from "../components/AccountPage";
-import BottomComponent from "../components/BottomComponent";
-import FriendsPage from "../components/FriendsPage";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import SelectOnlineGame from "../components/SelectOnlineGame"
-import SelectStorageGames from "../components/SelectStorageGame";
+import { View, Image, Text } from "react-native";
 import { Colors } from "../Types";
 import { useMemo } from "react";
-import { useAssets } from 'expo-asset';
+import BottomComponent from "./BottomComponent";
 
 function getImageLength(width: number, height: number) {
   if (width < height) {
@@ -61,20 +49,6 @@ function WelcomeImages() {
   )
 }
 
-function Overlay({gameType}:{gameType: "online" | "ai" | "friend" | "friends" | "account"}) {
-  const router = useRouter()
-  if  (gameType === "account") {
-    return <AccountPage />
-  } else if (gameType === "online") {
-    return <SelectOnlineGame onClose={() => {router.push("/")}}/>
-  } else if (gameType === "ai" || gameType === "friend") {
-    return <SelectStorageGames isFriend={gameType === "friend"} onClose={() => {router.push("/")}}/>
-  } else if (gameType === "friends") {
-    return <FriendsPage />
-  }
-  return <Text>{gameType}</Text>
-}
-
 export function WelcomePage({
   gameType
 }:{
@@ -103,17 +77,6 @@ export function WelcomePage({
         <WelcomeImages />
       </View>
       <BottomComponent />
-      <View style={{width,height, alignContent: 'center', alignItems: 'center', justifyContent: 'center', position: 'absolute'}} pointerEvents='box-none'>
-        {gameType !== undefined ?
-          <Overlay gameType={gameType}/>:null
-        }
-      </View>
     </View>
-  )
-}
-
-export default function DefaultMainWelcomePage() {
-  return (
-    <WelcomePage />
   )
 }

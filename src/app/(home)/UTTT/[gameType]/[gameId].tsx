@@ -5,23 +5,23 @@
   UltimateTicTacToe.tsx
 */
 import { useEffect, useMemo, useState } from "react"
-import { gridStateMode } from "../../../Types"
+import { gridStateMode } from "../../../../Types"
 import { useSelector } from "react-redux"
-import { RootState } from "../../../redux/store"
+import { RootState } from "../../../../redux/store"
 import { View, Text, StyleSheet, Pressable, ActivityIndicator, useWindowDimensions } from "react-native"
-import BigTileTextAnimation from "../../../components/BigTileTextAnimation"
-import Striketrough from "../../../components/Striketrough"
-import TileButton from "../../../components/TileButton"
-import { ChevronLeft, CloseIcon, CopiedIcon, CopyIcon, OfflineIcon, PersonIcon } from "../../../components/Icons"
+import BigTileTextAnimation from "../../../../components/BigTileTextAnimation"
+import Striketrough from "../../../../components/Striketrough"
+import TileButton from "../../../../components/TileButton"
+import { ChevronLeft, CloseIcon, CopiedIcon, CopyIcon, OfflineIcon, PersonIcon } from "../../../../components/Icons"
 import * as Clipboard from 'expo-clipboard';
 import { Redirect, useGlobalSearchParams, useRouter } from "expo-router"
-import useGame from "../../../hooks/useGame"
-import { auth } from "../../../firebase"
-import PlayersPage from "../../../components/PlayersPage"
-import GameOverComponent from "../../../components/GameOverComponent"
+import useGame from "../../../../hooks/useGame"
+import { auth } from "../../../../firebase"
+import PlayersPage from "../../../../components/PlayersPage"
+import GameOverComponent from "../../../../components/GameOverComponent"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import useIsConnected from "../../../hooks/useIsConnected"
-import { trainModel } from "../../../functions/Ai"
+import useIsConnected from "../../../../hooks/useIsConnected"
+import { trainModel } from "../../../../functions/Ai"
 
 //Renders root type
 function InnerGame({game, gridIndex, gameLength}:{game: GameType, gridIndex: number, gameLength: number}) {
