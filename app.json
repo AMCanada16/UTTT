@@ -26,9 +26,17 @@
       [
         "expo-asset",
         {
-          "assets": ["assets/UTTT-Demo-Start.gif", "assets/UTTT-Demo-End.gif", "assets/UTTT-Demo-Ai.gif"]
+          "assets": [
+            "assets/UTTT-Demo-Start.gif",
+            "assets/UTTT-Demo-End.gif",
+            "assets/UTTT-Demo-Ai.gif",
+            "assets/UTTT-Demo-Start.gif",
+            "assets/UTTT-Demo-End.gif",
+            "assets/UTTT-Demo-Ai.gif"
+          ]
         }
-      ]
+      ],
+      "@bacons/apple-targets"
     ],
     "ios": {
       "supportsTablet": true,
@@ -79,23 +87,25 @@
         ]
       },
       "infoPlist": {
-        "NSAllowsArbitraryLoads":true,
+        "NSAllowsArbitraryLoads": true,
         "CFBundleAllowMixedLocalizations": true,
         "NSAppTransportSecurity": {
           "NSExceptionDomains": {
             "exp.direct": {
               "NSIncludesSubdomains": true,
-              "NSExceptionAllowsInsecureHTTPLoads": true,
+              "NSExceptionAllowsInsecureHTTPLoads": true
             },
             "128.189.128.248": {
               "NSIncludesSubdomains": true,
-              "NSExceptionAllowsInsecureHTTPLoads": true,
-            },
-          },
+              "NSExceptionAllowsInsecureHTTPLoads": true
+            }
+          }
         },
+        "LSMinimumSystemVersion": "14"
       },
       "googleServicesFile": "./GoogleService-Info.plist",
-      "buildNumber": "13"
+      "buildNumber": "13",
+      "appleTeamId": "SYV2CK2N9N"
     },
     "android": {
       "adaptiveIcon": {
