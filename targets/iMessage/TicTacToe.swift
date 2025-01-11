@@ -47,7 +47,7 @@ struct TicTacToeTile: View {
 			return
 		}
 		do {
-			currentGame.currentGame = try gameState.game(TileButtonPress(index: index, tileIndex: tileIndex, game: game))
+      currentGame.currentGame = try gameState.game(TileButtonPress(index: index, tileIndex: tileIndex, gridIndex: 0, game: game))
 		} catch {
 			// TODO something went wrong
 		}

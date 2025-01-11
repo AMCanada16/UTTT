@@ -16,6 +16,13 @@
       "**/*"
     ],
     "plugins": [
+      [
+        "@bacons/apple-targets",
+        {
+          "appleTeamId": "SYV2CK2N9N",
+          "root": "./targets"
+        }
+      ],
       "@react-native-google-signin/google-signin",
       "expo-apple-authentication",
       "expo-router",
@@ -36,56 +43,20 @@
           ]
         }
       ],
-      "@bacons/apple-targets"
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "17.0",
+            "useFrameworks":"dynamic"
+          }
+        }
+      ]
     ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "Archimedes4.UTTT",
       "usesAppleSignIn": true,
-      "privacyManifests": {
-        "NSPrivacyAccessedAPITypes": [
-          {
-            "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
-            "NSPrivacyAccessedAPITypeReasons": [
-              "CA92.1"
-            ]
-          }
-        ],
-        "NSPrivacyCollectedDataTypes": [
-          {
-            "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeEmailAddress",
-            "NSPrivacyCollectedDataTypeLinked": true,
-            "NSPrivacyCollectedDataTypeTracking": false,
-            "NSPrivacyCollectedDataTypePurposes": [
-              "NSPrivacyCollectedDataTypePurposeAppFunctionality"
-            ]
-          },
-          {
-            "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeGameplayContent",
-            "NSPrivacyCollectedDataTypeLinked": true,
-            "NSPrivacyCollectedDataTypeTracking": false,
-            "NSPrivacyCollectedDataTypePurposes": [
-              "NSPrivacyCollectedDataTypePurposeAppFunctionality"
-            ]
-          },
-          {
-            "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeCrashData",
-            "NSPrivacyCollectedDataTypeLinked": false,
-            "NSPrivacyCollectedDataTypeTracking": false,
-            "NSPrivacyCollectedDataTypePurposes": [
-              "NSPrivacyCollectedDataTypePurposeAppFunctionality"
-            ]
-          },
-          {
-            "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeUserID",
-            "NSPrivacyCollectedDataTypeLinked": true,
-            "NSPrivacyCollectedDataTypeTracking": false,
-            "NSPrivacyCollectedDataTypePurposes": [
-              "NSPrivacyCollectedDataTypePurposeAppFunctionality"
-            ]
-          }
-        ]
-      },
       "infoPlist": {
         "NSAllowsArbitraryLoads": true,
         "CFBundleAllowMixedLocalizations": true,
@@ -101,11 +72,16 @@
             }
           }
         },
-        "LSMinimumSystemVersion": "14"
+        "LSMinimumSystemVersion": "17"
       },
       "googleServicesFile": "./GoogleService-Info.plist",
       "buildNumber": "13",
-      "appleTeamId": "SYV2CK2N9N"
+      "appleTeamId": "SYV2CK2N9N",
+      "entitlements": {
+        "com.apple.security.application-groups": [
+          "group.Archimedes4.UTTT"
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
