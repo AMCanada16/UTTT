@@ -25,7 +25,12 @@
       ],
       "@react-native-google-signin/google-signin",
       "expo-apple-authentication",
-      "expo-router",
+      [
+        "expo-router",
+        {
+          "headOrigin": ""
+        }
+      ],
       "expo-notifications",
       "expo-secure-store",
       "expo-dev-client",
@@ -48,7 +53,7 @@
         {
           "ios": {
             "deploymentTarget": "17.0",
-            "useFrameworks":"dynamic"
+            "useFrameworks":"static"
           }
         }
       ]
