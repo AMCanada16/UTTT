@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseFirestore
+import FirebaseAuth
 
 enum gameState: Equatable {
 	case loading
@@ -15,7 +16,7 @@ enum gameState: Equatable {
 	
 	static func ==(lhs: gameState, rhs: gameState) -> Bool {
 		switch (lhs, rhs) {
-			case (let .game(a1), let .game(a2)):
+			case (let .game(_a1), let .game(_a2)):
 				return true
 			case (.error, .error):
 				return true
@@ -43,10 +44,14 @@ struct compressedUserTypeRaw: Codable {
 
 class UseGame: ObservableObject {
   @Published var currentGame: gameState = gameState.loading
+  private var gameId: String = ""
   
   func followGame() {
+    if (Auth.auth().currentUser == nil) {
+      return
+    }
     let db = Firestore.firestore()
-    db.collection("Games").document("9125785").addSnapshotListener { [self] documentSnapshot, error in
+    db.collection("Games").document("1068175").addSnapshotListener { [self] documentSnapshot, error in
       guard let document = documentSnapshot else {
         print("Error fetching document: \(error!)")
         return
@@ -76,7 +81,45 @@ class UseGame: ObservableObject {
           print("gameStateInner Error")
           return
         }
-				let gameData = DimentionalType(inner: [gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open,gridStateMode.open], value: [gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open], active: [])
+				let gameData = DimentionalType(inner: [gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               
+                                               // ---------
+                                               
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               
+                                               // ---------
+                                               
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open,
+                                               gridStateMode.open,gridStateMode.open,gridStateMode.open], value: [gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open], active: [])
         guard let selectedGrid = data["selectedGrid"] as? Int else {
           print("selectedGrid Error")
           return
@@ -113,7 +156,13 @@ class UseGame: ObservableObject {
     }
   }
   
+  func updateGameId(gameId: String) {
+    self.gameId = gameId
+    followGame()
+  }
+  
   init() {
     followGame()
   }
+  
 }

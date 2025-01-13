@@ -28,7 +28,7 @@
       [
         "expo-router",
         {
-          "headOrigin": ""
+          "headOrigin": "https://archimedes4-games.web.app/"
         }
       ],
       "expo-notifications",

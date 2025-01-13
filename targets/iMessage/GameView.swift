@@ -16,8 +16,8 @@ func getLength(width: CGFloat, height: CGFloat) -> CGFloat {
 
 struct GameView: View {
   @Binding var mode: ViewType
-  @StateObject var currentGame = UseGame()
-
+  @EnvironmentObject var currentGame: UseGame
+  
   func goToAccount() {
     mode = ViewType.account
   }

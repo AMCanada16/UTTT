@@ -13,7 +13,7 @@ struct TicTacToeTile: View {
 	let gridIndex: Int
 	var game: GameType
 	var length: CGFloat
-	@ObservedObject var currentGame: UseGame
+  @EnvironmentObject var currentGame: UseGame
 	
 	/*
 		| 0 1 2    | 3 4 5    | 6 7 8    |
@@ -72,7 +72,7 @@ struct TicTacToeTile: View {
 struct TicTacToeCore: View {
 	let gridIndex: Int
 	var game: GameType
-	@ObservedObject var currentGame: UseGame
+  @EnvironmentObject var currentGame: UseGame
 	
 	func calculateHeight(height: CGFloat, active: ActiveType) -> CGFloat {
 		if (active.yOne == active.yTwo) {
@@ -125,19 +125,19 @@ struct TicTacToeCore: View {
 			ZStack {
 				VStack (spacing: 1) {
 					HStack (spacing: 1){
-						TicTacToeTile(tileIndex: 0, gridIndex: gridIndex, game: game, length: length, currentGame: currentGame)
-						TicTacToeTile(tileIndex: 1, gridIndex: gridIndex, game: game, length: length, currentGame: currentGame)
-						TicTacToeTile(tileIndex: 2, gridIndex: gridIndex, game: game, length: length, currentGame: currentGame)
+						TicTacToeTile(tileIndex: 0, gridIndex: gridIndex, game: game, length: length)
+						TicTacToeTile(tileIndex: 1, gridIndex: gridIndex, game: game, length: length)
+						TicTacToeTile(tileIndex: 2, gridIndex: gridIndex, game: game, length: length)
 					}.padding(0)
 					HStack (spacing: 1) {
-						TicTacToeTile(tileIndex: 3, gridIndex: gridIndex, game: game, length: length, currentGame: currentGame)
-						TicTacToeTile(tileIndex: 4, gridIndex: gridIndex, game: game, length: length, currentGame: currentGame)
-						TicTacToeTile(tileIndex: 5, gridIndex: gridIndex, game: game, length: length, currentGame: currentGame)
+						TicTacToeTile(tileIndex: 3, gridIndex: gridIndex, game: game, length: length)
+						TicTacToeTile(tileIndex: 4, gridIndex: gridIndex, game: game, length: length)
+						TicTacToeTile(tileIndex: 5, gridIndex: gridIndex, game: game, length: length)
 					}
 					HStack (spacing: 1) {
-						TicTacToeTile(tileIndex: 6, gridIndex: gridIndex, game: game, length: length, currentGame: currentGame)
-						TicTacToeTile(tileIndex: 7, gridIndex: gridIndex, game: game, length: length, currentGame: currentGame)
-						TicTacToeTile(tileIndex: 8, gridIndex: gridIndex, game: game, length: length, currentGame: currentGame)
+						TicTacToeTile(tileIndex: 6, gridIndex: gridIndex, game: game, length: length)
+						TicTacToeTile(tileIndex: 7, gridIndex: gridIndex, game: game, length: length)
+						TicTacToeTile(tileIndex: 8, gridIndex: gridIndex, game: game, length: length)
 					}
 				}.background(Color.black)
 				let active = game.data.active.first(where: {$0.firstIndex == gridIndex % 3 && $0.secondIndex == gridIndex/3})
@@ -161,11 +161,15 @@ struct TickTackToe: View {
   var body: some View {
 		switch currentGame.currentGame {
 		case .loading:
-			Text("Loading")
+      if (gridIndex == 4) {
+        Text("Loading")
+      }
 		case .game(let game):
-			TicTacToeCore(gridIndex: gridIndex, game: game, currentGame: currentGame)
+			TicTacToeCore(gridIndex: gridIndex, game: game)
 		default:
-			Text("Something went wrong")
+      if (gridIndex == 4) {
+        Text("Something went wrong")
+      }
 		}
     
   }
