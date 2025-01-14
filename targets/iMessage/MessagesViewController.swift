@@ -63,11 +63,15 @@ class MessagesViewController: MSMessagesAppViewController {
         let controller: UIViewController
         if presentationStyle == .compact {
             // Show a list of previously created ice creams.
-            controller = UIHostingController(rootView: ViewController().environment(currentMode))
+          controller = UIHostingController(rootView: ViewController(addMessage: { 
+            conversation.send(self.composeMessage(session: conversation.selectedMessage?.session))
+          }).environment(currentMode))
 
         } else {
              // Parse an `IceCream` from the conversation's `selectedMessage` or create a new `IceCream`.
-          controller = UIHostingController(rootView: ViewController().environment(currentMode))
+          controller = UIHostingController(rootView: ViewController(addMessage: { 
+            conversation.send(self.composeMessage(session: conversation.selectedMessage?.session))
+          }).environment(currentMode))
         }
       
         addChild(controller)
@@ -93,6 +97,17 @@ class MessagesViewController: MSMessagesAppViewController {
             child.view.removeFromSuperview()
             child.removeFromParent()
         }
+    }
+  
+    fileprivate func composeMessage(session: MSSession? = nil) -> MSMessage {
+        
+        let layout = MSMessageTemplateLayout()
+        layout.caption = "Do you want to join the game?"
+        
+        let message = MSMessage(session: session ?? MSSession())
+        message.layout = layout
+        
+        return message
     }
 }
 

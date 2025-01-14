@@ -48,6 +48,7 @@ struct TicTacToeTile: View {
 		}
 		do {
       currentGame.currentGame = try gameState.game(TileButtonPress(index: index, tileIndex: tileIndex, gridIndex: 0, game: game))
+      currentGame.madeMove = true
 		} catch {
 			// TODO something went wrong
 		}
@@ -165,7 +166,11 @@ struct TickTackToe: View {
         Text("Loading")
       }
 		case .game(let game):
-			TicTacToeCore(gridIndex: gridIndex, game: game)
+      if (game.users.count >= 2) {
+        TicTacToeCore(gridIndex: gridIndex, game: game)
+      } else if (gridIndex == 4) {
+        Text("Waiting for another player to join.")
+      }
 		default:
       if (gridIndex == 4) {
         Text("Something went wrong")

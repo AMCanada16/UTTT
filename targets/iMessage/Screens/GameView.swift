@@ -28,7 +28,7 @@ struct GameView: View {
   }
 	
 	func goToHome() {
-		mode = ViewType.createGame
+    mode = ViewType.home
 	}
   
 	var body: some View {

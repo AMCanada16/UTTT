@@ -57,3 +57,15 @@ struct GameType {
   var owner: String
   var userWon: String?
 }
+
+enum joinGameState {
+  case notStarted, success, failed, noGame, loading, gameFull
+}
+
+enum GeneralError: Error {
+    case main(String)
+}
+
+enum ViewType {
+  case login, game, home, account, gameStats, gameOver, waitToJoin
+}

@@ -74,6 +74,7 @@ export async function updateGame(gameState: GameType): Promise<loadingState.fail
  * @param gameId The id of the game to join
  * @param currentUserId The uid of the joining user
  * @returns a boolean on the result
+ * @todo Add a check to see if the user is already in the game
  */
 export async function joinGame(gameId: string, currentUserId: string): Promise<boolean> {
   let added = false

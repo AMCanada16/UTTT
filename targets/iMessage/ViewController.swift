@@ -9,43 +9,39 @@ import SwiftUI
 import Firebase
 import FirebaseAuth
 
-enum ViewType {
-  case login, game, createGame, account, gameStats, gameOver
-}
-
 struct ViewController: View {
   @State var mode: ViewType = ViewType.game;
   @StateObject var currentGame = UseGame()
+  let addMessage: () -> Void
   var body: some View {
     ZStack {
       if (mode == ViewType.login) {
         LoginView()
       } else if (mode == ViewType.game) {
-        GameView(mode: $mode)
+        GameView(mode: $mode, addMessage: addMessage)
           .environmentObject(currentGame)
       } else if (mode == ViewType.account) {
         AccountView(mode: $mode)
       } else if (mode == ViewType.gameOver) {
         
-      } else if (mode == ViewType.createGame) {
-        CreateGameView(mode: $mode)
+      } else if (mode == ViewType.home) {
+        HomeView(mode: $mode)
           .environmentObject(currentGame)
       } else if (mode == ViewType.gameStats) {
         GameStatsView(mode: $mode)
+          .environmentObject(currentGame)
+      } else if (mode == ViewType.waitToJoin) {
+        WaitToJoin(mode: $mode)
           .environmentObject(currentGame)
       }
     }.onAppear() {
       Auth.auth().addStateDidChangeListener { auth, user in
         if (user != nil && mode == ViewType.login) {
-          mode = ViewType.createGame
+          mode = ViewType.home
         } else if (user == nil) {
           mode = ViewType.login
         }
       }
     }
   }
-}
-
-#Preview {
-    ViewController()
 }
