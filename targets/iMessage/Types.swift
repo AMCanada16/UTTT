@@ -62,6 +62,10 @@ enum joinGameState {
   case notStarted, success, failed, noGame, loading, gameFull
 }
 
+enum loadingState {
+  case notStarted, success, failed, loading
+}
+
 enum GeneralError: Error {
     case main(String)
 }

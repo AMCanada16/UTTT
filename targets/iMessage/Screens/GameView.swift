@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 func getLength(width: CGFloat, height: CGFloat) -> CGFloat {
   if ((width - 30.0) < (height)) {
@@ -14,10 +15,9 @@ func getLength(width: CGFloat, height: CGFloat) -> CGFloat {
   return height
 }
 
-struct GameView: View {
+struct MainGame: View {
   @Binding var mode: ViewType
   @EnvironmentObject var currentGame: UseGame
-  let addMessage: () -> Void
   
   func goToAccount() {
     mode = ViewType.account
@@ -26,44 +26,44 @@ struct GameView: View {
   func goToGameStats() {
     mode = ViewType.gameStats
   }
-	
-	func goToHome() {
-    mode = ViewType.home
-	}
   
-	var body: some View {
-		GeometryReader {geometry in
-			let length = getLength(width: geometry.size.width, height: geometry.size.height - geometry.safeAreaInsets.bottom)
-			let tileLength = (length - 10)/3
-			VStack {
-				HStack {
-					VStack (spacing: 5) {
-						HStack (spacing: 5) {
-							TickTackToe(currentGame: currentGame, gridIndex: 0)
-								.frame(width: tileLength, height: tileLength)
-							TickTackToe(currentGame: currentGame, gridIndex: 1)
-								.frame(width: tileLength, height: tileLength)
-							TickTackToe(currentGame: currentGame, gridIndex: 2)
-								.frame(width: tileLength, height: tileLength)
-						}
-						HStack (spacing: 5) {
-							TickTackToe(currentGame: currentGame, gridIndex: 3)
-								.frame(width: tileLength, height: tileLength)
-							TickTackToe(currentGame: currentGame, gridIndex: 4)
-								.frame(width: tileLength, height: tileLength)
-							TickTackToe(currentGame: currentGame, gridIndex: 5)
-								.frame(width: tileLength, height: tileLength)
-						}
-						HStack (spacing: 5) {
-							TickTackToe(currentGame: currentGame, gridIndex: 6)
-								.frame(width: tileLength, height: tileLength)
-							TickTackToe(currentGame: currentGame, gridIndex: 7)
-								.frame(width: tileLength, height: tileLength)
-							TickTackToe(currentGame: currentGame, gridIndex: 8)
-								.frame(width: tileLength, height: tileLength)
-						}
-					}.frame(width: length, height: length).background(Color.primary)
-					VStack {
+  func goToHome() {
+    mode = ViewType.home
+  }
+  
+  var body: some View {
+    GeometryReader {geometry in
+      let length = getLength(width: geometry.size.width, height: geometry.size.height - geometry.safeAreaInsets.bottom)
+      let tileLength = (length - 10)/3
+      VStack {
+        HStack {
+          VStack (spacing: 5) {
+            HStack (spacing: 5) {
+              TickTackToe(currentGame: currentGame, gridIndex: 0)
+                .frame(width: tileLength, height: tileLength)
+              TickTackToe(currentGame: currentGame, gridIndex: 1)
+                .frame(width: tileLength, height: tileLength)
+              TickTackToe(currentGame: currentGame, gridIndex: 2)
+                .frame(width: tileLength, height: tileLength)
+            }
+            HStack (spacing: 5) {
+              TickTackToe(currentGame: currentGame, gridIndex: 3)
+                .frame(width: tileLength, height: tileLength)
+              TickTackToe(currentGame: currentGame, gridIndex: 4)
+                .frame(width: tileLength, height: tileLength)
+              TickTackToe(currentGame: currentGame, gridIndex: 5)
+                .frame(width: tileLength, height: tileLength)
+            }
+            HStack (spacing: 5) {
+              TickTackToe(currentGame: currentGame, gridIndex: 6)
+                .frame(width: tileLength, height: tileLength)
+              TickTackToe(currentGame: currentGame, gridIndex: 7)
+                .frame(width: tileLength, height: tileLength)
+              TickTackToe(currentGame: currentGame, gridIndex: 8)
+                .frame(width: tileLength, height: tileLength)
+            }
+          }.frame(width: length, height: length).background(Color.primary)
+          VStack {
             if (currentGame.madeMove) {
               Button(action: goToAccount) {
                 Image(systemName: "xmark.circle.fill")
@@ -103,10 +103,40 @@ struct GameView: View {
                   .foregroundColor(.white)
               }
             }
-					}
-				}
-			}.frame(maxWidth: .infinity, maxHeight: .infinity)
-		}.background(Color.primary)
+          }
+        }
+      }.frame(maxWidth: .infinity, maxHeight: .infinity)
+    }.background(Color.primary)
+  }
+}
+
+struct WaitForPlayer: View {
+  var body: some View {
+    VStack {
+      Text("Waiting for other player.")
+    }
+  }
+}
+
+struct GameView: View {
+  @Binding var mode: ViewType
+  @EnvironmentObject var currentGame: UseGame
+  let addMessage: () -> Void
+  
+  
+	var body: some View {
+    switch currentGame.currentGame {
+    case .error:
+      Text("Something went wrong")
+    case .loading:
+      Text("Loading")
+    case .game(let currentGame):
+      if (Game().isCurrentUsersTurn(game: currentGame, uid: Auth.auth().currentUser?.uid ?? "")) {
+        MainGame(mode: $mode)
+      } else {
+        
+      }
+    }
 	}
 }
 

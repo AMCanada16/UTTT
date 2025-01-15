@@ -49,6 +49,31 @@ class Game {
     return gameData
   }
   
+  func dimentionalTypeToJson(json: [String: Any]) throws -> DimentionalType {
+    var gameData = DimentionalType(inner: emptyGame, value: [gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open], active: [])
+    guard let rawActive = json["active"] as? [[String: Any]] else {
+      throw GeneralError.main("Active is not present")
+    }
+    var active: [ActiveType] = []
+    for x in rawActive {
+      active.append(ActiveType(xOne: x["xOne"] as! Int, xTwo: x["xTwo"] as! Int, yOne: x["yOne"] as! Int, yTwo: x["yTwo"] as! Int, firstIndex: x["firstIndex"] as! Int, secondIndex: x["secondIndex"] as! Int))
+    }
+    guard let rawInner = json["inner"] as? [Int] else {
+      print("inner Error")
+      throw GeneralError.main("Inner is not present")
+    }
+    let inner: [gridStateMode] = rawInner.map({return gridStateMode(rawValue: $0)!})
+    guard let rawValue = json["value"] as? [Int] else {
+      print("value Error")
+      throw GeneralError.main("Value is not present")
+    }
+    let value: [gridStateMode] = rawValue.map({return gridStateMode(rawValue: $0)!})
+    gameData.active = active
+    gameData.inner = inner
+    gameData.value = value
+    return gameData
+  }
+  
   /**
    * A function to add the user to the players. Will fail if two players are already in the game
    * @param gameId The id of the game to join
@@ -97,5 +122,24 @@ class Game {
       return joinGameState.failed
     }
     return added
+  }
+  
+  func isCurrentUsersTurn(game: GameType, uid: String) -> Bool {
+    let playingUser = game.users.first(where: {$0.userId == uid})
+    if (playingUser?.player == game.currentTurn) {
+      return true
+    }
+    return false
+  }
+  
+  func updateGame(game: GameType) -> loadingState {
+    var data: [String: Any] = [:]
+    data["currentTurn"] = game.currentTurn.rawValue
+    data["gameOver"] = game.gameOver.rawValue
+    data["data"] = [:]
+    data["users"] = Users().usersToJson(users: game.users)
+    data["selectedGrid"] = game.selectedGrid
+    
+    return loadingState.failed
   }
 }

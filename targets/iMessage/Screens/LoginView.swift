@@ -126,6 +126,7 @@ struct LoginView: View {
                 Image("google-icon")
                   .resizable()
                   .aspectRatio(contentMode: .fit)
+                  .padding(.vertical, 5)
                 Text("Sign in With Google")
                   .foregroundStyle(.black)
               }
