@@ -11,9 +11,8 @@ import Foundation
 struct TicTacToeTile: View {
 	let tileIndex: Int
 	let gridIndex: Int
-	var game: GameType
 	var length: CGFloat
-  @EnvironmentObject var currentGame: UseGame
+  @EnvironmentObject var useGame: UseGame
 	
 	/*
 		| 0 1 2    | 3 4 5    | 6 7 8    |
@@ -41,14 +40,14 @@ struct TicTacToeTile: View {
 	}
 	
 	func buttonPress(tileIndex: Int) {
+    let game = Game().getGame(state: useGame.currentGame)!
 		let index = getIndex(tileIndex: tileIndex)
-		print(game.selectedGrid)
-		if game.data.inner[index] != gridStateMode.open || (game.selectedGrid != 0 && game.selectedGrid != gridIndex) {
+    if game.data.inner[index] != gridStateMode.open || (game.selectedGrid != 0 && game.selectedGrid != (gridIndex + 1)) {
 			return
 		}
 		do {
-      currentGame.currentGame = try gameState.game(TileButtonPress(index: index, tileIndex: tileIndex, gridIndex: 0, game: game))
-      currentGame.madeMove = true
+      useGame.previousGameState = Game().getGame(state: useGame.currentGame)
+      useGame.currentGame = try gameState.game(TileButtonPress(index: index, tileIndex: tileIndex, gridIndex: gridIndex, game: game))
 		} catch {
 			// TODO something went wrong
 		}
@@ -60,9 +59,9 @@ struct TicTacToeTile: View {
 			buttonPress(tileIndex: tileIndex)
 		} label: {
 			VStack {
-				if game.data.inner[index] == gridStateMode.o {
+        if Game().getGame(state: useGame.currentGame)!.data.inner[index] == gridStateMode.o {
 					Text("O")
-				} else if game.data.inner[index] == gridStateMode.x {
+				} else if Game().getGame(state: useGame.currentGame)!.data.inner[index] == gridStateMode.x {
 					Text("X")
 				}
 			}.frame(width: length, height: length).background(Color.primary)
@@ -72,8 +71,7 @@ struct TicTacToeTile: View {
 
 struct TicTacToeCore: View {
 	let gridIndex: Int
-	var game: GameType
-  @EnvironmentObject var currentGame: UseGame
+  @EnvironmentObject var useGame: UseGame
 	
 	func calculateHeight(height: CGFloat, active: ActiveType) -> CGFloat {
 		if (active.yOne == active.yTwo) {
@@ -126,22 +124,22 @@ struct TicTacToeCore: View {
 			ZStack {
 				VStack (spacing: 1) {
 					HStack (spacing: 1){
-						TicTacToeTile(tileIndex: 0, gridIndex: gridIndex, game: game, length: length)
-						TicTacToeTile(tileIndex: 1, gridIndex: gridIndex, game: game, length: length)
-						TicTacToeTile(tileIndex: 2, gridIndex: gridIndex, game: game, length: length)
+						TicTacToeTile(tileIndex: 0, gridIndex: gridIndex, length: length)
+						TicTacToeTile(tileIndex: 1, gridIndex: gridIndex, length: length)
+						TicTacToeTile(tileIndex: 2, gridIndex: gridIndex, length: length)
 					}.padding(0)
 					HStack (spacing: 1) {
-						TicTacToeTile(tileIndex: 3, gridIndex: gridIndex, game: game, length: length)
-						TicTacToeTile(tileIndex: 4, gridIndex: gridIndex, game: game, length: length)
-						TicTacToeTile(tileIndex: 5, gridIndex: gridIndex, game: game, length: length)
+						TicTacToeTile(tileIndex: 3, gridIndex: gridIndex, length: length)
+						TicTacToeTile(tileIndex: 4, gridIndex: gridIndex, length: length)
+						TicTacToeTile(tileIndex: 5, gridIndex: gridIndex, length: length)
 					}
 					HStack (spacing: 1) {
-						TicTacToeTile(tileIndex: 6, gridIndex: gridIndex, game: game, length: length)
-						TicTacToeTile(tileIndex: 7, gridIndex: gridIndex, game: game, length: length)
-						TicTacToeTile(tileIndex: 8, gridIndex: gridIndex, game: game, length: length)
+						TicTacToeTile(tileIndex: 6, gridIndex: gridIndex, length: length)
+						TicTacToeTile(tileIndex: 7, gridIndex: gridIndex, length: length)
+						TicTacToeTile(tileIndex: 8, gridIndex: gridIndex, length: length)
 					}
 				}.background(Color.black)
-				let active = game.data.active.first(where: {$0.firstIndex == gridIndex % 3 && $0.secondIndex == gridIndex/3})
+        let active = Game().getGame(state: useGame.currentGame)!.data.active.first(where: {$0.gridIndex == gridIndex})
 				if active != nil {
 					RoundedRectangle(cornerRadius: 25)
 						.fill(.yellow)
@@ -156,7 +154,7 @@ struct TicTacToeCore: View {
 
 
 struct TickTackToe: View {
-	@ObservedObject var currentGame: UseGame
+  @EnvironmentObject var currentGame: UseGame
 	let gridIndex: Int
 	
   var body: some View {
@@ -167,7 +165,7 @@ struct TickTackToe: View {
       }
 		case .game(let game):
       if (game.users.count >= 2) {
-        TicTacToeCore(gridIndex: gridIndex, game: game)
+        TicTacToeCore(gridIndex: gridIndex)
       } else if (gridIndex == 4) {
         Text("Waiting for another player to join.")
       }

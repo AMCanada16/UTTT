@@ -11,15 +11,12 @@ enum gridStateMode: Int, Codable {
   case open, x, o, full
 }
 
-// FirstIndex is the x
-// SecondIndex is the y
 struct ActiveType {
 	var xOne: Int
 	var xTwo: Int
 	var yOne: Int
 	var yTwo: Int
-	var firstIndex: Int
-	var secondIndex: Int
+	var gridIndex: Int
 }
 
 struct RootType {
@@ -42,6 +39,13 @@ enum joinRules: String {
   case `public`
   case friends
   case invitation
+}
+
+struct OnlineStatsType {
+  var gamesPlayed: Int
+  var activeGames: Int
+  var gamesWon: Int
+  var gamesLost: Int
 }
 
 struct GameType {
@@ -71,5 +75,5 @@ enum GeneralError: Error {
 }
 
 enum ViewType {
-  case login, game, home, account, gameStats, gameOver, waitToJoin
+  case login, game, home, account, gameStats, gameOver, waitToJoin, info
 }

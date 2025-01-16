@@ -31,8 +31,10 @@ struct ViewController: View {
         GameStatsView(mode: $mode)
           .environmentObject(currentGame)
       } else if (mode == ViewType.waitToJoin) {
-        WaitToJoin(mode: $mode)
+        WaitToJoin(mode: $mode, addMessage: addMessage)
           .environmentObject(currentGame)
+      } else if (mode == ViewType.info) {
+        InfoView(mode: $mode)
       }
     }.onAppear() {
       Auth.auth().addStateDidChangeListener { auth, user in

@@ -61,19 +61,10 @@ class MessagesViewController: MSMessagesAppViewController {
         removeAllChildViewControllers()
         
         let controller: UIViewController
-        if presentationStyle == .compact {
-            // Show a list of previously created ice creams.
-          controller = UIHostingController(rootView: ViewController(addMessage: { 
-            conversation.send(self.composeMessage(session: conversation.selectedMessage?.session))
-          }).environment(currentMode))
-
-        } else {
-             // Parse an `IceCream` from the conversation's `selectedMessage` or create a new `IceCream`.
-          controller = UIHostingController(rootView: ViewController(addMessage: { 
-            conversation.send(self.composeMessage(session: conversation.selectedMessage?.session))
-          }).environment(currentMode))
-        }
-      
+        controller = UIHostingController(rootView: ViewController(addMessage: {
+          conversation.send(self.composeMessage(session: conversation.selectedMessage?.session))
+        }).environment(currentMode))
+        
         addChild(controller)
         controller.view.frame = view.bounds
         controller.view.translatesAutoresizingMaskIntoConstraints = false

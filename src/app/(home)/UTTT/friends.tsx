@@ -4,9 +4,9 @@
   22 September 2024
 */
 import React from 'react'
+import { View } from 'react-native'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../../redux/store'
-import { View } from 'react-native'
 import FriendsPage from '../../../components/FriendsPage'
 
 export default function index() {

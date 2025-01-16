@@ -89,9 +89,10 @@ func setGameTile(original: GameType, index: Int) ->GameType {
   return newOriginal
 }
 
+//TODO what is this used for does not work
 func setActive(original: GameType, firstIndex: Int, secondIndex: Int, active: ActiveType?) -> GameType {
   var newOriginal = original
-	newOriginal.data.active.append(ActiveType(xOne: 0, xTwo: 0, yOne: 0, yTwo: 0, firstIndex: 0, secondIndex: 0))
+  newOriginal.data.active.append(ActiveType(xOne: 0, xTwo: 0, yOne: 0, yTwo: 0, gridIndex: 0))
   return newOriginal
 }
 
@@ -149,8 +150,7 @@ func TileButtonPress(
 							xTwo: 2,
 							yOne: y,
 							yTwo: y,
-							firstIndex: Int(floor((Double(index % 9))/3)),
-							secondIndex: secondIndex
+              gridIndex: gridIndex
 						))
 					// TODO handle active
 				}
@@ -178,29 +178,27 @@ func TileButtonPress(
 							xTwo: xPos,
 							yOne: 0,
 							yTwo: 2,
-							firstIndex: Int(floor((Double(index % 9))/3)),
-							secondIndex: secondIndex
+              gridIndex: gridIndex
 						))
 				}
 			}
 			
-			//Check Diagnal Left Right
+			//Check Diagnal Right Left
 			let lrBaseIndex = getLRBaseIndex(index: index)
 			if (newGame.data.inner[lrBaseIndex] == newGame.data.inner[lrBaseIndex + 10] && newGame.data.inner[lrBaseIndex + 10] == newGame.data.inner[lrBaseIndex + 20] && newGame.data.inner[lrBaseIndex] != gridStateMode.open) {
 				change = true
 				newGame.data.value[gridIndex] = currentTurn
 				newGame.data.active.append(
 					ActiveType(
-						xOne: 0,
-						xTwo: 2,
-						yOne: 0,
-						yTwo: 2,
-						firstIndex: Int(floor((Double(index % 9))/3)),
-						secondIndex: Int(floor(Double(index)/27.0))
+						xOne: 2,
+						xTwo: 0,
+						yOne: 2,
+						yTwo: 0,
+            gridIndex: gridIndex
 					))
 			}
 			
-			//Check Diagnal Right Left
+			//Check Diagnal Left Right
 			let rlBaseIndex = getLRBaseIndex(index: index) + 2
 			if (newGame.data.inner[rlBaseIndex] == newGame.data.inner[rlBaseIndex + 8] && newGame.data.inner[rlBaseIndex + 8] == newGame.data.inner[rlBaseIndex + 16] && newGame.data.inner[rlBaseIndex] != gridStateMode.open) {
 				change = true
@@ -208,12 +206,11 @@ func TileButtonPress(
 				print("Set value right left")
 				newGame.data.active.append(
 					ActiveType(
-						xOne: 2,
-						xTwo: 0,
-						yOne: 2,
-						yTwo: 0,
-						firstIndex: Int(floor((Double(index % 9))/3)),
-						secondIndex: Int(floor(Double(index)/27.0))
+						xOne: 0,
+						xTwo: 2,
+						yOne: 0,
+						yTwo: 2,
+            gridIndex: gridIndex
 					))
 			}
 			if (!change){
@@ -233,7 +230,7 @@ func TileButtonPress(
 					}
 				}
 				if (full) {
-					newGame.data.value[tileIndex] = gridStateMode.full
+					newGame.data.value[tileIndex - 1] = gridStateMode.full
 					change = true
 				}
 			}

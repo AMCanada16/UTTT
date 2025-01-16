@@ -22,9 +22,9 @@ struct GameStatsView: View {
       VStack {
         GeometryReader { geometry in
           VStack {
-              Button(action: goHome) {
-                  Text("Back")
-              }
+            Button(action: goHome) {
+              Text("Back")
+            }
             Text("Game Id: \(game.gameId)")
               .foregroundStyle(.white)
             Text("Owner: \(game.owner)")

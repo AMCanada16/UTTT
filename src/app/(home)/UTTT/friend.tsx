@@ -3,11 +3,11 @@
   Andrew Mainella
   22 September 2024
 */
+import { router } from 'expo-router'
 import React from 'react'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../../redux/store'
-import { router } from 'expo-router'
 import SelectStorageGames from '../../../components/SelectStorageGame'
 
 export default function friend() {

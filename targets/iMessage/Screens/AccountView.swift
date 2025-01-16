@@ -13,6 +13,7 @@ struct AccountView: View {
   @Binding var mode: ViewType
   @State var isLoading: Bool = false
   @State var username: String = ""
+  @State var onlineStats: OnlineStatsType? = nil
   
   func loadAccount() async {
     guard let currentUser = Auth.auth().currentUser else {
@@ -45,11 +46,12 @@ struct AccountView: View {
           HStack {
             Spacer()
             Button(action: goBack) {
-              Image(systemName: "chevron.left")
+              Image(systemName: "arrowshape.backward.circle")
                 .resizable()
-                .foregroundColor(.white)
-                .aspectRatio(contentMode: .fit)
+                .frame(width: 40, height: 40)
+                .foregroundStyle(.white)
             }
+            Spacer()
             Image("Logo")
               .resizable()
               .frame(width: 35, height: 35)
@@ -83,25 +85,100 @@ struct AccountView: View {
               .font(Font.custom("RussoOne", size: 30))
               .shadow(color: Color(UIColor(hex: "#FF5757ff")!), radius: 25)
               .foregroundColor(Color(UIColor(hex: "#ff9c9cff")!))
-          }
-          Image(systemName: "person.crop.circle")
-          Text(username)
-          HStack {
-            VStack {
-              
-            }.frame(width: (geometry.size.width-45)/2, height: (geometry.size.height - 100)/2).background(Color.white)
-            VStack {
-              
-            }.frame(width: (geometry.size.width-45)/2, height: (geometry.size.height - 100)/2).background(Color.white)
+            Spacer()
           }
           HStack {
-            VStack {
-              
-            }.frame(width: (geometry.size.width-45)/2, height: (geometry.size.height - 100)/2).background(Color.white)
-            VStack {
-              
-            }.frame(width: (geometry.size.width-45)/2, height: (geometry.size.height - 100)/2).background(Color.white)
+            Image(systemName: "person.crop.circle")
+              .foregroundStyle(.white)
+            Text(username)
+              .font(.custom("RussoOne", size: 25))
+              .foregroundStyle(.white)
           }
+          let containerHeight = (geometry.size.height - (100 + geometry.safeAreaInsets.bottom))/2
+          HStack {
+            HStack {
+              if (onlineStats == nil) {
+                ProgressView()
+              } else {
+                Image("controller")
+                  .resizable()
+                  .aspectRatio(contentMode: .fit)
+                  .padding(.vertical)
+                Text(onlineStats!.gamesPlayed.description)
+                  .padding(.leading, 5)
+                  .padding(.vertical)
+                  .font(.custom("Ultimate", size: 25))
+              }
+            }.frame(width: (geometry.size.width-45)/2, height: containerHeight)
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 5))
+            .overlay(
+                RoundedRectangle(cornerRadius: 5)
+                    .stroke(.black, lineWidth: 1)
+            )
+            HStack {
+              if (onlineStats == nil) {
+                ProgressView()
+              } else {
+                Image("crown")
+                  .resizable()
+                  .aspectRatio(contentMode: .fit)
+                  .padding(.vertical)
+                Text(onlineStats!.gamesWon.description)
+                  .padding(.leading, 5)
+                  .padding(.vertical)
+                  .font(.custom("Ultimate", size: 25))
+              }
+            }.frame(width: (geometry.size.width-45)/2, height: containerHeight)
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 5))
+            .overlay(
+                RoundedRectangle(cornerRadius: 5)
+                    .stroke(.black, lineWidth: 1)
+            )
+          }
+          HStack {
+            HStack {
+              if (onlineStats == nil) {
+                ProgressView()
+              } else {
+                Image("skull")
+                  .resizable()
+                  .aspectRatio(contentMode: .fit)
+                  .padding(.vertical)
+                Text(onlineStats!.gamesLost.description)
+                  .padding(.leading, 5)
+                  .padding(.vertical)
+                  .font(.custom("Ultimate", size: 25))
+              }
+            }.frame(width: (geometry.size.width-45)/2, height: containerHeight)
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 5))
+            .overlay(
+                RoundedRectangle(cornerRadius: 5)
+                    .stroke(.black, lineWidth: 1)
+            )
+            HStack {
+              if (onlineStats == nil) {
+                ProgressView()
+              } else {
+                Image("activity")
+                  .resizable()
+                  .aspectRatio(contentMode: .fit)
+                  .padding(.vertical)
+                Text(onlineStats!.activeGames.description)
+                  .padding(.leading, 5)
+                  .padding(.vertical)
+                  .font(.custom("Ultimate", size: 25))
+              }
+            }.frame(width: (geometry.size.width-45)/2, height: containerHeight)
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 5))
+            .overlay(
+                RoundedRectangle(cornerRadius: 5)
+                    .stroke(.black, lineWidth: 1)
+            )
+          }.padding(.bottom, geometry.safeAreaInsets.bottom)
         }.frame(width: geometry.size.width, height: geometry.size.height)
       }
     }
@@ -110,6 +187,9 @@ struct AccountView: View {
     .onAppear() {
       Task {
         await loadAccount()
+      }
+      Task {
+        onlineStats = await Users().getOnlineGameStats()
       }
     }
   }

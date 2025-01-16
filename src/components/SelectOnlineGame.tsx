@@ -9,7 +9,7 @@ import { RootState } from "../redux/store"
 import { useSelector } from "react-redux"
 import useUsernameExists from "../hooks/useUsernameExists"
 import useIsConnected from "../hooks/useIsConnected"
-import { createNewGame, getInvitationsCount, getOnlineGames } from "../functions/OnlineFunctions"
+import { createGame, getInvitationsCount, getOnlineGames } from "../functions/OnlineFunctions"
 import { emptyGame, gridStateMode, joinRulesArray, loadingState } from "../Types"
 import { auth, db } from "../firebase"
 import { ActivityIndicator, Pressable, View, Text, TextInput, Modal, FlatList } from "react-native"
@@ -22,6 +22,7 @@ import { getFriends } from "../functions/UserFunctions"
 import { DeleteText } from "./AccountPage"
 import { deleteDoc, doc } from "firebase/firestore"
 import useIsAuth from "../hooks/useIsAuth"
+import React from "react"
 
 function DeleteGame({
   deleting,
@@ -104,7 +105,7 @@ export default function SelectOnlineGame({onClose}:{onClose: () => void}){
   async function createNew() {
     const uid = auth.currentUser?.uid
     if (uid !== undefined) {
-      const result = await createNewGame(emptyGame, gridStateMode.x, uid)
+      const result = await createGame(emptyGame, gridStateMode.x, uid)
       if (result !== null){
         router.push("/UTTT/online/"+result)
       }

@@ -5,7 +5,6 @@
 import { Unsubscribe, collection, doc, endAt, onSnapshot, orderBy, query, startAt, where } from "firebase/firestore"
 import { useEffect, useState } from "react"
 import { auth, db } from "../firebase"
-import { getFriends } from "../functions/UserFunctions"
 import { loadingState } from "../Types"
 
 /*

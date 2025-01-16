@@ -17,7 +17,7 @@ func getLength(width: CGFloat, height: CGFloat) -> CGFloat {
 
 struct MainGame: View {
   @Binding var mode: ViewType
-  @EnvironmentObject var currentGame: UseGame
+  @EnvironmentObject var useGame: UseGame
   
   func goToAccount() {
     mode = ViewType.account
@@ -31,6 +31,24 @@ struct MainGame: View {
     mode = ViewType.home
   }
   
+  func makeMove() {
+    switch useGame.currentGame {
+    case .game(let currentGame):
+      useGame.previousGameState = nil
+      Task {
+        // TODO adding some loading funcionality
+        await Game().updateGame(game: currentGame)
+      }
+    default:
+      return
+    }
+  }
+  
+  func goBack() {
+    useGame.currentGame = .game(useGame.previousGameState!)
+    useGame.previousGameState = nil
+  }
+  
   var body: some View {
     GeometryReader {geometry in
       let length = getLength(width: geometry.size.width, height: geometry.size.height - geometry.safeAreaInsets.bottom)
@@ -39,33 +57,33 @@ struct MainGame: View {
         HStack {
           VStack (spacing: 5) {
             HStack (spacing: 5) {
-              TickTackToe(currentGame: currentGame, gridIndex: 0)
+              TickTackToe(gridIndex: 0)
                 .frame(width: tileLength, height: tileLength)
-              TickTackToe(currentGame: currentGame, gridIndex: 1)
+              TickTackToe(gridIndex: 1)
                 .frame(width: tileLength, height: tileLength)
-              TickTackToe(currentGame: currentGame, gridIndex: 2)
-                .frame(width: tileLength, height: tileLength)
-            }
-            HStack (spacing: 5) {
-              TickTackToe(currentGame: currentGame, gridIndex: 3)
-                .frame(width: tileLength, height: tileLength)
-              TickTackToe(currentGame: currentGame, gridIndex: 4)
-                .frame(width: tileLength, height: tileLength)
-              TickTackToe(currentGame: currentGame, gridIndex: 5)
+              TickTackToe(gridIndex: 2)
                 .frame(width: tileLength, height: tileLength)
             }
             HStack (spacing: 5) {
-              TickTackToe(currentGame: currentGame, gridIndex: 6)
+              TickTackToe(gridIndex: 3)
                 .frame(width: tileLength, height: tileLength)
-              TickTackToe(currentGame: currentGame, gridIndex: 7)
+              TickTackToe(gridIndex: 4)
                 .frame(width: tileLength, height: tileLength)
-              TickTackToe(currentGame: currentGame, gridIndex: 8)
+              TickTackToe(gridIndex: 5)
+                .frame(width: tileLength, height: tileLength)
+            }
+            HStack (spacing: 5) {
+              TickTackToe(gridIndex: 6)
+                .frame(width: tileLength, height: tileLength)
+              TickTackToe(gridIndex: 7)
+                .frame(width: tileLength, height: tileLength)
+              TickTackToe(gridIndex: 8)
                 .frame(width: tileLength, height: tileLength)
             }
           }.frame(width: length, height: length).background(Color.primary)
           VStack {
-            if (currentGame.madeMove) {
-              Button(action: goToAccount) {
+            if (useGame.previousGameState != nil) {
+              Button(action: goBack) {
                 Image(systemName: "xmark.circle.fill")
                   .resizable()
                   .frame(width: 50, height: 50)
@@ -73,7 +91,7 @@ struct MainGame: View {
                   .aspectRatio(contentMode: .fit)
               }
               
-              Button(action: goToAccount) {
+              Button(action: makeMove) {
                 Image(systemName: "arrow.up.circle.fill")
                   .resizable()
                   .frame(width: 50, height: 50)
@@ -106,6 +124,14 @@ struct MainGame: View {
           }
         }
       }.frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onAppear() {
+          guard let currentGame = Game().getGame(state: useGame.currentGame) else {
+            return
+          }
+          if (currentGame.users.count < 2) {
+            mode = ViewType.waitToJoin
+          }
+        }
     }.background(Color.primary)
   }
 }
@@ -114,27 +140,63 @@ struct WaitForPlayer: View {
   var body: some View {
     VStack {
       Text("Waiting for other player.")
+    }.frame(maxWidth: .infinity, maxHeight: .infinity)
+    .background(Color.primary)
+  }
+}
+
+struct LoadingView: View {
+  @Binding var mode: ViewType
+  
+  func goBack() {
+    mode = ViewType.home
+  }
+  
+  var body: some View {
+    ZStack {
+      VStack() {
+        HStack {
+          ProgressView()
+            .tint(.white)
+          Text("Loading Game...")
+            .foregroundStyle(.white)
+        }
+      }.frame(maxWidth: .infinity, maxHeight: .infinity)
+      .background(Color.primary)
+      VStack {
+        HStack {
+          Button(action: goBack) {
+            Image(systemName: "arrowshape.backward.circle")
+              .resizable()
+              .frame(width: 40, height: 40)
+              .foregroundStyle(.white)
+          }
+          .padding(.leading, 15)
+          .padding(.top, 15)
+          Spacer()
+        }
+        Spacer()
+      }
     }
   }
 }
 
 struct GameView: View {
   @Binding var mode: ViewType
-  @EnvironmentObject var currentGame: UseGame
+  @EnvironmentObject var useGame: UseGame
   let addMessage: () -> Void
   
-  
 	var body: some View {
-    switch currentGame.currentGame {
+    switch useGame.currentGame {
     case .error:
       Text("Something went wrong")
     case .loading:
-      Text("Loading")
+      LoadingView(mode: $mode)
     case .game(let currentGame):
-      if (Game().isCurrentUsersTurn(game: currentGame, uid: Auth.auth().currentUser?.uid ?? "")) {
+      if (Game().isCurrentUsersTurn(game: currentGame, uid: Auth.auth().currentUser?.uid ?? "") || useGame.previousGameState != nil) {
         MainGame(mode: $mode)
       } else {
-        
+        WaitForPlayer()
       }
     }
 	}

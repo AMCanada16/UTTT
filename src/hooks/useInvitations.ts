@@ -1,9 +1,8 @@
-import { where } from 'firebase/firestore';
 /*
   UTTT
   Andrew Mainella
 */
-import { collection, doc, endAt, onSnapshot, orderBy, query, startAt } from "firebase/firestore"
+import { collection, endAt, onSnapshot, orderBy, query, startAt, where } from "firebase/firestore"
 import { useEffect, useState } from "react"
 import { auth, db } from "../firebase"
 import { getFriends } from "../functions/UserFunctions"

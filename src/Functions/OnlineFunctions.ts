@@ -16,7 +16,7 @@ import { gridStateMode, loadingState } from '../Types';
  * @param userUid The useruid of the player creating the game.
  * @returns nothing on failure and the game id of the newly created game.
  */
-export async function createNewGame(gameSate: DimentionalType, playerMode: gridStateMode, userUid: string): Promise<string | null> {
+export async function createGame(gameSate: DimentionalType, playerMode: gridStateMode, userUid: string): Promise<string | null> {
   var date = new Date();
   const randomId = Math.floor(1000000 + Math.random() * 9000000)
   try{
@@ -59,7 +59,7 @@ export async function updateGame(gameState: GameType): Promise<loadingState.fail
       date: new Date().toISOString(),
       gameOver: gameState.gameOver,
       data: gameState.data,
-      selectedGird: gameState.selectedGrid,
+      selectedGrid: gameState.selectedGrid,
       gameType: gameState.gameType,
       gameId: gameState.gameId
     })

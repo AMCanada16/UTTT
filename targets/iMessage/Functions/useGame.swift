@@ -28,15 +28,6 @@ enum gameState: Equatable {
 	}
 }
 
-struct innerValueActiveType: Codable {
-  var xOne: Int
-  var xTwo: Int
-  var yOne: Int
-  var yTwo: Int
-  var firstIndex: Int
-  var secondIndex: Int
-}
-
 struct compressedUserTypeRaw: Codable {
   var userId: String
   var player: Int
@@ -83,7 +74,7 @@ let emptyGame = [gridStateMode.open,gridStateMode.open,gridStateMode.open,
 
 class UseGame: ObservableObject {
   @Published var currentGame: gameState = gameState.loading
-  @Published var madeMove: Bool = false
+  @Published var previousGameState: GameType? = nil // If this is null no move has been made
   private var gameId: String = ""
   
   func followGame() {
@@ -100,7 +91,6 @@ class UseGame: ObservableObject {
         guard let data = document.data() else {
           return
         }
-        print("start")
         guard let currentTurnTemp = data["currentTurn"] as? Int, let currentTurn = gridStateMode(rawValue: currentTurnTemp) else {
           print("current Turn Error")
           return
@@ -111,6 +101,10 @@ class UseGame: ObservableObject {
         }
         guard let gameOverTemp = data["gameOver"] as? Int, let gameOver = gridStateMode(rawValue: gameOverTemp) else {
           print("gameOver Error")
+          return
+        }
+        guard let rawGameData = data["data"] as? [String:Any] else {
+          print("gameDataError")
           return
         }
         guard let rawGameData = data["data"] as? [String:Any] else {
@@ -129,14 +123,11 @@ class UseGame: ObservableObject {
           print("gameId Error")
           return
         }
-        
-        let decoder = JSONDecoder()
-
-        let tempUsers = try! decoder.decode([compressedUserTypeRaw].self, from:  try! JSONSerialization.data(withJSONObject: data["users"]!, options: []))
-        var users: [compressedUserType] = []
-        for user in tempUsers {
-          users.append(compressedUserType(userId: user.userId, player: gridStateMode(rawValue: user.player)!))
+        print(data["users"])
+        guard let users = try? Users().jsonToUsers(json: data) else {
+          return
         }
+        print("Users result", users)
         guard let joinRuleTemp = data["joinRule"] as? String, let joinRule = joinRules(rawValue: joinRuleTemp) else {
           print("joinRule Turn Error")
           return
@@ -150,7 +141,6 @@ class UseGame: ObservableObject {
           return
         }
         currentGame = gameState.game(GameType(currentTurn: currentTurn, date: date, gameOver: gameOver, data: gameData, selectedGrid: selectedGrid, gameId: gameId, users: users, joinRule: joinRule, invitations: invitations, owner: owner))
-        print("Decoded")
       } else {
         print("Document not found")
       }

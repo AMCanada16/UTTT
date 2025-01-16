@@ -41,7 +41,7 @@ func sha256(_ input: String) -> String {
   return hashString
 }
 
-
+// TODO implament function
 func signInWithGoogle() {
   return
 }
