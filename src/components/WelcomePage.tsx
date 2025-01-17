@@ -1,10 +1,10 @@
+import { useMemo } from "react";
+import { View, Image, Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
-import { View, Image, Text } from "react-native";
-import { Colors } from "../Types";
-import { useMemo } from "react";
-import BottomComponent from "./BottomComponent";
+import { RootState } from "@redux/store";
+import { Colors } from "@types";
+import BottomComponent from "@components/BottomComponent";
 
 function getImageLength(width: number, height: number) {
   if (width < height) {
@@ -34,15 +34,15 @@ function WelcomeImages() {
   return (
     <View style={{flexDirection: 'row'}}>
       <View style={{marginHorizontal: 5, marginLeft: (width - ((imageLength * 3) + 25))/2}}>
-        <Image source={require("../../assets/UTTT-Demo-Start.gif")} style={{width: imageLength, height: imageLength, overflow: 'hidden'}} />
+        <Image source={require("assets/UTTT-Demo-Start.gif")} style={{width: imageLength, height: imageLength, overflow: 'hidden'}} />
         <Text style={{textAlign: 'center', color: 'white', fontSize: Math.round(width * 0.01)}}>Play Tic Tac Toe inside Tic Tac Toe.</Text>
       </View>
       <View style={{marginHorizontal: 5}}>
-        <Image source={require("../../assets/UTTT-Demo-End.gif")} style={{width: imageLength, height: imageLength, overflow: 'hidden'}} />
+        <Image source={require("assets/UTTT-Demo-End.gif")} style={{width: imageLength, height: imageLength, overflow: 'hidden'}} />
         <Text style={{textAlign: 'center', color: 'white', fontSize: Math.round(width * 0.01)}}>Win the big game to win.</Text>
       </View>
       <View style={{marginHorizontal: 5}}>
-        <Image source={require("../../assets/UTTT-Demo-Ai.gif")} style={{width: imageLength, height: imageLength, overflow: 'hidden'}} />
+        <Image source={require("assets/UTTT-Demo-Ai.gif")} style={{width: imageLength, height: imageLength, overflow: 'hidden'}} />
         <Text style={{textAlign: 'center', color: 'white', fontSize: Math.round(width * 0.01)}}>Play Against AI</Text>
       </View>
     </View>

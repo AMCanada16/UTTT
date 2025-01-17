@@ -5,18 +5,18 @@
 */
 import { View, Text, Pressable, FlatList, ListRenderItemInfo, ActivityIndicator, TextInput, Platform } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { auth } from '../firebase';
+import { auth } from '@functions/firebase';
 import { Redirect, useRouter  } from 'expo-router';
 import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
-import { approveFriendRequest, requestFriend } from '../functions/UserFunctions';
-import DefaultButton from './DefaultButton';
+import { RootState } from '@redux/store';
+import { approveFriendRequest, requestFriend } from '@functions/UserFunctions';
+import DefaultButton from '@components/DefaultButton';
 import { CheckMarkIcon, ChevronLeft, CloseIcon, OfflineIcon, XIcon } from './Icons';
-import useFriends from '../hooks/useFriends';
-import OnlineComponent from './OnlineComponent';
+import useFriends from '@hooks/useFriends';
+import OnlineComponent from '@components/OnlineComponent';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
-import useIsConnected from '../hooks/useIsConnected';
-import useIsAuth from '../hooks/useIsAuth';
+import useIsConnected from '@hooks/useIsConnected';
+import useIsAuth from '@hooks/useIsAuth';
 
 function FriendButtonComponent({
   friend

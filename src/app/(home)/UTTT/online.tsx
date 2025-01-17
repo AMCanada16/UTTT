@@ -1,9 +1,9 @@
+import { router } from 'expo-router'
 import React from 'react'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'
-import { RootState } from '../../../redux/store'
-import SelectOnlineGame from '../../../components/SelectOnlineGame'
-import { router } from 'expo-router'
+import SelectOnlineGame from '@components/SelectOnlineGame'
+import { RootState } from '@redux/store'
 
 
 export default function index() {

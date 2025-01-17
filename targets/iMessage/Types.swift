@@ -77,3 +77,5 @@ enum GeneralError: Error {
 enum ViewType {
   case login, game, home, account, gameStats, gameOver, waitToJoin, info
 }
+
+typealias AddMessageType = (String) -> Void

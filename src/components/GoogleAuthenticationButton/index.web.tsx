@@ -1,6 +1,6 @@
 import { GoogleLogin } from "@react-oauth/google";
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
-import { auth } from "../../firebase";
+import { auth } from "@functions/firebase";
 
 export default function GoogleAuthenticationButton() {
   return (

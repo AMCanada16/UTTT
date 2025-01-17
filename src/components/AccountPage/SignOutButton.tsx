@@ -1,9 +1,8 @@
 import { useState } from "react"
-import { ActivityIndicator, View } from "react-native"
-import { ErrorCircleIcon, SignOutIcon } from "../Icons"
-import {Text} from "react-native"
-import { signOut } from '../../functions/AuthenticationFunctions'
-import DefaultButton from "../DefaultButton"
+import { ActivityIndicator, View, Text } from "react-native"
+import { ErrorCircleIcon, SignOutIcon } from "@components/Icons"
+import DefaultButton from "@components/DefaultButton"
+import { signOut } from '@functions/AuthenticationFunctions'
 
 export default function SignOutButton() {
   const [signOutLoading, setSignOutLoading] = useState<boolean>(false)

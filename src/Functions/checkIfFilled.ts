@@ -3,8 +3,8 @@
   Andrew Mainella
   September 2024
 */
-import { auth } from "../firebase"
-import { gridStateMode } from "../Types"
+import { auth } from "@functions/firebase"
+import { gridStateMode } from "@types"
 
 /**
  * Returns tue if the tile is filled meaning it is not open.

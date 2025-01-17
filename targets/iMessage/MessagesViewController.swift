@@ -61,8 +61,8 @@ class MessagesViewController: MSMessagesAppViewController {
         removeAllChildViewControllers()
         
         let controller: UIViewController
-        controller = UIHostingController(rootView: ViewController(addMessage: {
-          conversation.send(self.composeMessage(session: conversation.selectedMessage?.session))
+        controller = UIHostingController(rootView: ViewController(addMessage: { message in
+          conversation.send(self.composeMessage(session: conversation.selectedMessage?.session, caption: message))
         }).environment(currentMode))
         
         addChild(controller)
@@ -90,15 +90,15 @@ class MessagesViewController: MSMessagesAppViewController {
         }
     }
   
-    fileprivate func composeMessage(session: MSSession? = nil) -> MSMessage {
-        
-        let layout = MSMessageTemplateLayout()
-        layout.caption = "Do you want to join the game?"
-        
-        let message = MSMessage(session: session ?? MSSession())
-        message.layout = layout
-        
-        return message
+    fileprivate func composeMessage(session: MSSession? = nil, caption: String) -> MSMessage {
+      
+      let layout = MSMessageTemplateLayout()
+      layout.caption = caption
+      
+      let message = MSMessage(session: session ?? MSSession())
+      message.layout = layout
+      
+      return message
     }
 }
 

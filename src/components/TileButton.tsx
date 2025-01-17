@@ -5,11 +5,11 @@
 */
 import { useMemo } from "react"
 import { Pressable, useWindowDimensions } from "react-native"
-import TextAnimation from "./TextAnimation"
-import tileButtonPress from "../functions/tileButtonPress"
-import { gridStateMode, loadingState } from "../Types"
-import useCheckIfFilled from "../hooks/useCheckIfFilled"
-import getIndex from "../functions/getIndex"
+import TextAnimation from "@components/TextAnimation"
+import tileButtonPress from "@functions/tileButtonPress"
+import useCheckIfFilled from "@hooks/useCheckIfFilled"
+import getIndex from "@functions/getIndex"
+import { gridStateMode, loadingState } from "@types"
 
 export default function TileButton(
   {tileIndex, gridIndex, currentTurn, game, gameLength}:

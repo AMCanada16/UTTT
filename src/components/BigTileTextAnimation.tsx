@@ -5,7 +5,7 @@
 */
 import React, { useState } from 'react'
 import { View } from 'react-native'
-import TextAnimation from './TextAnimation'
+import TextAnimation from '@components/TextAnimation'
 
 /**
  * 

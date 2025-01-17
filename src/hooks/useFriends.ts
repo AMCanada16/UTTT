@@ -4,8 +4,8 @@
 */
 import { Unsubscribe, collection, doc, endAt, onSnapshot, orderBy, query, startAt, where } from "firebase/firestore"
 import { useEffect, useState } from "react"
-import { auth, db } from "../firebase"
-import { loadingState } from "../Types"
+import { auth, db } from "@functions/firebase"
+import { loadingState } from "@types"
 
 /*
   TO DO

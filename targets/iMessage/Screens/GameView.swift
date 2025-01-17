@@ -184,7 +184,7 @@ struct LoadingView: View {
 struct GameView: View {
   @Binding var mode: ViewType
   @EnvironmentObject var useGame: UseGame
-  let addMessage: () -> Void
+  let addMessage: AddMessageType
   
 	var body: some View {
     switch useGame.currentGame {

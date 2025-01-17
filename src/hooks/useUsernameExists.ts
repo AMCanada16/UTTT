@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { auth, db } from "../firebase";
-import { loadingState } from "../Types";
+import { auth, db } from "@functions/firebase";
+import { loadingState } from "@types";
 import { Unsubscribe, doc, onSnapshot } from "firebase/firestore";
 
 /**

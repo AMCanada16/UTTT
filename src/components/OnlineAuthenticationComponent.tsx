@@ -4,16 +4,15 @@
   May 8, 2024
   Authentication component used to play online games.
 */
-import { View, Text, Pressable } from 'react-native'
 import React from 'react'
-import { CloseIcon } from './Icons'
+import { View, Text, Pressable } from 'react-native'
 import { useSelector } from 'react-redux'
-import { RootState } from '../redux/store'
-import { signInAnonymously } from '../functions/AuthenticationFunctions'
-import AppleAuthenticationButton from './AppleAuthenticationButton'
-import DefaultButton from './DefaultButton'
-import GoogleAuthenticationButton from './GoogleAuthenticationButton'
-
+import { CloseIcon } from '@components/Icons'
+import AppleAuthenticationButton from '@components/AppleAuthenticationButton'
+import DefaultButton from '@components/DefaultButton'
+import GoogleAuthenticationButton from '@components/GoogleAuthenticationButton'
+import { signInAnonymously } from '@functions/AuthenticationFunctions'
+import { RootState } from '@redux/store'
 
 export default function OnlineAuthenticationComponent({
   onClose

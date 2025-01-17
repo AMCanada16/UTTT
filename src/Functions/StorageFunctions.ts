@@ -6,7 +6,7 @@
   Storage functions for the games.
 */
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { emptyGame, gridStateMode, loadingState } from '../Types';
+import { emptyGame, gridStateMode, loadingState } from '@types';
 
 /**
  * A function that creates a storage game.

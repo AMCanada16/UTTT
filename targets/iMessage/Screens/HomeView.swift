@@ -27,6 +27,10 @@ struct HomeView: View {
     
   }
   
+  func clearInput() {
+    input = ""
+  }
+  
   func createGame() {
     createGameState = loadingState.loading
     currentGame.currentGame = gameState.loading
@@ -97,17 +101,28 @@ struct HomeView: View {
           UTTTHeader()
           HStack(spacing: 0) {
             VStack {
-              TextField("Game ID", text: $input)
-                .lineLimit(1)
-                .padding(.horizontal)
-                .frame(height: 50)
-                .disableAutocorrection(true)
-                .background(.white)
-                .clipShape(.rect(cornerRadius: 8))
-                .overlay(
-                  RoundedRectangle(cornerRadius: 8)
-                    .stroke(.black, lineWidth: 1)
-                )
+              HStack {
+                TextField("Game ID", text: $input)
+                  .lineLimit(1)
+                  .disableAutocorrection(true)
+                  .frame(height: 30)
+                if (input != "") {
+                  Button(action: clearInput) {
+                    Image(systemName: "xmark.circle.fill")
+                      .resizable()
+                      .frame(width: 30, height: 30)
+                      .foregroundStyle(.black)
+                  }
+                }
+              }
+              .padding()
+              .background(.white)
+              .frame(height: 50)
+              .clipShape(.rect(cornerRadius: 8))
+              .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                  .stroke(.black, lineWidth: 1)
+              )
               HStack(spacing: 0) {
                 if (input.count != 0) {
                   Button(action: joinGame) {
@@ -123,15 +138,15 @@ struct HomeView: View {
                         .minimumScaleFactor(0.5)
                     }
                     .padding()
+                    .frame(width: ((geometry.size.width - 90) * 0.5) - 5, height: 50)
                     .background(Color.white)
-                    .frame(width: ((geometry.size.width - 90) * 0.5) - 2.5)
                     .clipShape(.rect(cornerRadius: 8))
                     .overlay( /// apply a rounded border
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(.black, lineWidth: 1)
                     )
+                    .padding(.trailing, 10)
                   }
-                  Spacer()
                 }
                 Button(action: createGame) {
                   HStack {
@@ -146,7 +161,7 @@ struct HomeView: View {
                       .minimumScaleFactor(0.5)
                   }
                   .padding()
-                  .frame(width: ((geometry.size.width - 90) * (input.count != 0 ? 0.45:1)) - (input.count != 0 ? 2.5:0))
+                  .frame(width: ((geometry.size.width - 90) * (input.count != 0 ? 0.5:1)) - (input.count != 0 ? 5:0), height: 50)
                   .background(Color.white)
                   .clipShape(.rect(cornerRadius: 8))
                   .overlay( /// apply a rounded border
@@ -154,8 +169,8 @@ struct HomeView: View {
                           .stroke(.black, lineWidth: 1)
                   )
                 }
-              }
-            }
+              }.frame(width:(geometry.size.width - 90))
+            }.frame(width:(geometry.size.width - 90))
             VStack {
               Button(action: goToInformation) {
                 Image(systemName: "info.circle")

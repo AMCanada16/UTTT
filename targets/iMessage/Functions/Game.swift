@@ -59,6 +59,7 @@ class Users {
       let wonGamesQuery = db.collection("Games").whereField("userWon", isEqualTo: uid).count
       let wonGamesResult = try await wonGamesQuery.getAggregation(source: .server)
       let gamesWon = wonGamesResult.count
+      print(gamesPlayed, activeGames, gamesWon)
       return OnlineStatsType(gamesPlayed: gamesPlayed.intValue, activeGames: activeGames.intValue, gamesWon: gamesWon.intValue, gamesLost: gamesPlayed.intValue - gamesWon.intValue)
     } catch {
       return nil

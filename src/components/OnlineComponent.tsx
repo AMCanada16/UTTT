@@ -3,8 +3,8 @@
   Andrew Mainella
   22 September 2024
 */
-import useUserOnline from "../hooks/useUserOnline"
-import { OfflineIcon, OnlineIcon } from "./Icons"
+import { OfflineIcon, OnlineIcon } from "@components/Icons"
+import useUserOnline from "@hooks/useUserOnline"
 
 export default function OnlineComponent({uid}:{uid: string}) {
   const isOnline = useUserOnline(uid)

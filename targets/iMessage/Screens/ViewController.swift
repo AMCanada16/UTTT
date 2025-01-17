@@ -12,7 +12,7 @@ import FirebaseAuth
 struct ViewController: View {
   @State var mode: ViewType = ViewType.game;
   @StateObject var currentGame = UseGame()
-  let addMessage: () -> Void
+  let addMessage: AddMessageType
   var body: some View {
     ZStack {
       if (mode == ViewType.login) {

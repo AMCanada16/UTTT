@@ -13,14 +13,16 @@ import FirebaseAuth
 struct WaitToJoin: View {
   @EnvironmentObject var useGame: UseGame
   @Binding var mode: ViewType
-  let addMessage: () -> Void
+  let addMessage: AddMessageType
+  @State var isCopied: Bool = false
   
   func copyGameId() {
     UIPasteboard.general.string = Game().getGame(state: useGame.currentGame)?.gameId ?? "No Game"
+    isCopied = true
   }
   
   func sendMessage() {
-    addMessage()
+    addMessage("Do you want to join the game?")
   }
   
   func goBack() {
@@ -35,31 +37,75 @@ struct WaitToJoin: View {
   }
   
   var body: some View {
-    VStack {
-      UTTTHeader()
-      HStack {
-        Button(action: goBack) {
-          Image(systemName: "arrowshape.backward.circle.fill")
-            .resizable()
-            .frame(width: 25, height: 25)
+    ZStack {
+      GeometryReader { geometry in
+        VStack {
+          UTTTHeader()
+          Text("Wait for other players to join. Invite more people!")
+            .font(.headline)
+            .foregroundStyle(.white)
+          HStack(spacing: 0) {
+            VStack{}.frame(width: geometry.size.width * 0.1 + 25)
+            Spacer()
+            VStack {
+//              HStack {
+//                Text("Game ID:")
+//                Spacer()
+//              }
+              HStack{
+                Text("Game ID:")
+                Button(action: copyGameId) {
+                  Image(systemName: isCopied ? "document.on.document.fill":"document.on.document")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 25, height: 25)
+                    .foregroundStyle(.black)
+                    
+                }
+                Text(Game().getGame(state: useGame.currentGame)?.gameId ?? "No Game")
+                  .font(.headline)
+              }
+            }
+            .padding()
+            .frame(width: geometry.size.width * 0.6)
+            .background(.white)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .overlay( /// apply a rounded border
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(.black, lineWidth: 1)
+            )
+            Spacer()
+            Button(action: sendMessage) {
+              Image(systemName: "message.circle.fill")
+                .resizable()
+                .frame(width: geometry.size.width * 0.1, height: geometry.size.width * 0.1)
+                .foregroundStyle(.white)
+            }
+            .padding(.trailing, 25)
+          }
         }
-        Button(action: copyGameId) {
-          Text("Copy")
+        .frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
+        .onChange(of: getUserCount(currentGame: useGame.currentGame), initial: true) { oldCount, newCount in
+          print("onChange Called \(newCount)")
+          if (newCount >= 2) {
+            mode = ViewType.game
+          }
         }
-      }
-      Text(Game().getGame(state: useGame.currentGame)?.gameId ?? "No Game")
-      Button(action: sendMessage) {
-        Image(systemName: "message.circle.fill")
-          .resizable()
-          .frame(width: 25, height: 25)
       }
     }
-    .frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
-    .onChange(of: getUserCount(currentGame: useGame.currentGame), initial: true) { oldCount, newCount in
-      print("onChange Called \(newCount)")
-      if (newCount >= 2) {
-        mode = ViewType.game
+    VStack {
+      HStack {
+        Button(action: goBack) {
+          Image(systemName: "arrowshape.backward.circle")
+            .resizable()
+            .frame(width: 40, height: 40)
+            .foregroundStyle(.white)
+        }
+        .padding(.leading, 15)
+        .padding(.top, 15)
+        Spacer()
       }
+      Spacer()
     }
   }
 }

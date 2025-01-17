@@ -3,18 +3,19 @@
   Andrew Mainella
   27 September 2024
 */
-import { useSelector } from "react-redux";
-import { addGame, getStorageGames } from "../functions/StorageFunctions";
-import { useEffect, useState } from "react";
-import store, { RootState } from "../redux/store";
 import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import { Pressable, View, Text, FlatList, Modal } from "react-native";
-import { CheckMarkIcon, ChevronLeft, CircleIcon, CloseIcon, TrashIcon } from "./Icons";
-import DefaultButton from "./DefaultButton";
-import { DeleteText } from "./AccountPage";
-import { loadingState } from "../Types";
-import { deleteGame as deleteStorageGame } from "../functions/StorageFunctions";
-import { aiHistorySlice } from "../redux/reducers/aiHistoryReducer";
+import { useSelector } from "react-redux";
+import { addGame, getStorageGames } from "@functions/StorageFunctions";
+import store, { RootState } from "@redux/store";
+import { CheckMarkIcon, ChevronLeft, CircleIcon, CloseIcon, TrashIcon } from "@components/Icons";
+import DefaultButton from "@components/DefaultButton";
+import { DeleteText } from "@components/AccountPage";
+import { deleteGame as deleteStorageGame } from "@functions/StorageFunctions";
+import { aiHistorySlice } from "@redux/reducers/aiHistoryReducer";
+import { loadingState } from "@types";
+import React from "react";
 
 function DeleteGame({
   deleting,

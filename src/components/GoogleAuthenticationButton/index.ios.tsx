@@ -4,9 +4,9 @@
   27 September 2024
 */
 import { Pressable, useWindowDimensions, View } from "react-native"
-import { GoogleIcon } from "../Icons"
+import { GoogleIcon } from "@components/Icons"
 import { Text } from "react-native"
-import signInWithGoogleiOS from "../../functions/signInWithGoogleiOS"
+import signInWithGoogleiOS from "@functions/signInWithGoogleiOS"
 
 export default function GoogleAuthenticationButton() {
   const {width} = useWindowDimensions()

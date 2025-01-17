@@ -7,9 +7,9 @@ import { View, Text, StyleSheet, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { ActiveIcon, ControllerIcon, CrownIcon, SkullIcon } from './Icons'
 import { useSelector } from 'react-redux'
-import { RootState } from '../redux/store'
-import { getOnlineGameStats } from '../functions/OnlineFunctions'
-import { loadingState } from '../Types'
+import { RootState } from '@redux/store'
+import { getOnlineGameStats } from '@functions/OnlineFunctions'
+import { loadingState } from '@types'
 
 const styles = StyleSheet.create({
   statComponent: {

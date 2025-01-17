@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { gridStateMode } from '../../Types';
+import { gridStateMode } from '@types';
 
 const initalState: GameType = {
   currentTurn: 0,

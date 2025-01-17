@@ -4,7 +4,6 @@
   22 September 2024
 */
 import React, { useEffect } from "react";
-import { StyleSheet } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedProps,
@@ -12,7 +11,7 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 import { Svg, Circle } from "react-native-svg";
-import { CircleIcon, XIcon } from "./Icons";
+import { CircleIcon, XIcon } from "@components/Icons";
 
 if (typeof window !== 'undefined') {
   // @ts-ignore

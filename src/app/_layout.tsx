@@ -6,7 +6,7 @@
 
 */
 
-import RootLayout from "../components/RootLayout";
+import RootLayout from "@components/RootLayout";
 
 /**
  * The the main function for the app holds providers.

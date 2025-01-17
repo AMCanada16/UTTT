@@ -4,13 +4,13 @@
 */
 import { doc, onSnapshot } from "firebase/firestore"
 import { useEffect, useState } from "react"
-import { auth, db } from "../firebase"
-import { joinGame } from "../functions/OnlineFunctions"
+import { auth, db } from "@functions/firebase"
+import { joinGame } from "@functions/OnlineFunctions"
 import { useSelector } from "react-redux"
-import store, { RootState } from "../redux/store"
-import { loadStorageGame, updateStorageGame } from "../functions/StorageFunctions"
-import { gameSlice } from "../redux/reducers/gameReducer"
-import { getUsername } from "../functions/UserFunctions"
+import store, { RootState } from "@redux/store"
+import { loadStorageGame, updateStorageGame } from "@functions/StorageFunctions"
+import { gameSlice } from "@redux/reducers/gameReducer"
+import { getUsername } from "@functions/UserFunctions"
 
 /**
  * A hook

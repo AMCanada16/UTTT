@@ -1,7 +1,7 @@
 import { onDisconnect, ref, set } from 'firebase/database';
-import { auth, database } from '../firebase';
-import { useEffect } from 'react';
 import { Timestamp } from 'firebase/firestore';
+import { useEffect } from 'react';
+import { auth, database } from '@functions/firebase';
 
 export default function useShareStatus() {
   useEffect(() => {

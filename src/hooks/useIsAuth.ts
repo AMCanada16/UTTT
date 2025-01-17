@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { auth } from "../firebase";
+import { auth } from "@functions/firebase";
 
 export default function useIsAuth() {
   const [isLoading, setIsLoading] = useState(true);

@@ -1,8 +1,8 @@
-import { Pressable, View } from 'react-native'
+import { Pressable } from 'react-native'
 import React from 'react'
-import { SignInWithApple } from '../Icons'
+import { SignInWithApple } from '@components/Icons'
 import { useSelector } from 'react-redux'
-import { RootState } from '../../redux/store'
+import { RootState } from '@redux/store'
 
 export default function AppleAuthenticationButton() {
   const { width } = useSelector((state: RootState) => state.dimensions)

@@ -4,10 +4,12 @@
     "strict": true,
     "paths": {
       "@firebase/auth": ["./node_modules/@firebase/auth/dist/index.rn.d.ts"],
-      "@components":["./src/components"],
-      "@functions":["./src/functions"],
-      "@hooks":["./src/hooks"],
-      "@redux":["./src/redux"],
+      "@components/*":["./src/components/*"],
+      "@functions/*":["./src/functions/*"],
+      "@hooks/*":["./src/hooks/*"],
+      "@redux/*":["./src/redux/*"],
+      "@types":["./src/types.ts"],
+      "assets/*":["./assets/*"]
     }
   }
 }

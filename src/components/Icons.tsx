@@ -6,7 +6,7 @@
 import React from "react";
 import { StyleProp, ViewStyle } from "react-native";
 import Svg, { G, Path, Rect, Shape, SvgProps } from "react-native-svg";
-import SVGXml from "./SVGXml";
+import SVGXml from "@components/SVGXml";
 
 type iconProps = {
   width: number;

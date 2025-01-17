@@ -1,9 +1,9 @@
 import React from 'react'
 import * as AppleAuthentication from 'expo-apple-authentication';
-import { auth } from '../../firebase';
+import { auth } from '@functions/firebase';
 import { OAuthProvider, signInWithCredential } from 'firebase/auth';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
+import { RootState } from '@redux/store';
 import { View } from 'react-native';
 
 export default function AppleAuthenticationButton() {

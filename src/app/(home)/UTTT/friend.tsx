@@ -7,8 +7,8 @@ import { router } from 'expo-router'
 import React from 'react'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'
-import { RootState } from '../../../redux/store'
-import SelectStorageGames from '../../../components/SelectStorageGame'
+import SelectStorageGames from '@components/SelectStorageGame'
+import { RootState } from '@redux/store'
 
 export default function friend() {
   const {height, width} = useSelector((state: RootState) => state.dimensions)

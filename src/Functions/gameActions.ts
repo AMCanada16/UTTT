@@ -4,10 +4,10 @@
   25 April 2024
 */
 import { doc, updateDoc } from "firebase/firestore";
-import { gameSlice } from "../redux/reducers/gameReducer";
-import store from "../redux/store";
-import { auth, db } from "../firebase";
-import { gridStateMode } from "../Types";
+import { gameSlice } from "@redux/reducers/gameReducer";
+import store from "@redux/store";
+import { auth, db } from "@functions/firebase";
+import { gridStateMode } from "@types";
 
 /**
  * Set the selected grid of the game

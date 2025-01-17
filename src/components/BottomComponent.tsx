@@ -7,8 +7,8 @@ import { View, Text, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'expo-router'
 import { useSelector } from 'react-redux'
-import { RootState } from '../redux/store'
-import GlitchComponent from './GlitchComponent'
+import { RootState } from '@redux/store'
+import GlitchComponent from '@components/GlitchComponent'
 
 enum collapsedMode {
   full, // all side by side

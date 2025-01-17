@@ -6,8 +6,8 @@
 import React from 'react'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'
-import { RootState } from '../../../redux/store'
-import FriendsPage from '../../../components/FriendsPage'
+import FriendsPage from '@components/FriendsPage'
+import { RootState } from '@redux/store'
 
 export default function index() {
   const {height, width} = useSelector((state: RootState) => state.dimensions)

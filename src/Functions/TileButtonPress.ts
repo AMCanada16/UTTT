@@ -12,7 +12,7 @@
 
 import { gameSlice } from "../redux/reducers/gameReducer";
 import store from "../redux/store";
-import { gridStateMode, loadingState } from "../Types";
+import { gridStateMode, loadingState } from "../types";
 import { perdict } from "./Ai/common";
 import indexToGridIndex from "./indexToGridIndex";
 import indexToTileIndex from "./indexToTileIndex";

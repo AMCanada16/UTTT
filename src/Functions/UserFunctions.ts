@@ -4,8 +4,8 @@
   22 September 2024
 */
 import { collection, getDoc, setDoc, updateDoc, where, query, getCountFromServer, doc, runTransaction  } from "firebase/firestore";
-import { db } from "../firebase";
-import { loadingState } from "../Types";
+import { db } from "./firebase";
+import { loadingState } from "@types";
 
 /**
  * Gets the username of a users provided the uid.

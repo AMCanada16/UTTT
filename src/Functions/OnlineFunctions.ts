@@ -5,9 +5,9 @@
   OnlineFunctions.ts
   Online game functions.
 */
-import { auth, db } from '../firebase';
+import { auth, db } from '@functions/firebase';
 import { and, collection, doc, getCountFromServer, getDocsFromServer, or, orderBy, query, runTransaction, updateDoc, where } from "firebase/firestore"
-import { gridStateMode, loadingState } from '../Types';
+import { gridStateMode, loadingState } from '@types';
 
 /**
  * Creates a new game online

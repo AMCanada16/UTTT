@@ -9,12 +9,12 @@ import { View, Text, Pressable, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { ChevronRight, CloseIcon, SignOutIcon } from './Icons'
 import { useSelector } from 'react-redux'
-import { RootState } from '../redux/store'
-import { addUser, checkIfUsernameValid } from '../functions/UserFunctions'
-import { auth } from '../firebase'
-import DefaultButton from './DefaultButton'
-import { signOut } from '../functions/AuthenticationFunctions'
-import { loadingState } from '../Types'
+import { RootState } from '@redux/store'
+import { addUser, checkIfUsernameValid } from '@functions/UserFunctions'
+import { auth } from '@functions/firebase'
+import DefaultButton from '@components/DefaultButton'
+import { signOut } from '@functions/AuthenticationFunctions'
+import { loadingState } from '@types'
 
 /**
  * A function to add a username if the account doesn't have one

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
-import checkIfFilled from "../functions/checkIfFilled"
-import store from "../redux/store"
+import checkIfFilled from "@functions/checkIfFilled"
 
 export default function useCheckIfFilled(
   game: GameType,

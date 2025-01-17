@@ -5,16 +5,16 @@
   _layout.tsx
 
 */
-import React, { useCallback, useEffect } from 'react';
-import { StatusBar, View, useWindowDimensions } from 'react-native';
-import store, { RootState } from '../redux/store';
-import { dimensionsSlice } from '../redux/reducers/dimensionsReducer';
-import {Provider, useSelector} from "react-redux"
 import { Slot, SplashScreen } from 'expo-router';
 import { useFonts } from 'expo-font';
 import Head from "expo-router/head"
-import useShareStatus from '../hooks/useShareStatus';
-import GoogleProvider from './GoogleProvider';
+import React, { useCallback, useEffect } from 'react';
+import { StatusBar, View, useWindowDimensions } from 'react-native';
+import {Provider, useSelector} from "react-redux"
+import store, { RootState } from '@redux/store';
+import { dimensionsSlice } from '@redux/reducers/dimensionsReducer';
+import useShareStatus from '@hooks/useShareStatus';
+import GoogleProvider from '@components/GoogleProvider';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -38,11 +38,11 @@ function App() {
   }, [dimensions.height, dimensions.width, height, width])
 
   const [fontsLoaded, fontError] = useFonts({
-    "RussoOne":require("../../assets/Fonts/RussoOne.ttf"),
-    "Ultimate":require("../../assets/Fonts/Ultimate.ttf"),
-    "BarlowCondensed":require("../../assets/Fonts/BarlowCondensed.ttf"),
-    "Glitch":require("../../assets/Fonts/Glitch.ttf"),
-    "Roboto":require("../../assets/Fonts/Roboto.ttf")
+    "RussoOne":require("assets/Fonts/RussoOne.ttf"),
+    "Ultimate":require("assets/Fonts/Ultimate.ttf"),
+    "BarlowCondensed":require("assets/Fonts/BarlowCondensed.ttf"),
+    "Glitch":require("assets/Fonts/Glitch.ttf"),
+    "Roboto":require("assets/Fonts/Roboto.ttf")
   });
 
   const onLayoutRootView = useCallback(async () => {

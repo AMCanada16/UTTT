@@ -10,8 +10,8 @@ import { bundleResourceIO } from '@tensorflow/tfjs-react-native';
 let model: tf.LayersModel | undefined
 
 export async function getModel() {
-  const modelJson = require('../../../assets/main.json');
-  const modelWeights = require('../../../assets/main.bin');
+  const modelJson = require('assets/main.json');
+  const modelWeights = require('assets/main.bin');
   
   const result = await tf.loadLayersModel(bundleResourceIO(modelJson, modelWeights))
   model = result
