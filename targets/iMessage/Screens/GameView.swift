@@ -16,19 +16,20 @@ func getLength(width: CGFloat, height: CGFloat) -> CGFloat {
 }
 
 struct MainGame: View {
-  @Binding var mode: ViewType
+  @EnvironmentObject var currentMode: CurrentMode
   @EnvironmentObject var useGame: UseGame
   
   func goToAccount() {
-    mode = ViewType.account
+    currentMode.previousMode = ViewType.game
+    currentMode.mode = ViewType.account
   }
 
   func goToGameStats() {
-    mode = ViewType.gameStats
+    currentMode.mode = ViewType.gameStats
   }
   
   func goToHome() {
-    mode = ViewType.home
+    currentMode.mode = ViewType.home
   }
   
   func makeMove() {
@@ -129,7 +130,7 @@ struct MainGame: View {
             return
           }
           if (currentGame.users.count < 2) {
-            mode = ViewType.waitToJoin
+            currentMode.mode = ViewType.waitToJoin
           }
         }
     }.background(Color.primary)
@@ -146,10 +147,10 @@ struct WaitForPlayer: View {
 }
 
 struct LoadingView: View {
-  @Binding var mode: ViewType
+  @EnvironmentObject var currentMode: CurrentMode
   
   func goBack() {
-    mode = ViewType.home
+    currentMode.mode = ViewType.home
   }
   
   var body: some View {
@@ -182,7 +183,6 @@ struct LoadingView: View {
 }
 
 struct GameView: View {
-  @Binding var mode: ViewType
   @EnvironmentObject var useGame: UseGame
   let addMessage: AddMessageType
   
@@ -191,10 +191,10 @@ struct GameView: View {
     case .error:
       Text("Something went wrong")
     case .loading:
-      LoadingView(mode: $mode)
+      LoadingView()
     case .game(let currentGame):
       if (Game().isCurrentUsersTurn(game: currentGame, uid: Auth.auth().currentUser?.uid ?? "") || useGame.previousGameState != nil) {
-        MainGame(mode: $mode)
+        MainGame()
       } else {
         WaitForPlayer()
       }

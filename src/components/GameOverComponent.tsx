@@ -3,14 +3,14 @@
   Andrew Mainella
   22 September 2024
 */
+import { useRouter } from 'expo-router'
 import { View, Text } from 'react-native'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import { Colors, gridStateMode } from '@types'
 import DefaultButton from '@components/DefaultButton'
-import { ChevronLeft, CircleIcon, XIcon } from './Icons'
-import { useRouter } from 'expo-router'
+import { ChevronLeft, CircleIcon, XIcon } from '@components/Icons'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 function getFontSize(width: number, height: number) {

@@ -10,38 +10,38 @@ import Firebase
 import FirebaseAuth
 
 struct ViewController: View {
-  @State var mode: ViewType = ViewType.game;
+  @EnvironmentObject var currentMode: CurrentMode
   @StateObject var currentGame = UseGame()
   let addMessage: AddMessageType
   var body: some View {
     ZStack {
-      if (mode == ViewType.login) {
+      if (currentMode.mode == ViewType.login) {
         LoginView()
-      } else if (mode == ViewType.game) {
-        GameView(mode: $mode, addMessage: addMessage)
+      } else if (currentMode.mode == ViewType.game) {
+        GameView(addMessage: addMessage)
           .environmentObject(currentGame)
-      } else if (mode == ViewType.account) {
-        AccountView(mode: $mode)
-      } else if (mode == ViewType.gameOver) {
-        
-      } else if (mode == ViewType.home) {
-        HomeView(mode: $mode)
+      } else if (currentMode.mode == ViewType.account) {
+        AccountView()
+      } else if (currentMode.mode == ViewType.gameOver) {
+        GameOverView()
+      } else if (currentMode.mode == ViewType.home) {
+        HomeView()
           .environmentObject(currentGame)
-      } else if (mode == ViewType.gameStats) {
-        GameStatsView(mode: $mode)
+      } else if (currentMode.mode == ViewType.gameStats) {
+        GameStatsView()
           .environmentObject(currentGame)
-      } else if (mode == ViewType.waitToJoin) {
-        WaitToJoin(mode: $mode, addMessage: addMessage)
+      } else if (currentMode.mode == ViewType.waitToJoin) {
+        WaitToJoin(addMessage: addMessage)
           .environmentObject(currentGame)
-      } else if (mode == ViewType.info) {
-        InfoView(mode: $mode)
+      } else if (currentMode.mode == ViewType.info) {
+        InfoView()
       }
     }.onAppear() {
       Auth.auth().addStateDidChangeListener { auth, user in
-        if (user != nil && mode == ViewType.login) {
-          mode = ViewType.home
+        if (user != nil && currentMode.mode == ViewType.login) {
+          currentMode.mode = ViewType.home
         } else if (user == nil) {
-          mode = ViewType.login
+          currentMode.mode = ViewType.login
         }
       }
     }

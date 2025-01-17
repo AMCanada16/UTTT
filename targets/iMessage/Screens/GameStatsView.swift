@@ -9,11 +9,11 @@ import SwiftUI
 import FirebaseAuth
 
 struct GameStatsView: View {
-  @Binding var mode: ViewType
+  @EnvironmentObject var currentMode: CurrentMode
   @EnvironmentObject var useGame: UseGame
   
   func goHome() {
-    mode = ViewType.game
+    currentMode.mode = ViewType.game
   }
   
   var body: some View {
@@ -59,7 +59,7 @@ struct GameStatsView: View {
       }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
     default:
       VStack {}.onAppear() {
-        mode = ViewType.game
+        currentMode.mode = ViewType.game
       }
     }
   }

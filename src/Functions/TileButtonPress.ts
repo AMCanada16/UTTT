@@ -10,15 +10,15 @@
     Also, this function will first make a move the user makes. Then it will update the state and let the ai move. It will then finally wait for the ai to make the final move.
 */
 
-import { gameSlice } from "../redux/reducers/gameReducer";
-import store from "../redux/store";
-import { gridStateMode, loadingState } from "../types";
-import { perdict } from "./Ai/common";
-import indexToGridIndex from "./indexToGridIndex";
-import indexToTileIndex from "./indexToTileIndex";
-import { updateGame } from "./OnlineFunctions";
-import pickTile from "./pickTile";
-import { updateStorageGame } from "./StorageFunctions";
+import { perdict } from "@functions/Ai/common";
+import indexToGridIndex from "@functions/indexToGridIndex";
+import indexToTileIndex from "@functions/indexToTileIndex";
+import { updateGame } from "@functions/OnlineFunctions";
+import pickTile from "@functions/pickTile";
+import { updateStorageGame } from "./storageFunctions";
+import { gameSlice } from "@redux/reducers/gameReducer";
+import store from "@redux/store";
+import { gridStateMode, loadingState } from "@types";
 
 /**
  * 

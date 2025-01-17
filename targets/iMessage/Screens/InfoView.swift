@@ -10,19 +10,34 @@ import Firebase
 import FirebaseAuth
 
 struct InfoView: View {
-  @Binding var mode: ViewType
+  @EnvironmentObject var currentMode: CurrentMode
   
   func goBack() {
-    mode = ViewType.home
+    currentMode.mode = ViewType.home
   }
   
   var body: some View {
-    VStack {
-      Button(action: goBack) {
-        Image(systemName: "arrowshape.backward.circle")
-          .resizable()
+    ZStack {
+      GeometryReader { geometry in
+        VStack {
+          UTTTHeader()
+          Text("Info about the gamr")
       }
-      
-    }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
+    }
+    VStack {
+      HStack {
+        Button(action: goBack) {
+          Image(systemName: "arrowshape.backward.circle")
+            .resizable()
+            .frame(width: 40, height: 40)
+            .foregroundStyle(.white)
+        }
+        .padding(.leading, 15)
+        .padding(.top, 15)
+        Spacer()
+      }
+      Spacer()
+    }
+  }
   }
 }

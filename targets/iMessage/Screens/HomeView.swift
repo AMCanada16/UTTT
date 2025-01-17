@@ -9,18 +9,19 @@ import SwiftUI
 import FirebaseAuth
 
 struct HomeView: View {
-  @Binding var mode: ViewType
+  @EnvironmentObject var currentMode: CurrentMode
   @EnvironmentObject var currentGame: UseGame
   @State var input: String = ""
   @State var cJoinGameState: joinGameState = joinGameState.notStarted
   @State var createGameState: loadingState = loadingState.notStarted
   
   func goToInformation() {
-    mode = ViewType.info
+    currentMode.mode = ViewType.info
   }
   
   func goToAccount() {
-    mode = ViewType.account
+    currentMode.mode = ViewType.account
+    currentMode.previousMode = ViewType.home
   }
   
   func goToApp() {
@@ -36,7 +37,7 @@ struct HomeView: View {
     currentGame.currentGame = gameState.loading
     Task {
       guard let uid = Auth.auth().currentUser?.uid else {
-        mode = ViewType.login
+        currentMode.mode = ViewType.login
         return
       }
       guard let result = await Game().createGame(uid: uid) else {
@@ -45,7 +46,7 @@ struct HomeView: View {
       }
       createGameState = loadingState.success
       currentGame.updateGameId(gameId: result)
-      mode = ViewType.waitToJoin
+      currentMode.mode = ViewType.waitToJoin
     }
   }
   
@@ -58,13 +59,13 @@ struct HomeView: View {
       currentGame.currentGame = gameState.loading
       currentGame.updateGameId(gameId: input)
       guard let uid = Auth.auth().currentUser?.uid else {
-        mode = ViewType.login
+        currentMode.mode = ViewType.login
         return
       }
       let result = await Game().joinGame(gameId: input, uid: uid)
       cJoinGameState = result
       if (result == joinGameState.success) {
-        mode = ViewType.game
+        currentMode.mode = ViewType.game
       }
     }
   }

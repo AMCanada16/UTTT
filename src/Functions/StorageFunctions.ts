@@ -2,8 +2,8 @@
   UTTT
   Andrew Mainella
   8 May 2024
-  StorageFunctions.ts
-  Storage functions for the games.
+  storageFunctions.ts
+  Storage functions for the games. This deals with local storage.
 */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { emptyGame, gridStateMode, loadingState } from '@types';

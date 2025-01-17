@@ -10,7 +10,7 @@ import Firebase
 import FirebaseAuth
 
 struct AccountView: View {
-  @Binding var mode: ViewType
+  @EnvironmentObject var currentMode: CurrentMode
   @State var isLoading: Bool = false
   @State var username: String = ""
   @State var onlineStats: OnlineStatsType? = nil
@@ -36,7 +36,11 @@ struct AccountView: View {
   }
   
   func goBack() {
-    mode = ViewType.game
+    if (currentMode.previousMode == ViewType.game) {
+      currentMode.mode = ViewType.game
+    } else {
+      currentMode.mode = ViewType.home
+    }
   }
   
   var body: some View {

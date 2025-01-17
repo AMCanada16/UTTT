@@ -8,7 +8,7 @@ import { auth, db } from "@functions/firebase"
 import { joinGame } from "@functions/OnlineFunctions"
 import { useSelector } from "react-redux"
 import store, { RootState } from "@redux/store"
-import { loadStorageGame, updateStorageGame } from "@functions/StorageFunctions"
+import { loadStorageGame, updateStorageGame } from "@functions/storageFunctions"
 import { gameSlice } from "@redux/reducers/gameReducer"
 import { getUsername } from "@functions/UserFunctions"
 

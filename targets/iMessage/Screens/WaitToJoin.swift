@@ -12,7 +12,7 @@ import FirebaseAuth
 
 struct WaitToJoin: View {
   @EnvironmentObject var useGame: UseGame
-  @Binding var mode: ViewType
+  @EnvironmentObject var currentMode: CurrentMode
   let addMessage: AddMessageType
   @State var isCopied: Bool = false
   
@@ -26,7 +26,7 @@ struct WaitToJoin: View {
   }
   
   func goBack() {
-    mode = ViewType.home
+    currentMode.mode = ViewType.home
   }
   
   func getUserCount(currentGame: gameState) -> Int {
@@ -48,10 +48,6 @@ struct WaitToJoin: View {
             VStack{}.frame(width: geometry.size.width * 0.1 + 25)
             Spacer()
             VStack {
-//              HStack {
-//                Text("Game ID:")
-//                Spacer()
-//              }
               HStack{
                 Text("Game ID:")
                 Button(action: copyGameId) {
@@ -88,7 +84,7 @@ struct WaitToJoin: View {
         .onChange(of: getUserCount(currentGame: useGame.currentGame), initial: true) { oldCount, newCount in
           print("onChange Called \(newCount)")
           if (newCount >= 2) {
-            mode = ViewType.game
+            currentMode.mode = ViewType.game
           }
         }
       }
