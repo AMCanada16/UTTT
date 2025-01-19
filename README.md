@@ -1,6 +1,9 @@
 # UTTT
 React Native Ultimate Tic Tac Toe
 
+## Note when building
+Make sure that Stickers Icon Role in Build Settings is set to Extension
+
 ## Stack
 Framework
 Expo

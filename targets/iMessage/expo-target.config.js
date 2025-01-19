@@ -1,4 +1,10 @@
 /** @type {import('@bacons/apple-targets/app.plugin').ConfigFunction} */
 module.exports = config => ({
-  type: "imessage"
-});
+  type: "imessage",
+  frameworks: [
+    "Messages",
+    "SwiftUI"
+  ],
+  name: "Ultimate Tic Tac Toe",
+}
+);

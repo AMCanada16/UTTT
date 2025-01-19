@@ -2,8 +2,8 @@ import { initializeApp, getApp, getApps, FirebaseOptions } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { initializeAuth, getReactNativePersistence, getAuth, Auth } from "firebase/auth"
 import { getDatabase } from "firebase/database";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const firebaseConfig: FirebaseOptions = {
     apiKey: "AIzaSyCCAWNKF8eHsynUew6iUSbj1RVW4IjTk8Q",
