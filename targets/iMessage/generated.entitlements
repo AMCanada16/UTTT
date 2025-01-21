@@ -10,5 +10,13 @@
 	<array>
 		<string>group.Archimedes4.UTTT</string>
 	</array>
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)Archimedes4.UTTT</string>
+		<string>$(AppIdentifierPrefix)*</string>
+		<string>$(AppIdentifierPrefix)UTTT:no-auth</string>
+		<string>$(AppIdentifierPrefix)Archimedes4.UTTT.iMessage 1</string>
+		<string>$(AppIdentifierPrefix)Archimedes4.UTTT.iMessage 2</string>
+	</array>
 </dict>
 </plist>

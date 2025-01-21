@@ -60,9 +60,11 @@ struct TicTacToeTile: View {
 		} label: {
 			VStack {
         if Game().getGame(state: useGame.currentGame)!.data.inner[index] == gridStateMode.o {
-					Text("O0")
+					Text("O")
+            .foregroundColor(Color(UIColor(hex: "#ff9c9cff")!))
 				} else if Game().getGame(state: useGame.currentGame)!.data.inner[index] == gridStateMode.x {
-					Text("X1")
+					Text("X")
+            .foregroundColor(Color(UIColor(hex: "#a0f4f7ff")!))
 				}
 			}.frame(width: length, height: length).background(Color.primary)
 		}

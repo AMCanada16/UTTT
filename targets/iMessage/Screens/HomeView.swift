@@ -15,6 +15,10 @@ struct HomeView: View {
   @State var cJoinGameState: joinGameState = joinGameState.notStarted
   @State var createGameState: loadingState = loadingState.notStarted
   
+  func clearJoinGameState() {
+    cJoinGameState = joinGameState.notStarted
+  }
+  
   func goToInformation() {
     currentMode.mode = ViewType.info
   }
@@ -87,10 +91,26 @@ struct HomeView: View {
           .foregroundStyle(.white)
       }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
     } else if (cJoinGameState == joinGameState.gameFull) {
-      VStack {
-        Text("The Game id Full!")
-          .foregroundStyle(.white)
-      }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
+      ZStack {
+        VStack {
+          Text("The Game is full!")
+            .foregroundStyle(.white)
+        }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
+        VStack {
+          HStack {
+            Button(action: clearJoinGameState) {
+              Image(systemName: "arrowshape.backward.circle")
+                .resizable()
+                .frame(width: 40, height: 40)
+                .foregroundStyle(.white)
+            }
+            .padding(.leading, 15)
+            .padding(.top, 15)
+            Spacer()
+          }
+          Spacer()
+        }
+      }
     } else if (createGameState == loadingState.loading) {
       VStack {
         Text("Creating the game!")

@@ -132,6 +132,13 @@ struct MainGame: View {
           if (currentGame.users.count < 2) {
             currentMode.mode = ViewType.waitToJoin
           }
+          if (currentGame.gameOver != gridStateMode.open) {
+            currentMode.mode = ViewType.gameOver
+          }
+        }.onChange(of: Game().getGame(state: useGame.currentGame)?.gameOver) { oldVal, newVal in
+          if (newVal != gridStateMode.open) {
+            currentMode.mode = ViewType.gameOver
+          }
         }
     }.background(Color.primary)
   }
@@ -140,7 +147,7 @@ struct MainGame: View {
 struct WaitForPlayer: View {
   var body: some View {
     VStack {
-      Text("Waiting for other player.")
+      Text("Waiting for other player to move.")
     }.frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(Color.primary)
   }

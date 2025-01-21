@@ -82,7 +82,6 @@ struct WaitToJoin: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
         .onChange(of: getUserCount(currentGame: useGame.currentGame), initial: true) { oldCount, newCount in
-          print("onChange Called \(newCount)")
           if (newCount >= 2) {
             currentMode.mode = ViewType.game
           }

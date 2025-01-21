@@ -24,6 +24,7 @@ struct ViewController: View {
         AccountView()
       } else if (currentMode.mode == ViewType.gameOver) {
         GameOverView()
+          .environmentObject(currentGame)
       } else if (currentMode.mode == ViewType.home) {
         HomeView()
           .environmentObject(currentGame)

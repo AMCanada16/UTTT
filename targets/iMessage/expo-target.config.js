@@ -4,7 +4,6 @@ module.exports = config => ({
   frameworks: [
     "Messages",
     "SwiftUI"
-  ],
-  name: "Ultimate Tic Tac Toe",
+  ]
 }
 );

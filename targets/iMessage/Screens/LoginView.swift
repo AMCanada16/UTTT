@@ -143,6 +143,11 @@ struct LoginView: View {
           }.frame(width: geometry.size.width, height: geometry.size.height)
         }
       }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
+        .onAppear() {
+          Task {
+            await getPersistance()
+          }
+        }
     }
 }
 

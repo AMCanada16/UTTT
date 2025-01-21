@@ -127,7 +127,6 @@ class UseGame: ObservableObject {
         guard let users = try? Users().jsonToUsers(json: data) else {
           return
         }
-        print("Users result", users)
         guard let joinRuleTemp = data["joinRule"] as? String, let joinRule = joinRules(rawValue: joinRuleTemp) else {
           print("joinRule Turn Error")
           return

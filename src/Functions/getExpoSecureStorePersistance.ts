@@ -76,15 +76,22 @@ export default function getExpoSecureStorePersistence(): Persistence {
     }
 
     _set(key: string, value: PersistenceValue): Promise<void> {
-      return SecureStore.setItemAsync(getKey(key), JSON.stringify(value));
+      console.log(key, value)
+      return SecureStore.setItemAsync(getKey(key), JSON.stringify(value), {
+        keychainService: "UTTT"
+      });
     }
 
     async _get<T extends PersistenceValue>(key: string): Promise<T | null> {
-      const json = await SecureStore.getItemAsync(getKey(key));
+      console.log("geeting", key)
+      const json = await SecureStore.getItemAsync(getKey(key), {
+        keychainService: "UTTT"
+      });
       return json ? JSON.parse(json) : null;
     }
 
     _remove(key: string): Promise<void> {
+      console.log("remopve", key)
       return SecureStore.deleteItemAsync(getKey(key));
     }
 
