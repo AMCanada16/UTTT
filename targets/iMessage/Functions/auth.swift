@@ -29,14 +29,16 @@ class KeychainService {
     func retriveSecret(id: String) -> String? {
       let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword,
                                   kSecMatchLimit as String: kSecMatchLimitOne,
+                                  kSecAttrGeneric as String: id,
+                                  kSecAttrAccount as String: id,
                                   kSecReturnData as String: true]
         
         
-        var retrivedData: AnyObject? = nil
-        let error = SecItemCopyMatching(query as CFDictionary, &retrivedData)
-        
-        guard let data = retrivedData as? Data else {return nil}
-        return String(data: data, encoding: String.Encoding.utf8)
+      var retrivedData: AnyObject? = nil
+      let error = SecItemCopyMatching(query as CFDictionary, &retrivedData)
+
+      guard let data = retrivedData as? Data else {return nil}
+      return String(data: data, encoding: String.Encoding.utf8)
     }
 }
 
@@ -57,24 +59,54 @@ struct PersistanceResponse: Codable {
   var appName: String
 }
 
+struct PersistanceApiResponse: Codable {
+  var response: String
+  var token: String?
+}
+
 func getPersistance() async {
   let apiKey = "AIzaSyCCAWNKF8eHsynUew6iUSbj1RVW4IjTk8Q"
   // If this is not working check Expo-secure-store add `kSecAttrAccessGroup as String: "SYV2CK2N9N.Archimedes4.UTTT"` to query
   guard let resultOne = KeychainService().retriveSecret(id: "firebaseauthUserAIzaSyCCAWNKF8eHsynUew6iUSbj1RVW4IjTk8QDEFAULT".replacing(/[:\[\]]/, with: "")) else {
     return
   }
-  print(resultOne)
+
   let data = resultOne.data(using: .utf8)!
   let decoder = JSONDecoder()
 
   do {
     let jsonPetitions = try decoder.decode(PersistanceResponse.self, from: data)
-    //let signInRes = try await Auth.auth().signIn(withCustomToken: jsonPetitions.stsTokenManager.refreshToken)
-    //print(signInRes.user.displayName)
-    let cred = OAuthProvider.credential(providerID: .apple, accessToken: jsonPetitions.stsTokenManager.accessToken)
-    let tempUser = try await Auth.auth().signIn(with: cred)
-    print(tempUser)
+    
+    guard let url = URL(string: "https://us-central1-archimedes4-games.cloudfunctions.net/exchangeToken") else {
+        return
+    }
+    // Parameters for x-www-form-urlencoded body
+    let parameters = [
+      "refresh_token": jsonPetitions.stsTokenManager.refreshToken
+    ]
+
+    // Convert parameters to x-www-form-urlencoded string
+    let bodyString = parameters.map { "\($0.key)=\($0.value)" }.joined(separator: "&")
+    guard let bodyData = bodyString.data(using: .utf8) else {
+        return
+    }
+
+    // Create a URLRequest and set its properties
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+    request.httpBody = bodyData
+    request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+    
+    let (data, response) = try await URLSession.shared.data(for: request)
+    let result = try JSONDecoder().decode(PersistanceApiResponse.self, from: data)
+    if (result.response != "success") {
+      return
+    }
+    guard let token = result.token else {
+      return
+    }
+    try await Auth.auth().signIn(withCustomToken: token)
   } catch let error {
-    print("Error \(error.localizedDescription)")
+    print("Error \(error)")
   }
 }

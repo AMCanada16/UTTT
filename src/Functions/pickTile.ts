@@ -22,7 +22,6 @@ function setValue(value: gridStateMode, index: number, game: GameType): GameType
   return newGame
 }
 
-
 export default function pickTile(
   index: number,
 	tileIndex: number,

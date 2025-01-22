@@ -38,6 +38,9 @@ struct ViewController: View {
         InfoView()
       }
     }.onAppear() {
+      Task {
+        await getPersistance()
+      }
       Auth.auth().addStateDidChangeListener { auth, user in
         if (user != nil && currentMode.mode == ViewType.login) {
           currentMode.mode = ViewType.home

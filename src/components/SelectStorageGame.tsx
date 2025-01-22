@@ -4,7 +4,7 @@
   27 September 2024
 */
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pressable, View, Text, FlatList, Modal } from "react-native";
 import { useSelector } from "react-redux";
 import { addGame, getStorageGames } from "@functions/storageFunctions";
@@ -15,7 +15,6 @@ import { DeleteText } from "@components/AccountPage";
 import { deleteGame as deleteStorageGame } from "@functions/storageFunctions";
 import { aiHistorySlice } from "@redux/reducers/aiHistoryReducer";
 import { loadingState } from "@types";
-import React from "react";
 
 function DeleteGame({
   deleting,
