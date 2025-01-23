@@ -76,14 +76,27 @@ struct HomeView: View {
   
   var body: some View {
     if (cJoinGameState == joinGameState.failed) {
-      VStack {
-        Text("Something Went Wrong")
-          .foregroundStyle(.white)
-      }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
+      ZStack {
+        VStack {
+          UTTTHeader()
+          HStack {
+            Text("Something went wrong!")
+              .foregroundStyle(.white)
+          }.padding(.top, 5)
+        }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
+        BackButton(goBack: {
+          cJoinGameState = joinGameState.notStarted
+        })
+      }
     } else if (cJoinGameState == joinGameState.loading) {
       VStack {
-        Text("Joining Game")
-          .foregroundStyle(.white)
+        UTTTHeader()
+        HStack {
+          ProgressView()
+            .tint(.white)
+          Text("Joining Game")
+            .foregroundStyle(.white)
+        }.padding(.top, 5)
       }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
     } else if (cJoinGameState == joinGameState.success) {
       VStack {
@@ -93,28 +106,24 @@ struct HomeView: View {
     } else if (cJoinGameState == joinGameState.gameFull) {
       ZStack {
         VStack {
+          UTTTHeader()
           Text("The Game is full!")
             .foregroundStyle(.white)
+            .padding(.top, 5)
         }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
-        VStack {
-          HStack {
-            Button(action: clearJoinGameState) {
-              Image(systemName: "arrowshape.backward.circle")
-                .resizable()
-                .frame(width: 40, height: 40)
-                .foregroundStyle(.white)
-            }
-            .padding(.leading, 15)
-            .padding(.top, 15)
-            Spacer()
-          }
-          Spacer()
-        }
+        BackButton(goBack: {
+          cJoinGameState = joinGameState.notStarted
+        })
       }
     } else if (createGameState == loadingState.loading) {
       VStack {
-        Text("Creating the game!")
-          .foregroundStyle(.white)
+        UTTTHeader()
+        HStack {
+          ProgressView()
+            .tint(.white)
+          Text("Creating the Game!")
+            .foregroundStyle(.white)
+        }.padding(.top, 5)
       }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
     } else {
       GeometryReader { geometry in

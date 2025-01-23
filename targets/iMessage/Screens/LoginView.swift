@@ -110,7 +110,6 @@ struct LoginView: View {
                           // Error. If error.code == .MissingOrInvalidNonce, make sure
                           // you're sending the SHA256-hashed nonce as a hex string with
                           // your request to Apple.
-                          print(error?.localizedDescription)
                           return
                         }
                         // User is signed in to Firebase with Apple.

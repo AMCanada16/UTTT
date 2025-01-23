@@ -9,6 +9,42 @@ import SwiftUI
 import Firebase
 import FirebaseAuth
 
+struct SignOutButtonView: View {
+  @State var geometry: GeometryProxy
+  
+  init (for metrics: GeometryProxy) {
+    self.geometry = metrics
+  }
+  
+  func signOut() {
+    
+  }
+  
+  var body: some View {
+    Button(action: signOut) {
+      HStack {
+        Image(systemName: "rectangle.portrait.and.arrow.right")
+          .resizable()
+          .foregroundStyle(.black)
+          .aspectRatio(contentMode: .fit)
+          .frame(maxHeight: 25)
+        Text("Sign Out")
+          .foregroundStyle(.black)
+          .lineLimit(1)
+          .minimumScaleFactor(0.5)
+      }
+      .padding()
+      .frame(width: geometry.size.width - 50, height: 50)
+      .background(Color.white)
+      .clipShape(.rect(cornerRadius: 8))
+      .overlay( /// apply a rounded border
+          RoundedRectangle(cornerRadius: 8)
+              .stroke(.black, lineWidth: 1)
+      )
+    }
+  }
+}
+
 struct AccountView: View {
   @EnvironmentObject var currentMode: CurrentMode
   @State var isLoading: Bool = false
@@ -42,6 +78,7 @@ struct AccountView: View {
       currentMode.mode = ViewType.home
     }
   }
+
   
   var body: some View {
     VStack {
@@ -91,14 +128,18 @@ struct AccountView: View {
               .foregroundColor(Color(UIColor(hex: "#ff9c9cff")!))
             Spacer()
           }
+          Spacer()
           HStack {
             Image(systemName: "person.crop.circle")
+              .resizable()
+              .frame(width: 30, height: 30)
               .foregroundStyle(.white)
             Text(username)
               .font(.custom("RussoOne", size: 25))
               .foregroundStyle(.white)
           }
-          let containerHeight = (geometry.size.height - (100 + geometry.safeAreaInsets.bottom))/2
+          Spacer()
+          let containerHeight = min((geometry.size.height - (100 + geometry.safeAreaInsets.bottom))/2, 50)
           HStack {
             HStack {
               if (onlineStats == nil) {
@@ -113,7 +154,7 @@ struct AccountView: View {
                   .padding(.vertical)
                   .font(.custom("Ultimate", size: 25))
               }
-            }.frame(width: (geometry.size.width-45)/2, height: containerHeight)
+            }.frame(width: (geometry.size.width-55)/2, height: containerHeight)
             .background(Color.white)
             .clipShape(RoundedRectangle(cornerRadius: 5))
             .overlay(
@@ -133,7 +174,7 @@ struct AccountView: View {
                   .padding(.vertical)
                   .font(.custom("Ultimate", size: 25))
               }
-            }.frame(width: (geometry.size.width-45)/2, height: containerHeight)
+            }.frame(width: (geometry.size.width-55)/2, height: containerHeight)
             .background(Color.white)
             .clipShape(RoundedRectangle(cornerRadius: 5))
             .overlay(
@@ -141,6 +182,7 @@ struct AccountView: View {
                     .stroke(.black, lineWidth: 1)
             )
           }
+          .padding(.horizontal, 25)
           HStack {
             HStack {
               if (onlineStats == nil) {
@@ -155,7 +197,7 @@ struct AccountView: View {
                   .padding(.vertical)
                   .font(.custom("Ultimate", size: 25))
               }
-            }.frame(width: (geometry.size.width-45)/2, height: containerHeight)
+            }.frame(width: (geometry.size.width-55)/2, height: containerHeight)
             .background(Color.white)
             .clipShape(RoundedRectangle(cornerRadius: 5))
             .overlay(
@@ -175,14 +217,16 @@ struct AccountView: View {
                   .padding(.vertical)
                   .font(.custom("Ultimate", size: 25))
               }
-            }.frame(width: (geometry.size.width-45)/2, height: containerHeight)
+            }.frame(width: (geometry.size.width-55)/2, height: containerHeight)
             .background(Color.white)
             .clipShape(RoundedRectangle(cornerRadius: 5))
             .overlay(
                 RoundedRectangle(cornerRadius: 5)
                     .stroke(.black, lineWidth: 1)
             )
-          }.padding(.bottom, geometry.safeAreaInsets.bottom)
+          }
+          .padding(.horizontal, 25)
+          SignOutButtonView(for: geometry)
         }.frame(width: geometry.size.width, height: geometry.size.height)
       }
     }

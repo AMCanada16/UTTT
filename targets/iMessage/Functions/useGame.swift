@@ -16,7 +16,7 @@ enum gameState: Equatable {
 	
 	static func ==(lhs: gameState, rhs: gameState) -> Bool {
 		switch (lhs, rhs) {
-			case (let .game(_a1), let .game(_a2)):
+      case (.game(_), .game(_)):
 				return true
 			case (.error, .error):
 				return true
@@ -107,10 +107,6 @@ class UseGame: ObservableObject {
           print("gameDataError")
           return
         }
-        guard let rawGameData = data["data"] as? [String:Any] else {
-          print("gameDataError")
-          return
-        }
         guard let gameData = try? Game().jsonToDimentionalType(json: rawGameData) else {
           print("Game Error")
           return
@@ -123,7 +119,6 @@ class UseGame: ObservableObject {
           print("gameId Error")
           return
         }
-        print(data["users"])
         guard let users = try? Users().jsonToUsers(json: data) else {
           return
         }
@@ -152,7 +147,6 @@ class UseGame: ObservableObject {
   }
   
   init() {
-    followGame()
   }
   
 }

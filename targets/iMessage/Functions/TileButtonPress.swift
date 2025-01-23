@@ -108,6 +108,9 @@ func setSelectedGrid(original: GameType, tileIndex: Int) -> GameType {
 
 /*
  Only call this function from the buttonPress func. This is because the user can make invalid moves if pressing this function.
+ If not doing this, somethings to note:
+ 1. the user needs to be able to make a move (the square is not full)
+ 2. the user needs to be able to move (it is the users turn)
  */
 func TileButtonPress(
   index: Int,
@@ -121,6 +124,7 @@ func TileButtonPress(
 		if (game.gameOver != gridStateMode.open) {
 			throw tileButtonPressError.gameAlreadyOver
 		}
+    
 		// define the default variables used
 		let currentTurn = game.currentTurn
 
@@ -190,10 +194,10 @@ func TileButtonPress(
 				newGame.data.value[gridIndex] = currentTurn
 				newGame.data.active.append(
 					ActiveType(
-						xOne: 2,
-						xTwo: 0,
-						yOne: 2,
-						yTwo: 0,
+						xOne: 0,
+						xTwo: 2,
+						yOne: 0,
+						yTwo: 2,
             gridIndex: gridIndex
 					))
 			}
@@ -206,10 +210,10 @@ func TileButtonPress(
 				print("Set value right left")
 				newGame.data.active.append(
 					ActiveType(
-						xOne: 0,
-						xTwo: 2,
-						yOne: 0,
-						yTwo: 2,
+						xOne: 2,
+						xTwo: 0,
+						yOne: 2,
+						yTwo: 0,
             gridIndex: gridIndex
 					))
 			}
@@ -252,8 +256,10 @@ func TileButtonPress(
 				let columnIndex = gridIndex % 3
 				
 				// Check full game horizontal
-				for x in 0..<2 {
-					if newGame.data.value[(rowIndex * 3) + x] != newGame.data.value[(rowIndex * 3)] {
+        for x in 1...2 {
+          print(newGame.data.value[(rowIndex * 3) + x])
+          print(newGame.data.value[(rowIndex * 3)])
+					if (newGame.data.value[(rowIndex * 3) + x] != newGame.data.value[(rowIndex * 3)]) {
 						break
 					}
 					if x == 2 {
@@ -263,8 +269,9 @@ func TileButtonPress(
 				}
 				
 				// Check full game vert
-				for y in 0..<2 {
-					if newGame.data.value[(y * 3) + columnIndex] != newGame.data.value[(y * 3) + columnIndex] {
+        for y in 1...2 {
+          print(columnIndex)
+          if newGame.data.value[(y * 3) + columnIndex] != newGame.data.value[columnIndex] {
 						break
 					}
 					if y == 2 {
@@ -287,8 +294,8 @@ func TileButtonPress(
 				
 				// is full game full?
 				var full = true
-				for x in 0..<2 {
-					for y in 0..<2 {
+        for x in 0...2 {
+          for y in 0...2 {
 						if newGame.data.value[x + (y * 3)] == gridStateMode.open {
 							full = false
 							break

@@ -20,8 +20,8 @@
  * limitations under the License.
  */
 
-import * as SecureStore from 'expo-secure-store';
-import { Persistence } from "firebase/auth/dist/auth/index"
+import * as SecureStore from "expo-secure-store";
+import { Persistence } from "firebase/auth/dist/auth/index";
 
 enum PersistenceType {
   SESSION = "SESSION",

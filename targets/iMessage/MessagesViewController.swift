@@ -18,7 +18,8 @@ class CurrentMode: ObservableObject {
 
 
 class MessagesViewController: MSMessagesAppViewController {
-  @StateObject var currentMode = CurrentMode()
+  var currentMode = CurrentMode()
+  var useGame =  UseGame()
   
   // MARK: Properties
   
@@ -57,27 +58,27 @@ class MessagesViewController: MSMessagesAppViewController {
   
   /// - Tag: PresentViewController
   private func presentViewController(for conversation: MSConversation, with presentationStyle: MSMessagesAppPresentationStyle) {
-      // Remove any child view controllers that have been presented.
-      removeAllChildViewControllers()
-      
-      let controller: UIViewController
-      controller = UIHostingController(rootView: ViewController(addMessage: { message in
-        conversation.send(self.composeMessage(session: conversation.selectedMessage?.session, caption: message))
-      }).environmentObject(currentMode))
-      
-      addChild(controller)
-      controller.view.frame = view.bounds
-      controller.view.translatesAutoresizingMaskIntoConstraints = false
-      view.addSubview(controller.view)
-      
-      NSLayoutConstraint.activate([
-          controller.view.leftAnchor.constraint(equalTo: view.leftAnchor),
-          controller.view.rightAnchor.constraint(equalTo: view.rightAnchor),
-          controller.view.topAnchor.constraint(equalTo: view.topAnchor),
-          controller.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-          ])
-      
-      controller.didMove(toParent: self)
+    // Remove any child view controllers that have been presented.
+    removeAllChildViewControllers()
+    
+    let controller: UIViewController
+    controller = UIHostingController(rootView: ViewController(currentMode: currentMode, useGame: useGame, addMessage: { message in
+      conversation.send(self.composeMessage(session: conversation.selectedMessage?.session, caption: message))
+    }))
+    
+    addChild(controller)
+    controller.view.frame = view.bounds
+    controller.view.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(controller.view)
+    
+    NSLayoutConstraint.activate([
+        controller.view.leftAnchor.constraint(equalTo: view.leftAnchor),
+        controller.view.rightAnchor.constraint(equalTo: view.rightAnchor),
+        controller.view.topAnchor.constraint(equalTo: view.topAnchor),
+        controller.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    
+    controller.didMove(toParent: self)
   }
   
   // MARK: Convenience

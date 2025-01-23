@@ -35,7 +35,7 @@ class KeychainService {
         
         
       var retrivedData: AnyObject? = nil
-      let error = SecItemCopyMatching(query as CFDictionary, &retrivedData)
+      SecItemCopyMatching(query as CFDictionary, &retrivedData)
 
       guard let data = retrivedData as? Data else {return nil}
       return String(data: data, encoding: String.Encoding.utf8)
@@ -65,13 +65,13 @@ struct PersistanceApiResponse: Codable {
 }
 
 func getPersistance() async {
-  let apiKey = "AIzaSyCCAWNKF8eHsynUew6iUSbj1RVW4IjTk8Q"
+  let API_KEY = "AIzaSyCCAWNKF8eHsynUew6iUSbj1RVW4IjTk8Q"
   // If this is not working check Expo-secure-store add `kSecAttrAccessGroup as String: "SYV2CK2N9N.Archimedes4.UTTT"` to query
-  guard let resultOne = KeychainService().retriveSecret(id: "firebaseauthUserAIzaSyCCAWNKF8eHsynUew6iUSbj1RVW4IjTk8QDEFAULT".replacing(/[:\[\]]/, with: "")) else {
+  guard let keychainResult = KeychainService().retriveSecret(id: "firebaseauthUser\(API_KEY)DEFAULT".replacing(/[:\[\]]/, with: "")) else {
     return
   }
 
-  let data = resultOne.data(using: .utf8)!
+  let data = keychainResult.data(using: .utf8)!
   let decoder = JSONDecoder()
 
   do {
@@ -97,7 +97,7 @@ func getPersistance() async {
     request.httpBody = bodyData
     request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
     
-    let (data, response) = try await URLSession.shared.data(for: request)
+    let (data, _) = try await URLSession.shared.data(for: request)
     let result = try JSONDecoder().decode(PersistanceApiResponse.self, from: data)
     if (result.response != "success") {
       return

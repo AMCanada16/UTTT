@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Foundation
+import FirebaseAuth
 
 struct TicTacToeTile: View {
 	let tileIndex: Int
@@ -42,6 +43,13 @@ struct TicTacToeTile: View {
 	func buttonPress(tileIndex: Int) {
     let game = Game().getGame(state: useGame.currentGame)!
 		let index = getIndex(tileIndex: tileIndex)
+    
+    // It is not the users turn
+    if (!Game().isCurrentUsersTurn(game: Game().getGame(state: useGame.currentGame)!, uid: Auth.auth().currentUser?.uid ?? "")) {
+      return
+    }
+    
+    // The tile is filled
     if game.data.inner[index] != gridStateMode.open || (game.selectedGrid != 0 && game.selectedGrid != (gridIndex + 1)) {
 			return
 		}
@@ -52,6 +60,37 @@ struct TicTacToeTile: View {
 			// TODO something went wrong
 		}
 	}
+  
+  func showingTile(game: GameType, previousGameState: GameType?) -> Bool {
+    let index = getIndex(tileIndex: tileIndex)
+    // Check if the tile is filled
+    if game.data.inner[index] != gridStateMode.open || (game.selectedGrid != 0 && game.selectedGrid != (gridIndex + 1)) {
+      return false
+    }
+    
+    
+    // Check if the pervioud game is not null
+    if (previousGameState != nil) {
+      return false
+    }
+    
+    let playerGridState = Users().getPlayer(game: game)
+    // Check if it is the current users turn
+    if (playerGridState == game.currentTurn) {
+      return true
+    }
+    return false
+  }
+  
+  func showingOTile(currentGame: gameState, previousGameState: GameType?) -> Bool {
+    let game = Game().getGame(state: currentGame)!
+    return (game.currentTurn == gridStateMode.o && showingTile(game: game, previousGameState: previousGameState))
+  }
+  
+  func showingXTile(currentGame: gameState, previousGameState: GameType?) -> Bool {
+    let game = Game().getGame(state: currentGame)!
+    return (game.currentTurn == gridStateMode.x && showingTile(game: game, previousGameState: previousGameState))
+  }
 	
 	var body: some View {
 		let index = getIndex(tileIndex: tileIndex)
@@ -65,7 +104,15 @@ struct TicTacToeTile: View {
 				} else if Game().getGame(state: useGame.currentGame)!.data.inner[index] == gridStateMode.x {
 					Text("X")
             .foregroundColor(Color(UIColor(hex: "#a0f4f7ff")!))
-				}
+        } else if (showingOTile(currentGame: useGame.currentGame, previousGameState: useGame.previousGameState)) {
+          Circle()
+            .foregroundStyle(Color(UIColor(hex: "#ff9c9cff")!))
+            .padding(3)
+        } else if (showingXTile(currentGame: useGame.currentGame, previousGameState: useGame.previousGameState)) {
+          Rectangle()
+            .foregroundStyle(Color(UIColor(hex: "#ff9c9cff")!))
+            .padding(3)
+        }
 			}.frame(width: length, height: length).background(Color.primary)
 		}
 	}
@@ -96,10 +143,10 @@ struct TicTacToeCore: View {
 			return 90
 		} else if (active.xOne == 0 && active.xTwo == 2) {
 			// Angle left right
-			return 45
+			return -45
 		} else {
 			// Angle right left
-			return -45
+			return 45
 		}
 	}
 	

@@ -1,19 +1,18 @@
 import { initializeApp, getApp, getApps, FirebaseOptions } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { initializeAuth, getReactNativePersistence, getAuth, Auth } from "firebase/auth"
+import { initializeAuth, getAuth, Auth } from "firebase/auth"
 import { getDatabase } from "firebase/database";
 import { Platform } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import getExpoSecureStorePersistence from "./getExpoSecureStorePersistance";
 
 const firebaseConfig: FirebaseOptions = {
-    apiKey: "AIzaSyCCAWNKF8eHsynUew6iUSbj1RVW4IjTk8Q",
-    authDomain: "archimedes4-games.firebaseapp.com",
-    projectId: "archimedes4-games",
-    storageBucket: "archimedes4-games.appspot.com",
-    messagingSenderId: "94813812988",
-    appId: "1:94813812988:web:971222502862df28e6ff79",
-    measurementId: "G-LP1K0RXN7R"  
+  apiKey: process.env.EXPO_PUBLIC_API_KEY,
+  authDomain: process.env.EXPO_PUBLIC_AUTH_DOMAIN,
+  projectId: process.env.EXPO_PUBLIC_PROJECT_ID,
+  storageBucket: process.env.EXPO_PUBLIC_STORAGE_BUCKET,
+  messagingSenderId: process.env.EXPO_PUBLIC_MESSAGING_SENDER_ID,
+  appId: process.env.EXPO_PUBLIC_APP_ID,
+  measurementId: process.env.EXPO_PUBLIC_MEASUREMENT_ID
 };
 
 // Initialize Firebase
@@ -29,11 +28,11 @@ if (getApps.length === 0) {
     auth = getAuth(app);
   }
 } else {
-  app = getApp()
+  app = getApp();
   auth = getAuth(app);
 }
 
-const db = getFirestore(app)
+const db = getFirestore(app);
 const database = getDatabase();
 
 export { db, auth, database };

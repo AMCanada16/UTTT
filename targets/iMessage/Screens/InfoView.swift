@@ -24,20 +24,9 @@ struct InfoView: View {
           Text("Info about the game")
         }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
       }
-      VStack {
-        HStack {
-          Button(action: goBack) {
-            Image(systemName: "arrowshape.backward.circle")
-              .resizable()
-              .frame(width: 40, height: 40)
-              .foregroundStyle(.white)
-          }
-          .padding(.leading, 15)
-          .padding(.top, 15)
-          Spacer()
-        }
-        Spacer()
-      }
+      BackButton(goBack: {
+        currentMode.mode = ViewType.home
+      })
     }
   }
 }

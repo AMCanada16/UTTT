@@ -10,38 +10,47 @@ import Firebase
 import FirebaseAuth
 
 struct ViewController: View {
-  @EnvironmentObject var currentMode: CurrentMode
-  @StateObject var currentGame = UseGame()
+  @ObservedObject var currentMode: CurrentMode
+  @ObservedObject var useGame: UseGame
   let addMessage: AddMessageType
+  
   var body: some View {
     ZStack {
       if (currentMode.mode == ViewType.login) {
         LoginView()
+          .environmentObject(currentMode)
       } else if (currentMode.mode == ViewType.game) {
         GameView(addMessage: addMessage)
-          .environmentObject(currentGame)
+          .environmentObject(useGame)
+          .environmentObject(currentMode)
       } else if (currentMode.mode == ViewType.account) {
         AccountView()
+          .environmentObject(currentMode)
       } else if (currentMode.mode == ViewType.gameOver) {
         GameOverView()
-          .environmentObject(currentGame)
+          .environmentObject(useGame)
+          .environmentObject(currentMode)
       } else if (currentMode.mode == ViewType.home) {
         HomeView()
-          .environmentObject(currentGame)
+          .environmentObject(useGame)
+          .environmentObject(currentMode)
       } else if (currentMode.mode == ViewType.gameStats) {
         GameStatsView()
-          .environmentObject(currentGame)
+          .environmentObject(useGame)
+          .environmentObject(currentMode)
       } else if (currentMode.mode == ViewType.waitToJoin) {
         WaitToJoin(addMessage: addMessage)
-          .environmentObject(currentGame)
+          .environmentObject(useGame)
+          .environmentObject(currentMode)
       } else if (currentMode.mode == ViewType.info) {
         InfoView()
+          .environmentObject(currentMode)
       }
     }.onAppear() {
       Task {
         await getPersistance()
       }
-      Auth.auth().addStateDidChangeListener { auth, user in
+      let _ = Auth.auth().addStateDidChangeListener { auth, user in
         if (user != nil && currentMode.mode == ViewType.login) {
           currentMode.mode = ViewType.home
         } else if (user == nil) {

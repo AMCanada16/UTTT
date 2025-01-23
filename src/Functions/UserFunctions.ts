@@ -4,7 +4,7 @@
   22 September 2024
 */
 import { collection, getDoc, setDoc, updateDoc, where, query, getCountFromServer, doc, runTransaction  } from "firebase/firestore";
-import { db } from "./firebase";
+import { db } from "@functions/firebase";
 import { loadingState } from "@types";
 
 /**
@@ -167,6 +167,12 @@ export async function approveFriendRequest(uid: string, approveUid: string) {
   }
 }
 
+/**
+ * 
+ * @param uid 
+ * @param requestUid 
+ * @returns 
+ */
 export async function requestFriend(uid: string, requestUid: string): Promise<loadingState> {
   try {
     await runTransaction(db, async (transaction) => {
@@ -187,7 +193,13 @@ export async function requestFriend(uid: string, requestUid: string): Promise<lo
   }
 }
 
-export async function removeFriend(uid: string, removeUid: string) {
+/**
+ * Removes a users friend
+ * @param uid the uid of the current user
+ * @param removeUid The uid of the friend to remove
+ * @returns 
+ */
+export async function removeFriend(uid: string, removeUid: string): Promise<loadingState> {
   try {
     await runTransaction(db, async (transaction) => {
       const usersRequestsResult = await transaction.get(doc(db, "Users", uid))

@@ -9,8 +9,8 @@ import SwiftUI
 import FirebaseAuth
 
 func getLength(width: CGFloat, height: CGFloat) -> CGFloat {
-  if ((width - 30.0) < (height)) {
-    return (width - 30.0)
+  if ((width - 90.0) < (height)) {
+    return (width - 90.0)
   }
   return height
 }
@@ -50,11 +50,27 @@ struct MainGame: View {
     useGame.previousGameState = nil
   }
   
+  func isShowingGameOver(currentGame: gameState, previousGame: GameType?) -> Bool {
+    if (previousGame != nil) {
+      return false
+    }
+    if (Game().getGame(state: useGame.currentGame)?.gameOver != gridStateMode.open) {
+      return true
+    }
+    return false
+  }
+  
   var body: some View {
     GeometryReader {geometry in
       let length = getLength(width: geometry.size.width, height: geometry.size.height - geometry.safeAreaInsets.bottom)
       let tileLength = (length - 10)/3
       VStack {
+        if (geometry.size.height >= length * 1.5) {
+          UTTTHeader()
+        }
+        if (!Game().isCurrentUsersTurn(game: Game().getGame(state: useGame.currentGame)!, uid: Auth.auth().currentUser?.uid ?? "") && useGame.previousGameState == nil) {
+          WaitForPlayer()
+        }
         HStack {
           VStack (spacing: 5) {
             HStack (spacing: 5) {
@@ -135,8 +151,8 @@ struct MainGame: View {
           if (currentGame.gameOver != gridStateMode.open) {
             currentMode.mode = ViewType.gameOver
           }
-        }.onChange(of: Game().getGame(state: useGame.currentGame)?.gameOver) { oldVal, newVal in
-          if (newVal != gridStateMode.open) {
+        }.onChange(of: isShowingGameOver(currentGame: useGame.currentGame, previousGame: useGame.previousGameState)) { oldVal, newVal in
+          if (newVal) {
             currentMode.mode = ViewType.gameOver
           }
         }
@@ -146,10 +162,8 @@ struct MainGame: View {
 
 struct WaitForPlayer: View {
   var body: some View {
-    VStack {
-      Text("Waiting for other player to move.")
-    }.frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(Color.primary)
+    Text("Waiting for other player to move.")
+      .foregroundStyle(.white)
   }
 }
 
@@ -200,11 +214,7 @@ struct GameView: View {
     case .loading:
       LoadingView()
     case .game(let currentGame):
-      if (Game().isCurrentUsersTurn(game: currentGame, uid: Auth.auth().currentUser?.uid ?? "") || useGame.previousGameState != nil) {
-        MainGame()
-      } else {
-        WaitForPlayer()
-      }
+      MainGame()
     }
 	}
 }

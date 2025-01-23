@@ -64,6 +64,16 @@ class Users {
       return nil
     }
   }
+  
+  func getPlayer(game: GameType) -> gridStateMode? {
+    guard let uid = Auth.auth().currentUser?.uid else {
+      return nil
+    }
+    guard let player: compressedUserType = game.users.first(where: {$0.userId == uid}) else {
+      return nil
+    }
+    return player.player
+  }
 }
 
 class Game {
@@ -125,7 +135,7 @@ class Game {
     var added: joinGameState = joinGameState.failed
     do {
       let db = Firestore.firestore()
-      try await db.runTransaction({(transaction, errorPointer) -> Any? in
+      try await db.runTransaction({(transaction, errorPointer) -> Void in
         guard let result = try? transaction.getDocument(db.collection("Games").document(gameId)) else {
           return
         }
@@ -197,7 +207,7 @@ class Game {
   
   func createGame(uid: String) async -> String? {
     let db = Firestore.firestore()
-    var date = Date();
+    let date = Date();
     let randomId = Int(floor(Double(1000000 + Double.random(in: 0...1) * 9000000)))
     let playerMode = gridStateMode.x.rawValue
     let emptyDimension = DimentionalType(inner: emptyGame, value: [gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open, gridStateMode.open], active: [])

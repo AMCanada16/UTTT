@@ -7,7 +7,7 @@
 */
 import { View, Text, Pressable, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { ChevronRight, CloseIcon, SignOutIcon } from './Icons'
+import { ChevronRight, CloseIcon, SignOutIcon } from '@components/Icons'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import { addUser, checkIfUsernameValid } from '@functions/UserFunctions'
