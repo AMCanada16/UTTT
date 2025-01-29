@@ -192,6 +192,7 @@ export default function PlayersPage({
         <Text
           style={{margin: 10, marginTop: 0, fontSize: 80, fontFamily: "Ultimate", textAlign: 'center'}}
         >Players</Text>
+        <Text style={{marginLeft: 5}}>Game ID: {gameId}</Text>
         <Text style={{marginLeft: 5}}>Game Open To...</Text>
         <SegmentedControl
           values={['Public', 'Friends', 'Invitations']}

@@ -11,6 +11,11 @@ import FirebaseAuth
 struct GameStatsView: View {
   @EnvironmentObject var currentMode: CurrentMode
   @EnvironmentObject var useGame: UseGame
+  @State var opponentUsername: String = ""
+  
+  func getOpponentUsername() {
+    
+  }
   
   func goHome() {
     currentMode.mode = ViewType.game
@@ -19,44 +24,21 @@ struct GameStatsView: View {
   var body: some View {
     switch useGame.currentGame {
     case .game(let game):
-      VStack {
-        GeometryReader { geometry in
-          VStack {
-            Button(action: goHome) {
-              Text("Back")
-            }
-            Text("Game Id: \(game.gameId)")
-              .foregroundStyle(.white)
-            Text("Owner: \(game.owner)")
-              .foregroundStyle(.white)
-            Text("Current Turn: \(game.currentTurn)")
-              .foregroundStyle(.white)
-            Text("Signed in: \(Auth.auth().currentUser?.uid ?? "No User Signed In")")
-              .foregroundStyle(.white)
-            Text("\(game.userWon ?? "No User Has Won.")")
-              .foregroundStyle(.white)
-            Text("\(game.users.count)")
-              .foregroundStyle(.white)
-            if (game.users.count >= 2) {
-              VStack {
-                Text("\(game.users[0].userId)")
-                  .foregroundStyle(.white)
-                Text("\(game.users[0].player)")
-                  .foregroundStyle(.white)
-              }.padding()
-              VStack {
-                Text("\(game.users[1].userId)")
-                  .foregroundStyle(.white)
-                Text("\(game.users[1].player)")
-                  .foregroundStyle(.white)
-              }.padding()
-            } else {
-              Text("The game does not have two players.")
-            }
-            
-          }.frame(width: geometry.size.width, height: geometry.size.height)
-        }
-      }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
+      ZStack {
+        VStack {
+          UTTTHeader()
+          Text("Game ID: \(game.gameId)")
+          if (Users().getPlayer(game: game) == gridStateMode.x) {
+            Text("Player X: You")
+          } else {
+            Text("Player Y: You")
+          }
+          Text("Player Two")
+        }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
+        BackButton(goBack: {
+          currentMode.mode = ViewType.game
+        })
+      }
     default:
       VStack {}.onAppear() {
         currentMode.mode = ViewType.game

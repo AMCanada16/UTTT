@@ -65,6 +65,9 @@ class Users {
     }
   }
   
+  /**
+   This gets the players grid state mode
+   */
   func getPlayer(game: GameType) -> gridStateMode? {
     guard let uid = Auth.auth().currentUser?.uid else {
       return nil
@@ -73,6 +76,24 @@ class Users {
       return nil
     }
     return player.player
+  }
+  
+  func getUsername(uid: String) async -> String? {
+    do {
+      let db = Firestore.firestore()
+      let userRef = db.collection("users").document(uid)
+      let doc = try await userRef.getDocument()
+      if (doc.exists) {
+        let data = doc.data()
+        guard let username = data?["username"] as? String else {
+          return nil
+        }
+        return username
+      }
+      return nil
+    } catch {
+      return nil
+    }
   }
 }
 
