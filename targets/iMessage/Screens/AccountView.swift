@@ -21,7 +21,9 @@ struct SignOutButtonView: View {
   func signOut() {
     Task {
       do {
-        let idToken = try await Auth.auth().currentUser?.getIDToken()
+        guard let idToken = try await Auth.auth().currentUser?.getIDToken() else {
+          return
+        }
         guard let url = URL(string: "https://us-central1-archimedes4-games.cloudfunctions.net/revokeTokens") else {
             return
         }
