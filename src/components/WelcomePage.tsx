@@ -24,7 +24,7 @@ function WelcomeImages() {
   const {height, width} = useSelector((state: RootState) => state.dimensions)
   const imageLength = useMemo(() => {return getImageLength(width, height)} , [width, height])
 
-  //const [assets, error] = useAssets([require("../../assets/UTTT-Demo-Start.gif"), require("../../assets/UTTT-Demo-End.gif"), require("../../assets/UTTT-Demo-Ai.gif")]);
+  //const [assets, error] = useAssets([require("assets/UTTT-Demo-Start.gif"), require("assets/UTTT-Demo-End.gif"), require("assets/UTTT-Demo-Ai.gif")]);
   
   if (imageLength === 0) { //|| assets === undefined || assets.length !== 3 || error !== undefined) {
     return null

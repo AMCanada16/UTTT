@@ -3,13 +3,13 @@
   Andrew Mainella
   22 September 2024
 */
-import { useMemo } from "react"
-import { Pressable, useWindowDimensions } from "react-native"
-import TextAnimation from "@components/TextAnimation"
-import tileButtonPress from "@functions/tileButtonPress"
-import useCheckIfFilled from "@hooks/useCheckIfFilled"
-import getIndex from "@functions/getIndex"
-import { gridStateMode, loadingState } from "@types"
+import { useMemo } from "react";
+import { Pressable, useWindowDimensions } from "react-native";
+import TextAnimation from "@components/TextAnimation";
+import tileButtonPress from "@functions/tileButtonPress";
+import getIndex from "@functions/getIndex";
+import useCheckIfFilled from "@hooks/useCheckIfFilled";
+import { gridStateMode, loadingState } from "@types";
 
 export default function TileButton(
   {tileIndex, gridIndex, currentTurn, game, gameLength}:

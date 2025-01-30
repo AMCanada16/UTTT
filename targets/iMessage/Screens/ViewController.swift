@@ -12,13 +12,26 @@ import FirebaseAuth
 struct ViewController: View {
   @ObservedObject var currentMode: CurrentMode
   @ObservedObject var useGame: UseGame
+  @State var gettingPresistance: Bool = true;
   let addMessage: AddMessageType
   
   var body: some View {
     ZStack {
       if (currentMode.mode == ViewType.login) {
-        LoginView()
-          .environmentObject(currentMode)
+        if (gettingPresistance) {
+          VStack {
+            UTTTHeader()
+            HStack {
+              ProgressView()
+                .tint(.white)
+              Text("Loading...")
+                .foregroundStyle(.white)
+            }.padding(.top, 5)
+          }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
+        } else {
+          LoginView()
+            .environmentObject(currentMode)
+        }
       } else if (currentMode.mode == ViewType.game) {
         GameView(addMessage: addMessage)
           .environmentObject(useGame)
@@ -48,7 +61,9 @@ struct ViewController: View {
       }
     }.onAppear() {
       Task {
+        gettingPresistance = true
         await getPersistance()
+        gettingPresistance = false
       }
       let _ = Auth.auth().addStateDidChangeListener { auth, user in
         if (user != nil && currentMode.mode == ViewType.login) {

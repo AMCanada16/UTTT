@@ -4,9 +4,9 @@
   21 September 2024
 */
 import * as tf from '@tensorflow/tfjs';
-import { getModel } from '.';
-import checkIfFilled from '../checkIfFilled';
-import indexToGridIndex from '../indexToGridIndex';
+import { getModel } from '@functions/ai';
+import checkIfFilled from '@functions/checkIfFilled';
+import indexToGridIndex from '@functions/indexToGridIndex';
 
 export function twoDtoOneDValue(twoD: number[][]) {
   var newArr: number[] = [0,0,0,0,0,0,0,0,0];

@@ -5,7 +5,7 @@
 */
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { ActiveIcon, ControllerIcon, CrownIcon, SkullIcon } from './Icons'
+import { ActiveIcon, ControllerIcon, CrownIcon, SkullIcon } from '@components/Icons'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import { getOnlineGameStats } from '@functions/OnlineFunctions'

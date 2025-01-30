@@ -3,8 +3,8 @@
   Andrew Mainella
   22 September 2024
 */
-import React from 'react'
-import { View, Text, DimensionValue } from 'react-native'
+import React from 'react';
+import { View, Text, DimensionValue } from 'react-native';
 
 export default function GlitchComponent({text, animated, fontSize, justifyText, width, height}:{text: string, animated: boolean, fontSize: number, justifyText?: "center" | "flex-start" | "flex-end" | "space-between" | "space-around" | "space-evenly" | undefined, width?:  DimensionValue | undefined, height?: DimensionValue | undefined}) {
   return (

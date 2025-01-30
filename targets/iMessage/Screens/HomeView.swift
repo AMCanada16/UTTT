@@ -14,6 +14,7 @@ struct HomeView: View {
   @State var input: String = ""
   @State var cJoinGameState: joinGameState = joinGameState.notStarted
   @State var createGameState: loadingState = loadingState.notStarted
+  @Environment(\.openURL) var openURL
   
   func clearJoinGameState() {
     cJoinGameState = joinGameState.notStarted
@@ -29,7 +30,9 @@ struct HomeView: View {
   }
   
   func goToApp() {
-    
+    if let url = URL(string: "Archimedes4.UTTT://home") {
+      openURL(url)
+    }
   }
   
   func clearInput() {

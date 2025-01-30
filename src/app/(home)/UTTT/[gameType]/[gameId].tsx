@@ -20,7 +20,7 @@ import PlayersPage from "@components/PlayersPage"
 import GameOverComponent from "@components/GameOverComponent"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import useIsConnected from "@hooks/useIsConnected"
-import { trainModel } from "@functions/Ai"
+import { trainModel } from "@functions/ai"
 import { gridStateMode } from "@types"
 import React from 'react';
 

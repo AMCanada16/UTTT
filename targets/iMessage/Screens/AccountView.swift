@@ -9,6 +9,8 @@ import SwiftUI
 import Firebase
 import FirebaseAuth
 
+
+
 struct SignOutButtonView: View {
   @State var geometry: GeometryProxy
   
@@ -17,7 +19,40 @@ struct SignOutButtonView: View {
   }
   
   func signOut() {
-    
+    Task {
+      do {
+        let idToken = try await Auth.auth().currentUser?.getIDToken()
+        guard let url = URL(string: "https://us-central1-archimedes4-games.cloudfunctions.net/revokeTokens") else {
+            return
+        }
+        // Parameters for x-www-form-urlencoded body
+        let parameters = [
+          "id_token": idToken
+        ]
+
+        // Convert parameters to x-www-form-urlencoded string
+        let bodyString = parameters.map { "\($0.key)=\($0.value)" }.joined(separator: "&")
+        guard let bodyData = bodyString.data(using: .utf8) else {
+            return
+        }
+
+        // Create a URLRequest and set its properties
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = bodyData
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        let (data, _) = try await URLSession.shared.data(for: request)
+        let result = try JSONDecoder().decode(RevokerApiResponse.self, from: data)
+        print(result)
+        if (result.response != "success") {
+          return
+        }
+        try Auth.auth().signOut()
+      } catch {
+        print("something went wrong")
+      }
+    }
   }
   
   var body: some View {

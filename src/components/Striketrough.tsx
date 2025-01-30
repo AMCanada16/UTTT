@@ -3,9 +3,9 @@
   Andrew Mainella
   22 September 2024
 */
-import React, { useMemo, useState } from 'react'
-import {Svg, Line} from "react-native-svg"
-import {View} from "react-native"
+import React, { useMemo, useState } from 'react';
+import {View} from "react-native";
+import {Svg, Line} from "react-native-svg";
 
 /**
  * A React Functional Component 

@@ -3,24 +3,24 @@
   Andrew Mainella
   22 September 2024
 */
-import { useRouter } from 'expo-router'
-import { View, Text } from 'react-native'
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { RootState } from '@redux/store'
-import { Colors, gridStateMode } from '@types'
-import DefaultButton from '@components/DefaultButton'
-import { ChevronLeft, CircleIcon, XIcon } from '@components/Icons'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useRouter } from 'expo-router';
+import React from 'react';
+import { View, Text } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSelector } from 'react-redux';
+import DefaultButton from '@components/DefaultButton';
+import { ChevronLeft, CircleIcon, XIcon } from '@components/Icons';
+import { RootState } from '@redux/store';
+import { Colors, gridStateMode } from '@types';
 
 function getFontSize(width: number, height: number) {
   if (width <= 560) {
-    return Math.round(width * 0.18)
+    return Math.round(width * 0.18);
   }
   if (width < 950) {
-    return Math.round(width * 0.1)
+    return Math.round(width * 0.1);
   }
-  return Math.round(height * 0.2)
+  return Math.round(height * 0.2);
 }
 
 export default function GameOverComponent({
@@ -28,10 +28,11 @@ export default function GameOverComponent({
 }:{
   onClose: () => void
 }) {
-  const {height, width} = useSelector((state: RootState) => state.dimensions)
-  const winner = useSelector((state: RootState) => state.gameState.gameOver)
-  const router = useRouter()
-  const insets = useSafeAreaInsets()
+  const {height, width} = useSelector((state: RootState) => state.dimensions);
+  const winner = useSelector((state: RootState) => state.gameState.gameOver);
+  const router = useRouter();
+  const insets = useSafeAreaInsets();
+  
   return (
     <View style={{position: 'absolute', width: width * ((width <= 560) ? 0.95:0.8), height: (height * ((width <= 560) ? 0.95:0.8)) - insets.top - insets.bottom, top: 'auto', bottom: 'auto', left: 'auto', right: 'auto', backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
       <Text

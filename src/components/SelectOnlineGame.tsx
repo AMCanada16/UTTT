@@ -3,25 +3,25 @@
   SelectOnlineGame.tsx
   27 Sepetember 2024
 */
-import { useRouter } from "expo-router"
-import React, { useEffect, useState } from "react"
-import { ActivityIndicator, Pressable, View, Text, TextInput, Modal, FlatList } from "react-native"
-import { useSelector } from "react-redux"
-import { deleteDoc, doc } from "firebase/firestore"
-import { DeleteText } from "@components/AccountPage"
-import OnlineAuthenticationComponent from "@components/OnlineAuthenticationComponent"
-import { ChevronLeft, CloseIcon, OfflineIcon, TrashIcon } from "@components/Icons"
-import DefaultButton from "@components/DefaultButton"
-import UsernameComponent from "@components/AddUserComponent"
-import useUsernameExists from "@hooks/useUsernameExists"
-import useIsConnected from "@hooks/useIsConnected"
-import { createGame, getInvitationsCount, getOnlineGames } from "@functions/OnlineFunctions"
-import { auth, db } from "@functions/firebase"
-import SegmentedControl from "@react-native-segmented-control/segmented-control"
-import { getFriends } from "@functions/UserFunctions"
-import { RootState } from "@redux/store"
-import useIsAuth from "@hooks/useIsAuth"
-import { emptyGame, gridStateMode, joinRulesArray, loadingState } from "@types"
+import { useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Pressable, View, Text, TextInput, Modal, FlatList } from "react-native";
+import { useSelector } from "react-redux";
+import { deleteDoc, doc } from "firebase/firestore";
+import { DeleteText } from "@components/AccountPage";
+import OnlineAuthenticationComponent from "@components/OnlineAuthenticationComponent";
+import { ChevronLeft, CloseIcon, OfflineIcon, TrashIcon } from "@components/Icons";
+import DefaultButton from "@components/DefaultButton";
+import UsernameComponent from "@components/AddUserComponent";
+import useUsernameExists from "@hooks/useUsernameExists";
+import useIsConnected from "@hooks/useIsConnected";
+import { createGame, getInvitationsCount, getOnlineGames } from "@functions/OnlineFunctions";
+import { auth, db } from "@functions/firebase";
+import SegmentedControl from "@react-native-segmented-control/segmented-control";
+import { getFriends } from "@functions/UserFunctions";
+import { RootState } from "@redux/store";
+import useIsAuth from "@hooks/useIsAuth";
+import { emptyGame, gridStateMode, joinRulesArray, loadingState } from "@types";
 
 function DeleteGame({
   deleting,

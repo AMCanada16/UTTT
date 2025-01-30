@@ -99,7 +99,7 @@ function DeleteGame({
   )
 }
 
-export default function SelectStorageGames({isFriend, onClose}:{isFriend: boolean, onClose: () => void}) {
+export default function SelectStorageGames({isFriend}:{isFriend: boolean}) {
   const router = useRouter();
   const [games, setGames] = useState<GameType[]>([])
   const {height, width} = useSelector((state: RootState) => state.dimensions)
@@ -149,7 +149,9 @@ export default function SelectStorageGames({isFriend, onClose}:{isFriend: boolea
       }} />
       <View style={{width: width * ((width <= 560) ? 0.95:0.8), backgroundColor: "rgba(255,255,255, 0.95)", height: height * 0.8, borderRadius: 25}}>
         <View style={{marginTop: (width <= 560) ? 15:25, marginHorizontal: (width <= 560) ? 15:25, flexDirection: 'row', marginBottom: 15, justifyContent: 'center'}}>
-          <Pressable onPress={() => {onClose()}} style={{position: 'absolute', left: 0}}>
+          <Pressable onPress={() => {
+            router.push("/")
+          }} style={{position: 'absolute', left: 0}}>
             <CloseIcon width={30} height={30}/>
           </Pressable>
           <Text style={{textAlign: 'center', fontWeight: 'bold', fontSize: 25}}>Load Game</Text>

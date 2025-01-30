@@ -4,22 +4,23 @@
   May 8, 2024
   Authentication component used to play online games.
 */
-import React from 'react'
-import { View, Text, Pressable } from 'react-native'
-import { useSelector } from 'react-redux'
-import { CloseIcon } from '@components/Icons'
-import AppleAuthenticationButton from '@components/AppleAuthenticationButton'
-import DefaultButton from '@components/DefaultButton'
-import GoogleAuthenticationButton from '@components/GoogleAuthenticationButton'
-import { signInAnonymously } from '@functions/AuthenticationFunctions'
-import { RootState } from '@redux/store'
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
+import { useSelector } from 'react-redux';
+import { CloseIcon } from '@components/Icons';
+import AppleAuthenticationButton from '@components/AppleAuthenticationButton';
+import DefaultButton from '@components/DefaultButton';
+import GoogleAuthenticationButton from '@components/GoogleAuthenticationButton';
+import { signInAnonymously } from '@functions/AuthenticationFunctions';
+import { RootState } from '@redux/store';
 
 export default function OnlineAuthenticationComponent({
   onClose
 }:{
   onClose: () => void
 }) {
-  const {width, height} = useSelector((state: RootState) => state.dimensions)
+  const {width, height} = useSelector((state: RootState) => state.dimensions);
+
   return (
     <View style={{
       backgroundColor: 'rgba(169,169,169,0.9)',
@@ -38,7 +39,7 @@ export default function OnlineAuthenticationComponent({
         <GoogleAuthenticationButton />
         <DefaultButton
           onPress={() => {
-            signInAnonymously()
+            signInAnonymously();
           }}
           style={{
             marginTop: 5

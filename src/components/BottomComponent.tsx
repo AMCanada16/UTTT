@@ -3,12 +3,12 @@
   Andrew Mainella
   22 September 2024
 */
-import { View, Text, Pressable } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { useRouter } from 'expo-router'
-import { useSelector } from 'react-redux'
-import { RootState } from '@redux/store'
-import GlitchComponent from '@components/GlitchComponent'
+import React, { useEffect, useState } from 'react';
+import { View, Text, Pressable } from 'react-native';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'expo-router';
+import GlitchComponent from '@components/GlitchComponent';
+import { RootState } from '@redux/store';
 
 enum collapsedMode {
   full, // all side by side

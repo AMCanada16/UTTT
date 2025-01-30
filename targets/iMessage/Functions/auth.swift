@@ -64,6 +64,10 @@ struct PersistanceApiResponse: Codable {
   var token: String?
 }
 
+struct RevokerApiResponse: Codable {
+  var response: String
+}
+
 func getPersistance() async {
   let API_KEY = "AIzaSyCCAWNKF8eHsynUew6iUSbj1RVW4IjTk8Q"
   // If this is not working check Expo-secure-store add `kSecAttrAccessGroup as String: "SYV2CK2N9N.Archimedes4.UTTT"` to query

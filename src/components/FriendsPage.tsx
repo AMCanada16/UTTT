@@ -3,20 +3,20 @@
   Andrew Mainella
   22 September 2024
 */
-import { View, Text, Pressable, FlatList, ListRenderItemInfo, ActivityIndicator, TextInput, Platform } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { auth } from '@functions/firebase';
 import { Redirect, useRouter  } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Pressable, FlatList, ListRenderItemInfo, ActivityIndicator, TextInput, Platform } from 'react-native';
 import { useSelector } from 'react-redux';
-import { RootState } from '@redux/store';
-import { approveFriendRequest, requestFriend } from '@functions/UserFunctions';
 import DefaultButton from '@components/DefaultButton';
-import { CheckMarkIcon, ChevronLeft, CloseIcon, OfflineIcon, XIcon } from './Icons';
-import useFriends from '@hooks/useFriends';
+import { CheckMarkIcon, ChevronLeft, CloseIcon, OfflineIcon, XIcon } from '@components/Icons';
 import OnlineComponent from '@components/OnlineComponent';
-import SegmentedControl from '@react-native-segmented-control/segmented-control';
+import { auth } from '@functions/firebase';
+import { approveFriendRequest, requestFriend } from '@functions/UserFunctions';
+import useFriends from '@hooks/useFriends';
 import useIsConnected from '@hooks/useIsConnected';
 import useIsAuth from '@hooks/useIsAuth';
+import SegmentedControl from '@react-native-segmented-control/segmented-control';
+import { RootState } from '@redux/store';
 
 function FriendButtonComponent({
   friend

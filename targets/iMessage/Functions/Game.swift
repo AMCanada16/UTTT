@@ -81,7 +81,7 @@ class Users {
   func getUsername(uid: String) async -> String? {
     do {
       let db = Firestore.firestore()
-      let userRef = db.collection("users").document(uid)
+      let userRef = db.collection("Users").document(uid)
       let doc = try await userRef.getDocument()
       if (doc.exists) {
         let data = doc.data()

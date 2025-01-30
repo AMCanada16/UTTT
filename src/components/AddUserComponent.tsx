@@ -5,16 +5,16 @@
   AddUserComponent.tsx
   A react functional component to add a user.
 */
-import { View, Text, Pressable, TextInput } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { ChevronRight, CloseIcon, SignOutIcon } from '@components/Icons'
-import { useSelector } from 'react-redux'
-import { RootState } from '@redux/store'
-import { addUser, checkIfUsernameValid } from '@functions/UserFunctions'
-import { auth } from '@functions/firebase'
-import DefaultButton from '@components/DefaultButton'
-import { signOut } from '@functions/AuthenticationFunctions'
-import { loadingState } from '@types'
+import React, { useEffect, useState } from 'react';
+import { View, Text, Pressable, TextInput } from 'react-native';
+import { useSelector } from 'react-redux';
+import DefaultButton from '@components/DefaultButton';
+import { ChevronRight, CloseIcon, SignOutIcon } from '@components/Icons';
+import { signOut } from '@functions/AuthenticationFunctions';
+import { addUser, checkIfUsernameValid } from '@functions/UserFunctions';
+import { auth } from '@functions/firebase';
+import { RootState } from '@redux/store';
+import { loadingState } from '@types';
 
 /**
  * A function to add a username if the account doesn't have one
@@ -27,20 +27,20 @@ export default function UsernameComponent({
 }:{
   onClose: () => void
 }) {
-  const {height, width} = useSelector((state: RootState) => state.dimensions)
-  const [username, setUsername] = useState<string>("")
-  const [usernameState, setUsernameState] = useState<loadingState>(loadingState.loading)
+  const {height, width} = useSelector((state: RootState) => state.dimensions);
+  const [username, setUsername] = useState<string>("");
+  const [usernameState, setUsernameState] = useState<loadingState>(loadingState.loading);
 
   async function check() {
     if (username.length > 2) {
-      setUsernameState(await checkIfUsernameValid(username))
+      setUsernameState(await checkIfUsernameValid(username));
     } else {
-      setUsernameState(loadingState.loading)
+      setUsernameState(loadingState.loading);
     }
   }
 
   useEffect(() => {
-    check()
+    check();
   }, [username])
 
   return (

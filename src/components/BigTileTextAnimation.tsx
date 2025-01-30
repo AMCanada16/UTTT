@@ -3,9 +3,9 @@
   Andrew Mainella
   14 May 2024
 */
-import React, { useState } from 'react'
-import { View } from 'react-native'
-import TextAnimation from '@components/TextAnimation'
+import React, { useState } from 'react';
+import { View } from 'react-native';
+import TextAnimation from '@components/TextAnimation';
 
 /**
  * 

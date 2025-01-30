@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
-import gridStateReducer from './reducers/gameReducer';
-import dimensionsReducer from './reducers/dimensionsReducer';
-import aiHistoryReducer from './reducers/aiHistoryReducer';
+import gridStateReducer from '@redux/reducers/gameReducer';
+import dimensionsReducer from '@redux/reducers/dimensionsReducer';
+import aiHistoryReducer from '@redux/reducers/aiHistoryReducer';
 
 
 const store = configureStore({

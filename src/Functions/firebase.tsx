@@ -3,7 +3,7 @@ import { getFirestore } from "firebase/firestore";
 import { initializeAuth, getAuth, Auth } from "firebase/auth"
 import { getDatabase } from "firebase/database";
 import { Platform } from "react-native";
-import getExpoSecureStorePersistence from "./getExpoSecureStorePersistance";
+import getExpoSecureStorePersistence from "@functions/getExpoSecureStorePersistance";
 
 const firebaseConfig: FirebaseOptions = {
   apiKey: process.env.EXPO_PUBLIC_API_KEY,

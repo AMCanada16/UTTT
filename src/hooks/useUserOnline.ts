@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { database } from "../functions/firebase";
 import { onValue, ref } from "firebase/database";
-import useIsAuth from "./useIsAuth";
+import { database } from "@functions/firebase";
+import useIsAuth from "@hooks/useIsAuth";
 
 
 /**

@@ -49,100 +49,56 @@ func signInWithGoogle() {
 
 struct LoginView: View {
   @State var currentNonce: String = ""
-    var body: some View {
-      VStack {
-        GeometryReader { geometry in
-          VStack (){
-            HStack{
-              Image("Logo")
+  var body: some View {
+    VStack {
+      GeometryReader { geometry in
+        VStack (){
+          UTTTHeader()
+          SignInWithAppleButton(.signIn) {request in
+            let nonce = getNonce()
+            currentNonce = nonce
+            request.nonce = sha256(nonce)
+            request.requestedScopes = [.fullName]
+          } onCompletion: { result in
+            switch result {
+              case .success(let authResults):
+                guard let credentials = authResults.credential as? ASAuthorizationAppleIDCredential, let identityToken = credentials.identityToken, let identityTokenString = String(data: identityToken, encoding: .utf8) else { return }
+                let credential = OAuthProvider.appleCredential(withIDToken: identityTokenString, rawNonce: currentNonce, fullName: credentials.fullName)
+
+                // Sign in with Firebase.
+                Auth.auth().signIn(with: credential) { (authResult, error) in
+                  if (error != nil) {
+                    return
+                  }
+                }
+              case .failure(let error):
+                 print("Authorization failed: " + error.localizedDescription)
+           }
+          }
+          .frame(height: 50)
+          .padding([.leading, .trailing], 25)
+          Button(action: signInWithGoogle) {
+            HStack {
+              Image("google-icon")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: 100, height: 100)
-              VStack (spacing: 5){
-                ZStack {
-                  Text("Ultimate")
-                    .font(.custom("Ultimate", size: 55))
-                    .offset(x: -2, y: -1)
-                    .foregroundColor(Color(UIColor(hex: "#00fffcff")!))
-                  Text("Ultimate")
-                    .font(.custom("Ultimate", size: 55))
-                    .offset(x: -2, y: 2)
-                    .foregroundColor(Color(UIColor(hex: "#fc00ffff")!))//Pink
-                  Text("Ultimate")
-                    .font(.custom("Ultimate", size: 55))
-                    .offset(x: 1, y: 2)
-                    .foregroundColor(Color(UIColor(hex: "#fffc00ff")!)) //Yello
-                  Text("Ultimate")
-                    .font(.custom("Ultimate", size: 55))
-                }
-                HStack (spacing: 0) {
-                  Text("Tic")
-                    .font(.custom("RussoOne", size: 40))
-                    .shadow(color: Color(UIColor(hex: "#FF5757ff")!), radius: 25)
-                    .foregroundColor(Color(UIColor(hex: "#ff9c9cff")!))
-                  Text("Tac")
-                    .font(Font.custom("RussoOne", size: 40))
-                    .shadow(color: Color(UIColor(hex: "#5CE1E6ff")!), radius: 25)
-                    .foregroundColor(Color(UIColor(hex: "#a0f4f7ff")!))
-                  Text("Toe")
-                    .font(Font.custom("RussoOne", size: 40))
-                    .shadow(color: Color(UIColor(hex: "#FF5757ff")!), radius: 25)
-                    .foregroundColor(Color(UIColor(hex: "#ff9c9cff")!))
-                }
-              }
+                .padding(.vertical, 5)
+              Text("Sign in With Google")
+                .foregroundStyle(.black)
             }
-            SignInWithAppleButton(.signIn) {request in
-              let nonce = getNonce()
-              currentNonce = nonce
-              request.nonce = sha256(nonce)
-              request.requestedScopes = [.fullName]
-            } onCompletion: { result in
-                print(result)
-              switch result {
-                    case .success(let authResults):
-                       print("Authorization successful.")
-                        guard let credentials = authResults.credential as? ASAuthorizationAppleIDCredential, let identityToken = credentials.identityToken, let identityTokenString = String(data: identityToken, encoding: .utf8) else { return }
-                        let credential = OAuthProvider.appleCredential(withIDToken: identityTokenString,
-                                                                       rawNonce: currentNonce, fullName: credentials.fullName)
-                      // Sign in with Firebase.
-                      Auth.auth().signIn(with: credential) { (authResult, error) in
-                        if (error != nil) {
-                          // Error. If error.code == .MissingOrInvalidNonce, make sure
-                          // you're sending the SHA256-hashed nonce as a hex string with
-                          // your request to Apple.
-                          return
-                        }
-                        // User is signed in to Firebase with Apple.
-                        // ...
-                      }
-                    case .failure(let error):
-                       print("Authorization failed: " + error.localizedDescription)
-             }
-            }
-            .frame(height: 50)
+            .frame(width: geometry.size.width - 50, height: 50)
+            .background(Color.white)
+            .clipShape(.rect(cornerRadius: 4))
+            .overlay( /// apply a rounded border
+                RoundedRectangle(cornerRadius: 4)
+                    .stroke(.black, lineWidth: 1)
+            )
             .padding([.leading, .trailing], 25)
-            Button(action: signInWithGoogle) {
-              HStack {
-                Image("google-icon")
-                  .resizable()
-                  .aspectRatio(contentMode: .fit)
-                  .padding(.vertical, 5)
-                Text("Sign in With Google")
-                  .foregroundStyle(.black)
-              }
-              .frame(width: geometry.size.width - 50, height: 50)
-              .background(Color.white)
-              .clipShape(.rect(cornerRadius: 4))
-              .overlay( /// apply a rounded border
-                  RoundedRectangle(cornerRadius: 4)
-                      .stroke(.black, lineWidth: 1)
-              )
-              .padding([.leading, .trailing], 25)
-            }
-          }.frame(width: geometry.size.width, height: geometry.size.height)
-        }
-      }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
-    }
+          }
+        }.frame(width: geometry.size.width, height: geometry.size.height)
+      }
+    }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
+  }
 }
 
 extension UIColor {
