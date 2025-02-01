@@ -1,9 +1,13 @@
-import { router } from 'expo-router'
-import React from 'react'
-import { View } from 'react-native'
-import { useSelector } from 'react-redux'
-import SelectOnlineGame from '@components/SelectOnlineGame'
-import { RootState } from '@redux/store'
+/*
+  Andrew Mainella
+  Jan 30 2024
+*/
+import { router } from 'expo-router';
+import React from 'react';
+import { View } from 'react-native';
+import { useSelector } from 'react-redux';
+import SelectOnlineGame from '@components/SelectOnlineGame';
+import { RootState } from '@redux/store';
 
 
 export default function index() {

@@ -3,13 +3,13 @@
   Andrew Mainella
   22 September 2024
 */
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { ActiveIcon, ControllerIcon, CrownIcon, SkullIcon } from '@components/Icons'
-import { useSelector } from 'react-redux'
-import { RootState } from '@redux/store'
-import { getOnlineGameStats } from '@functions/OnlineFunctions'
-import { loadingState } from '@types'
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { useSelector } from 'react-redux';
+import { ActiveIcon, ControllerIcon, CrownIcon, SkullIcon } from '@components/Icons';
+import { getOnlineGameStats } from '@functions/online';
+import { RootState } from '@redux/store';
+import { loadingState } from '@types';
 
 const styles = StyleSheet.create({
   statComponent: {
@@ -25,23 +25,23 @@ const styles = StyleSheet.create({
 })
 
 export default function OnlineStatics() {
-  const {height, width} = useSelector((state: RootState) => state.dimensions)
-  const [onlineStats, setOnlineStats] = useState<undefined | OnlineStatsType>(undefined)
-  const [onlineStatsState, setOnlineStatsState] = useState<loadingState>(loadingState.loading)
+  const {height, width} = useSelector((state: RootState) => state.dimensions);
+  const [onlineStats, setOnlineStats] = useState<undefined | OnlineStatsType>(undefined);
+  const [onlineStatsState, setOnlineStatsState] = useState<loadingState>(loadingState.loading);
 
   async function loadStatics() {
-    const result = await getOnlineGameStats()
+    const result = await getOnlineGameStats();
     if (result !== loadingState.failed) {
-      setOnlineStats(result)
-      setOnlineStatsState(loadingState.success)
+      setOnlineStats(result);
+      setOnlineStatsState(loadingState.success);
     } else {
-      setOnlineStatsState(loadingState.failed)
+      setOnlineStatsState(loadingState.failed);
     }
   }
 
   useEffect(() => {
-    loadStatics()
-  }, [])
+    loadStatics();
+  }, []);
 
   if (onlineStatsState === loadingState.loading) {
     return (

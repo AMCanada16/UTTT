@@ -2,12 +2,12 @@
   UTTT
   Andrew Mainella
   8 May 2024
+  auth.ts
 */
-import { signInAnonymously as signInAnonymouslyFirebase, signOut as signOutFirebase } from "firebase/auth";
-import { auth, database, db } from "@functions/firebase";
+import { signInAnonymously as signInAnonymouslyFirebase, signOut as signOutFirebase, deleteUser as deleteUserFirebase } from "firebase/auth";
+import { ref, remove } from "firebase/database";
 import { deleteDoc, doc } from "firebase/firestore";
-import { deleteUser as deleteUserFirebase } from "firebase/auth";
-import { ref, remove } from "firebase/database"
+import { auth, database, db } from "@functions/firebase";
 
 /**
  * 

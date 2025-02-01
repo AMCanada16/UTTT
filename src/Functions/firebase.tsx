@@ -1,3 +1,7 @@
+/*
+  UTTT
+  Andrew Mainella
+*/
 import { initializeApp, getApp, getApps, FirebaseOptions } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { initializeAuth, getAuth, Auth } from "firebase/auth"
@@ -18,20 +22,25 @@ const firebaseConfig: FirebaseOptions = {
 // Initialize Firebase
 let app;
 let auth: Auth;
-if (getApps.length === 0) {
+// Checks if the app is already initialized
+if (getApps().length === 0) {
   app = initializeApp(firebaseConfig);
   if (Platform.OS !== "web") {
+    // initializeAuth with expo secure persistence should not be done on web.
     auth = initializeAuth(app, {
       persistence: getExpoSecureStorePersistence(),
     });
   } else {
+    // get the auth, this will initilize it the default way
     auth = getAuth(app);
   }
 } else {
+  // Get the app and auth that has already been initalized.
   app = getApp();
   auth = getAuth(app);
 }
 
+// Get the firestore and database
 const db = getFirestore(app);
 const database = getDatabase();
 

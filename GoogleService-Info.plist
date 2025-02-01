@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.Archimedes4.UTTT</string>
+	<string>Archimedes4.UTTT</string>
 	<key>PROJECT_ID</key>
 	<string>archimedes4-games</string>
 	<key>STORAGE_BUCKET</key>

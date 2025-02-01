@@ -16,20 +16,13 @@ function getImageLength(width: number, height: number) {
   return (height * 0.8)/3 - 10
 } 
 
-
-const blurhash =
-  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
-
 function WelcomeImages() {
-  const {height, width} = useSelector((state: RootState) => state.dimensions)
-  const imageLength = useMemo(() => {return getImageLength(width, height)} , [width, height])
-
-  //const [assets, error] = useAssets([require("assets/UTTT-Demo-Start.gif"), require("assets/UTTT-Demo-End.gif"), require("assets/UTTT-Demo-Ai.gif")]);
+  const {height, width} = useSelector((state: RootState) => state.dimensions);
+  const imageLength = useMemo(() => {return getImageLength(width, height)} , [width, height]);
   
-  if (imageLength === 0) { //|| assets === undefined || assets.length !== 3 || error !== undefined) {
-    return null
+  if (imageLength === 0) {
+    return null;
   }
-  
 
   return (
     <View style={{flexDirection: 'row'}}>
@@ -49,11 +42,7 @@ function WelcomeImages() {
   )
 }
 
-export function WelcomePage({
-  gameType
-}:{
-  gameType?: "online" | "ai" | "friend" | "friends" | "account",
-}) {
+export function WelcomePage() {
   const {height, width} = useSelector((state: RootState) => state.dimensions)
   const insets = useSafeAreaInsets()
   // text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff, 0.025em 0.04em 0 #fffc00;

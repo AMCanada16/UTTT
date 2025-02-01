@@ -1,7 +1,7 @@
-import { Slot } from 'expo-router'
-import React from 'react'
-import { View, useWindowDimensions } from 'react-native'
-import { WelcomePage } from '@components/WelcomePage'
+import { Slot } from 'expo-router';
+import React from 'react';
+import { View, useWindowDimensions } from 'react-native';
+import { WelcomePage } from '@components/WelcomePage';
 
 /*
  This is the main layout. This needs to be in a main layout so only the overlay re-renders on re route.

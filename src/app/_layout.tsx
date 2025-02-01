@@ -5,7 +5,6 @@
   _layout.tsx
 
 */
-
 import RootLayout from "@components/RootLayout";
 
 /**

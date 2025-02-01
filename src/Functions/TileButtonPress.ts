@@ -9,13 +9,12 @@
     Offline will update the game in the local storeage. This function will handle any errors that occur.
     Also, this function will first make a move the user makes. Then it will update the state and let the ai move. It will then finally wait for the ai to make the final move.
 */
-
 import { perdict } from "@functions/ai/common";
 import indexToGridIndex from "@functions/indexToGridIndex";
 import indexToTileIndex from "@functions/indexToTileIndex";
-import { updateGame } from "@functions/OnlineFunctions";
+import { updateGame } from "@functions/online";
 import pickTile from "@functions/pickTile";
-import { updateStorageGame } from "./storageFunctions";
+import { updateStorageGame } from "@functions/storageFunctions";
 import { gameSlice } from "@redux/reducers/gameReducer";
 import store from "@redux/store";
 import { gridStateMode, loadingState } from "@types";

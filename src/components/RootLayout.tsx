@@ -11,10 +11,10 @@ import Head from "expo-router/head"
 import React, { useCallback, useEffect } from 'react';
 import { StatusBar, View, useWindowDimensions } from 'react-native';
 import {Provider, useSelector} from "react-redux"
+import GoogleProvider from '@components/GoogleProvider';
+import useShareStatus from '@hooks/useShareStatus';
 import store, { RootState } from '@redux/store';
 import { dimensionsSlice } from '@redux/reducers/dimensionsReducer';
-import useShareStatus from '@hooks/useShareStatus';
-import GoogleProvider from '@components/GoogleProvider';
 
 SplashScreen.preventAutoHideAsync();
 

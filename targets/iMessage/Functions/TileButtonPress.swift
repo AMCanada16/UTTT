@@ -212,8 +212,8 @@ func TileButtonPress(
 					ActiveType(
 						xOne: 2,
 						xTwo: 0,
-						yOne: 2,
-						yTwo: 0,
+						yOne: 0,
+						yTwo: 2,
             gridIndex: gridIndex
 					))
 			}

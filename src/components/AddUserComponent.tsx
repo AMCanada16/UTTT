@@ -10,7 +10,7 @@ import { View, Text, Pressable, TextInput } from 'react-native';
 import { useSelector } from 'react-redux';
 import DefaultButton from '@components/DefaultButton';
 import { ChevronRight, CloseIcon, SignOutIcon } from '@components/Icons';
-import { signOut } from '@functions/AuthenticationFunctions';
+import { signOut } from '@functions/auth';
 import { addUser, checkIfUsernameValid } from '@functions/UserFunctions';
 import { auth } from '@functions/firebase';
 import { RootState } from '@redux/store';
@@ -25,7 +25,7 @@ import { loadingState } from '@types';
 export default function UsernameComponent({
   onClose
 }:{
-  onClose: () => void
+  onClose: () => void;
 }) {
   const {height, width} = useSelector((state: RootState) => state.dimensions);
   const [username, setUsername] = useState<string>("");
@@ -41,7 +41,7 @@ export default function UsernameComponent({
 
   useEffect(() => {
     check();
-  }, [username])
+  }, [username]);
 
   return (
     <View style={{width: width * ((width <= 560) ? 0.95:0.8), height: height * 0.8, backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
@@ -94,7 +94,7 @@ export default function UsernameComponent({
       </DefaultButton>
       <DefaultButton 
         onPress={() => {
-          signOut()
+          signOut();
         }}
         style={{
           flexDirection: 'row',

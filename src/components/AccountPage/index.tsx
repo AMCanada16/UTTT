@@ -3,24 +3,24 @@
   Andrew Mainella
   22 September 2024
 */
-import { useRouter } from 'expo-router'
-import React, { useEffect, useState } from 'react'
-import { View, Text, Pressable, ActivityIndicator, TextInput, Platform, Modal } from 'react-native'
-import { useSelector } from 'react-redux'
-import { deleteUser } from '@functions/AuthenticationFunctions'
-import { checkIfUsernameValid, updateUsername } from '@functions/UserFunctions'
-import { auth } from '@functions/firebase'
-import DefaultButton from '@components/DefaultButton'
-import OnlineAuthenticationComponent from '@components/OnlineAuthenticationComponent'
-import UsernameComponent from '@components/AddUserComponent'
-import { ChevronLeft, CloseIcon, FriendIcon, OfflineIcon, OnlineIcon, PencilIcon, TrashIcon } from '@components/Icons'
-import OnlineStatics from '@components/OnlineStatics'
-import SignOutButton from '@components/AccountPage/SignOutButton'
-import useUsername from '@hooks/useUsernameExists'
-import useIsConnected from '@hooks/useIsConnected'
-import useIsAuth from '@hooks/useIsAuth'
-import { RootState } from '@redux/store'
-import { loadingState } from '@types'
+import { useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Pressable, ActivityIndicator, TextInput, Platform, Modal } from 'react-native';
+import { useSelector } from 'react-redux';
+import DefaultButton from '@components/DefaultButton';
+import OnlineAuthenticationComponent from '@components/OnlineAuthenticationComponent';
+import UsernameComponent from '@components/AddUserComponent';
+import { ChevronLeft, CloseIcon, FriendIcon, OfflineIcon, OnlineIcon, PencilIcon, TrashIcon } from '@components/Icons';
+import OnlineStatics from '@components/OnlineStatics';
+import SignOutButton from '@components/AccountPage/SignOutButton';
+import { deleteUser } from '@functions/auth';
+import { checkIfUsernameValid, updateUsername } from '@functions/UserFunctions';
+import { auth } from '@functions/firebase';
+import useUsername from '@hooks/useUsernameExists';
+import useIsConnected from '@hooks/useIsConnected';
+import useIsAuth from '@hooks/useIsAuth';
+import { RootState } from '@redux/store';
+import { loadingState } from '@types';
 
 export function DeleteText({
   secondsLeft,

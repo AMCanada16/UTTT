@@ -5,7 +5,7 @@
 import { doc, onSnapshot } from "firebase/firestore"
 import { useEffect, useState } from "react"
 import { auth, db } from "@functions/firebase"
-import { joinGame } from "@functions/OnlineFunctions"
+import { joinGame } from "@functions/online"
 import { useSelector } from "react-redux"
 import store, { RootState } from "@redux/store"
 import { loadStorageGame, updateStorageGame } from "@functions/storageFunctions"

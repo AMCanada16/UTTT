@@ -5,39 +5,39 @@
   UltimateTicTacToe.tsx
 */
 import * as Clipboard from 'expo-clipboard';
-import { useEffect, useMemo, useState } from "react"
-import { useSelector } from "react-redux"
-import { RootState } from "@redux/store"
-import { View, Text, StyleSheet, Pressable, ActivityIndicator, useWindowDimensions } from "react-native"
-import BigTileTextAnimation from "@components/BigTileTextAnimation"
-import Striketrough from "@components/Striketrough"
-import TileButton from "@components/TileButton"
-import { ChevronLeft, CloseIcon, CopiedIcon, CopyIcon, OfflineIcon, PersonIcon } from "@components/Icons"
-import { Redirect, useGlobalSearchParams, useRouter } from "expo-router"
-import useGame from "@hooks/useGame"
-import { auth } from "@functions/firebase"
-import PlayersPage from "@components/PlayersPage"
-import GameOverComponent from "@components/GameOverComponent"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-import useIsConnected from "@hooks/useIsConnected"
-import { trainModel } from "@functions/ai"
-import { gridStateMode } from "@types"
-import React from 'react';
+import { Redirect, useGlobalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useMemo, useState } from "react";
+import { View, Text, StyleSheet, Pressable, ActivityIndicator, useWindowDimensions } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
+import BigTileTextAnimation from "@components/BigTileTextAnimation";
+import GameOverComponent from "@components/GameOverComponent";
+import Striketrough from "@components/Striketrough";
+import TileButton from "@components/TileButton";
+import PlayersPage from "@components/PlayersPage";
+import { ChevronLeft, CloseIcon, CopiedIcon, CopyIcon, OfflineIcon, PersonIcon } from "@components/Icons";
+import { auth } from "@functions/firebase";
+import { trainModel } from "@functions/ai";
+import useIsConnected from "@hooks/useIsConnected";
+import useGame from "@hooks/useGame";
+import { RootState } from "@redux/store";
+import { gridStateMode } from "@types";
 
 //Renders root type
 function InnerGame({game, gridIndex, gameLength}:{game: GameType, gridIndex: number, gameLength: number}) {
   const active = useMemo(() => {
-    const foundActive = game.data.active.find((active) => active.gridIndex === gridIndex)
+    const foundActive = game.data.active.find((active) => active.gridIndex === gridIndex);
     return foundActive
-  }, [game])
-  const {width} = useWindowDimensions()
+  }, [game]);
+  const {width} = useWindowDimensions();
   const borderWidth = useMemo(() => {
     if (width >= 575) {
       return 4
     } else {
       return 4 * (width/575)
     }
-  }, [width])
+  }, [width]);
+
   return (
     <View key={`Grid_${gridIndex}`} style={{
       width: gameLength/3 - (borderWidth * 2),
@@ -82,16 +82,16 @@ function InnerGame({game, gridIndex, gameLength}:{game: GameType, gridIndex: num
 }
 
 function MainGame({game}:{game: GameType}) {
-  const { height, width } = useSelector((state: RootState) => state.dimensions)
+  const { height, width } = useSelector((state: RootState) => state.dimensions);
   const [gameLength, setGameLength] = useState<number>(0);
 
   useEffect(() => {
     if ((width < height && width <= 560) || (width > height && height <= 560)) {
-      setGameLength((height < width) ? height * 0.9: width * 0.9)
+      setGameLength((height < width) ? height * 0.9: width * 0.9);
     } else {
-      setGameLength((height < width) ? height * 0.8: width * 0.8) 
+      setGameLength((height < width) ? height * 0.8: width * 0.8);
     }
-  }, [width, height])
+  }, [width, height]);
 
   return (
     <View key={"Container"} style={{
@@ -119,14 +119,14 @@ function MainGame({game}:{game: GameType}) {
 
 export default function UltimateTicTacToe() {
   //first dimention board, second rows, third columns, forth second rows, fifth columns
-  const { gameType, gameId } = useGlobalSearchParams()
-  const {height, width} = useSelector((state: RootState) => state.dimensions)
-  const router = useRouter()
+  const { gameType, gameId } = useGlobalSearchParams();
+  const {height, width} = useSelector((state: RootState) => state.dimensions);
+  const router = useRouter();
   const [isCopied, setIsCopied] = useState<boolean>(false);
-  const [isShowingPlayers, setIsShowingPlayers] = useState<boolean>(false)
-  const [isShowingGameOver, setIsShowingGameOver] = useState<boolean>(true)
-  const insets = useSafeAreaInsets()
-  const isConnected = useIsConnected()
+  const [isShowingPlayers, setIsShowingPlayers] = useState<boolean>(false);
+  const [isShowingGameOver, setIsShowingGameOver] = useState<boolean>(true);
+  const insets = useSafeAreaInsets();
+  const isConnected = useIsConnected();
 
   const game = useGame(gameId as string, (gameType === 'online'))
   const [modelLoading, setModelLoading] = useState<boolean>(true)
@@ -139,17 +139,17 @@ export default function UltimateTicTacToe() {
   }
 
   async function loadModal() {
-    await trainModel()
-    setModelLoading(false)
+    await trainModel();
+    setModelLoading(false);
   }
 
   useEffect(() => {
     if (gameType === 'ai') {
-      loadModal()
+      loadModal();
     } else {
-      setModelLoading(false)
+      setModelLoading(false);
     }
-  }, [])
+  }, []);
 
   if (!isConnected) {
     return (

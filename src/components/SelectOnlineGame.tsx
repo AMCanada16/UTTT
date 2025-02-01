@@ -15,7 +15,7 @@ import DefaultButton from "@components/DefaultButton";
 import UsernameComponent from "@components/AddUserComponent";
 import useUsernameExists from "@hooks/useUsernameExists";
 import useIsConnected from "@hooks/useIsConnected";
-import { createGame, getInvitationsCount, getOnlineGames } from "@functions/OnlineFunctions";
+import { createGame, getInvitationsCount, getOnlineGames } from "@functions/online";
 import { auth, db } from "@functions/firebase";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import { getFriends } from "@functions/UserFunctions";

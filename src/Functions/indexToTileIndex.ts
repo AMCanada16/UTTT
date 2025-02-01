@@ -25,6 +25,6 @@
 */
 
 export default function indexToTileIndex(i: number): number {
-        // X Pos + Y Pos
+  // X Pos + Y Pos
   return Math.floor((i % 27) % 3) + (Math.floor((i % 27)/9) * 3)
 }

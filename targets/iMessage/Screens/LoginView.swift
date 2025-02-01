@@ -77,23 +77,20 @@ struct LoginView: View {
           }
           .frame(height: 50)
           .padding([.leading, .trailing], 25)
-          Button(action: signInWithGoogle) {
-            HStack {
-              Image("google-icon")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .padding(.vertical, 5)
-              Text("Sign in With Google")
-                .foregroundStyle(.black)
+          GoogleSignInButton(style: .wide) {
+            self.userInfo = ""
+            guard let rootViewController = self.rootViewController else {
+              print("No root view controller")
+              return
             }
-            .frame(width: geometry.size.width - 50, height: 50)
-            .background(Color.white)
-            .clipShape(.rect(cornerRadius: 4))
-            .overlay( /// apply a rounded border
-                RoundedRectangle(cornerRadius: 4)
-                    .stroke(.black, lineWidth: 1)
-            )
-            .padding([.leading, .trailing], 25)
+            GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { result, error in
+              guard let result else {
+                print("Error signing in: \(String(describing: error))")
+                return
+              }
+              print("Successfully signed in user")
+              self.userInfo = result.user.profile?.json ?? ""
+            }
           }
         }.frame(width: geometry.size.width, height: geometry.size.height)
       }

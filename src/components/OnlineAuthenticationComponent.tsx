@@ -11,7 +11,7 @@ import { CloseIcon } from '@components/Icons';
 import AppleAuthenticationButton from '@components/AppleAuthenticationButton';
 import DefaultButton from '@components/DefaultButton';
 import GoogleAuthenticationButton from '@components/GoogleAuthenticationButton';
-import { signInAnonymously } from '@functions/AuthenticationFunctions';
+import { signInAnonymously } from '@functions/auth';
 import { RootState } from '@redux/store';
 
 export default function OnlineAuthenticationComponent({

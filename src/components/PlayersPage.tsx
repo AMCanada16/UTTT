@@ -4,31 +4,31 @@
   PlayersPage.tsx
   A page to show the players in a game.
 */
-import { View, Text, Pressable, FlatList, TextInput, KeyboardAvoidingView } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { RootState } from '@redux/store'
-import { getUsername } from '@functions/UserFunctions'
+import { useRouter } from "expo-router";
+import React, { useEffect, useState } from 'react';
+import { View, Text, Pressable, FlatList, TextInput, KeyboardAvoidingView } from 'react-native';
+import { useSelector } from 'react-redux';
+import { doc, updateDoc } from 'firebase/firestore'
 import DefaultButton from '@components/DefaultButton'
 import OnlineComponent from '@components/OnlineComponent'
-import { ChevronLeft, CloseIcon, FriendIcon, TrashIcon } from './Icons'
+import { ChevronLeft, CloseIcon, FriendIcon, TrashIcon } from '@components/Icons'
 import { auth, db } from '@functions/firebase'
-import SegmentedControl from '@react-native-segmented-control/segmented-control'
-import { joinRulesArray } from '@types'
 import useInvitations from '@hooks/useInvitations'
-import { doc, updateDoc } from 'firebase/firestore'
-import { useRouter } from 'expo-router'
+import { getUsername } from '@functions/UserFunctions'
+import SegmentedControl from "@react-native-segmented-control/segmented-control"
+import { RootState } from "@redux/store"
+import { joinRulesArray } from "@types"
 
 function Invitations({
   height
 }:{
-  height: number
+  height: number;
 }) {
   const [isInvitationModeFriends, setIsInvitationModeFriends] = useState<boolean>(false);
-  const [search, setSearch] = useState<string>("")
-  const users = useInvitations(search, isInvitationModeFriends)
-  const game = useSelector((state: RootState) => state.gameState)
-  const [topHeight, setTopHeight] = useState<number>(0)
+  const [search, setSearch] = useState<string>("");
+  const users = useInvitations(search, isInvitationModeFriends);
+  const game = useSelector((state: RootState) => state.gameState);
+  const [topHeight, setTopHeight] = useState<number>(0);
 
   if (game.gameType !== "online") {
     return null
@@ -132,15 +132,15 @@ export default function PlayersPage({
   accounts,
   onClose
 }:{
-  accounts: compressedUserType[]
-  onClose: () => void
+  accounts: compressedUserType[];
+  onClose: () => void;
 }) {
-  const {height, width} = useSelector((state: RootState) => state.dimensions)
-  let [players, setPlayers] = useState<gameUserType[]>([])
-  const joinRule = useSelector((state: RootState) => state.gameState.joinRule)
-  const gameId = useSelector((state: RootState) => state.gameState.gameId)
-  const router = useRouter()
-  const [invitationHeight, setInvitationHeight] = useState<number>(0)
+  const {height, width} = useSelector((state: RootState) => state.dimensions);
+  let [players, setPlayers] = useState<gameUserType[]>([]);
+  const joinRule = useSelector((state: RootState) => state.gameState.joinRule);
+  const gameId = useSelector((state: RootState) => state.gameState.gameId);
+  const router = useRouter();
+  const [invitationHeight, setInvitationHeight] = useState<number>(0);
 
   async function loadUsers() {
     let newPlayers: gameUserType[] = []
@@ -158,15 +158,15 @@ export default function PlayersPage({
         })
       }
     }
-    setPlayers(newPlayers)
+    setPlayers(newPlayers);
   }
 
   useEffect(() => {
-    loadUsers()
-  }, [])
+    loadUsers();
+  }, []);
 
   if (joinRule === undefined) {
-      // This should be unreachable this component is only viewed when a game exists and is of an online type
+    // This should be unreachable this component is only viewed when a game exists and is of an online type
     return (
       <View>
         <Text>Something Wrong</Text>

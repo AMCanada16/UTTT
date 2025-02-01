@@ -5,7 +5,6 @@
   index.tsx
 */
 
-
-export default function DefaultMainWelcomePage() {
+export default function DefaultWelcomePage() {
   return null
 }

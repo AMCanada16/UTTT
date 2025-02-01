@@ -26,13 +26,13 @@ function getFontSize(width: number, height: number) {
 export default function GameOverComponent({
   onClose
 }:{
-  onClose: () => void
+  onClose: () => void;
 }) {
   const {height, width} = useSelector((state: RootState) => state.dimensions);
   const winner = useSelector((state: RootState) => state.gameState.gameOver);
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  
+
   return (
     <View style={{position: 'absolute', width: width * ((width <= 560) ? 0.95:0.8), height: (height * ((width <= 560) ? 0.95:0.8)) - insets.top - insets.bottom, top: 'auto', bottom: 'auto', left: 'auto', right: 'auto', backgroundColor: 'rgba(255,255,255, 0.95)', borderRadius: 25}}>
       <Text

@@ -2,11 +2,11 @@
   UTTT
   Andrew Mainella
   22 September 2024
-  OnlineFunctions.ts
+  online.ts
   Online game functions.
 */
+import { and, collection, doc, getCountFromServer, getDocsFromServer, or, orderBy, query, runTransaction, updateDoc, where } from "firebase/firestore";
 import { auth, db } from '@functions/firebase';
-import { and, collection, doc, getCountFromServer, getDocsFromServer, or, orderBy, query, runTransaction, updateDoc, where } from "firebase/firestore"
 import { gridStateMode, loadingState } from '@types';
 
 /**

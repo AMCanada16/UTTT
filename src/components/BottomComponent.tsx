@@ -3,10 +3,10 @@
   Andrew Mainella
   22 September 2024
 */
+import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { useSelector } from 'react-redux';
-import { useRouter } from 'expo-router';
 import GlitchComponent from '@components/GlitchComponent';
 import { RootState } from '@redux/store';
 

@@ -3,9 +3,9 @@
   Andrew Mainella
   17 January 2025
 */
-import { aiHistorySlice } from "@redux/reducers/aiHistoryReducer"
-import store from "@redux/store"
-import { gridStateMode, loadingState } from "@types"
+import { aiHistorySlice } from "@redux/reducers/aiHistoryReducer";
+import store from "@redux/store";
+import { gridStateMode, loadingState } from "@types";
 
 function getLRBaseIndex(index: number) {
 	return index - (index % 27) + ((Math.floor((index % 9)/3.0)) * 3)

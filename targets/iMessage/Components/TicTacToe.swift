@@ -10,10 +10,10 @@ import Foundation
 import FirebaseAuth
 
 struct TicTacToeTile: View {
-	let tileIndex: Int
-	let gridIndex: Int
-	var length: CGFloat
-  @EnvironmentObject var useGame: UseGame
+  let tileIndex: Int;
+  let gridIndex: Int;
+  var length: CGFloat;
+  @EnvironmentObject var useGame: UseGame;
 	
 	/*
 		| 0 1 2    | 3 4 5    | 6 7 8    |
@@ -41,8 +41,8 @@ struct TicTacToeTile: View {
 	}
 	
 	func buttonPress(tileIndex: Int) {
-    let game = Game().getGame(state: useGame.currentGame)!
-		let index = getIndex(tileIndex: tileIndex)
+    let game = Game().getGame(state: useGame.currentGame)!;
+    let index = getIndex(tileIndex: tileIndex);
     
     // It is not the users turn
     if (!Game().isCurrentUsersTurn(game: Game().getGame(state: useGame.currentGame)!, uid: Auth.auth().currentUser?.uid ?? "")) {
@@ -64,7 +64,7 @@ struct TicTacToeTile: View {
   func showingTile(game: GameType, previousGameState: GameType?) -> Bool {
     let index = getIndex(tileIndex: tileIndex)
     // Check if the tile is filled
-    if game.data.inner[index] != gridStateMode.open || (game.selectedGrid != 0 && game.selectedGrid != (gridIndex + 1)) {
+    if game.data.inner[index] != gridStateMode.open || (game.selectedGrid != 0 && game.selectedGrid != (gridIndex + 1)) || game.data.value[gridIndex] != gridStateMode.open {
       return false
     }
     
@@ -95,7 +95,9 @@ struct TicTacToeTile: View {
 	var body: some View {
 		let index = getIndex(tileIndex: tileIndex)
 		Button {
-			buttonPress(tileIndex: tileIndex)
+      if (showingXTile(currentGame: useGame.currentGame, previousGameState: useGame.previousGameState) || showingOTile(currentGame: useGame.currentGame, previousGameState: useGame.previousGameState)) {
+        buttonPress(tileIndex: tileIndex)
+      }
 		} label: {
 			VStack {
         if Game().getGame(state: useGame.currentGame)!.data.inner[index] == gridStateMode.o {
