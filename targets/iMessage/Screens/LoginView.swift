@@ -10,6 +10,7 @@ import AuthenticationServices
 import Firebase
 import CryptoKit
 import FirebaseAuth
+import GoogleSignInSwift
 
 func getNonce() -> String {
   var randomBytes = [UInt8](repeating: 0, count: 32)
@@ -41,11 +42,11 @@ func sha256(_ input: String) -> String {
   return hashString
 }
 
-// TODO implament function
-func signInWithGoogle() {
-  
-  return
-}
+//func handleSignInButton() {
+//  GoogleSignIn.shared.delegate = self
+//  GoogleSignIn.shared.presentingWindow = view.window
+//  GoogleSignIn.shared.signIn()
+//}
 
 struct LoginView: View {
   @State var currentNonce: String = ""
@@ -77,21 +78,7 @@ struct LoginView: View {
           }
           .frame(height: 50)
           .padding([.leading, .trailing], 25)
-          GoogleSignInButton(style: .wide) {
-            self.userInfo = ""
-            guard let rootViewController = self.rootViewController else {
-              print("No root view controller")
-              return
-            }
-            GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { result, error in
-              guard let result else {
-                print("Error signing in: \(String(describing: error))")
-                return
-              }
-              print("Successfully signed in user")
-              self.userInfo = result.user.profile?.json ?? ""
-            }
-          }
+//          GoogleSignInButton(action: handleSignInButton)
         }.frame(width: geometry.size.width, height: geometry.size.height)
       }
     }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)

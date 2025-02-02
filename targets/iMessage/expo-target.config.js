@@ -3,7 +3,7 @@ module.exports = config => ({
   type: "imessage",
   frameworks: [
     "Messages",
-    "SwiftUI"
+    "SwiftUI",
   ]
 }
 );

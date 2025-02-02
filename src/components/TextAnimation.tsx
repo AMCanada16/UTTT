@@ -25,15 +25,14 @@ export default function TextAnimation({length, mode, colored}:{length: number, m
 
   useEffect(() => {
     r.value = 0;
-  }, [])
+  }, []);
 
   // highlight-start
   const animatedProps = useAnimatedProps(() => ({
     r: withTiming(r.value, {
       duration: 500,
       easing: Easing.in(Easing.linear)
-    })
-    ,
+    }),
   }));
   // highlight-end
 
