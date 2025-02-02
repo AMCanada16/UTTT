@@ -10,7 +10,6 @@ import AuthenticationServices
 import Firebase
 import CryptoKit
 import FirebaseAuth
-import GoogleSignInSwift
 
 func getNonce() -> String {
   var randomBytes = [UInt8](repeating: 0, count: 32)
@@ -42,14 +41,16 @@ func sha256(_ input: String) -> String {
   return hashString
 }
 
-//func handleSignInButton() {
-//  GoogleSignIn.shared.delegate = self
-//  GoogleSignIn.shared.presentingWindow = view.window
-//  GoogleSignIn.shared.signIn()
-//}
-
 struct LoginView: View {
   @State var currentNonce: String = ""
+  @Environment(\.openURL) var openURL
+  
+  func goToApp() {
+    if let url = URL(string: "Archimedes4.UTTT://home") {
+      openURL(url)
+    }
+  }
+
   var body: some View {
     VStack {
       GeometryReader { geometry in
@@ -78,7 +79,27 @@ struct LoginView: View {
           }
           .frame(height: 50)
           .padding([.leading, .trailing], 25)
-//          GoogleSignInButton(action: handleSignInButton)
+          Button(action: goToApp) {
+            HStack {
+              Image(systemName: "info.circle")
+                .resizable()
+                .foregroundStyle(.black)
+                .aspectRatio(contentMode: .fit)
+                .frame(maxHeight: 25)
+              Text("Open Ultimate Tic Tac Toe")
+                .foregroundStyle(.black)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+            }
+            .padding()
+            .frame(width: geometry.size.width - 50, height: 50)
+            .background(Color.white)
+            .clipShape(.rect(cornerRadius: 8))
+            .overlay( /// apply a rounded border
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(.black, lineWidth: 1)
+            )
+          }
         }.frame(width: geometry.size.width, height: geometry.size.height)
       }
     }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)

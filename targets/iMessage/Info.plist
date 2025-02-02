@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleIconName</key>
-	<string>iMessage App Icon</string>
+	<string>iMessageIcon</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>NSExtension</key>
@@ -18,5 +18,17 @@
 		<string>RussoOne.ttf</string>
 		<string>Ultimate.ttf</string>
 	</array>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleIdentifier</key>
+	<string>Archimedes4.UTTT.iMessage</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleName</key>
+	<string>Ultimate Tic Tac Toe</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+  <key>CFBundleDisplayName</key>
+  <string>Ultimate Tic Tac Toe</string>
 </dict>
 </plist>

@@ -4,6 +4,7 @@ module.exports = config => ({
   frameworks: [
     "Messages",
     "SwiftUI",
-  ]
+  ],
+  name: "iMessage",
 }
 );
