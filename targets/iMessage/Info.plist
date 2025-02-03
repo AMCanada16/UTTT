@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleIconName</key>
-	<string>iMessageIcon</string>
+	<string>iMessage App Icon</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>NSExtension</key>

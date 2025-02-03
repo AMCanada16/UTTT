@@ -26,5 +26,11 @@ If the game is run on iMessage the game is always online. The user also has to b
 ## No google sign in
 Because the iMessage extension is an app extension, the google sign in does not work. So the user needs to sign in.
 
+
+## Thing to change in the iMessage build settings 
+1. The iMessage App Icon needs to be named `App Icon`
+2. Stickers Icon role needs to make to extension.
+3. Generate Info.plist file needs to be set to No
+
 ## Env
 There needs to be a GoogleService-Info.plist in the root directory. This can be downloaded from firebase.
