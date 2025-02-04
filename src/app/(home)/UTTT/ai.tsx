@@ -10,7 +10,7 @@ import SelectStorageGames from '@components/SelectStorageGame';
 import { RootState } from '@redux/store';
 
 export default function ai() {
-  const {height, width} = useSelector((state: RootState) => state.dimensions)
+  const {height, width} = useSelector((state: RootState) => state.dimensions);
   return (
     <View style={{width, height, alignContent: 'center', alignItems: 'center', justifyContent: 'center', position: 'absolute'}} pointerEvents='box-none'>
       <SelectStorageGames isFriend={false}/>

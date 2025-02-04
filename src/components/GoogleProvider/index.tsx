@@ -4,8 +4,8 @@
   11 September 2024
   Setting up google sign in with @react-native-google-signin/google-signin. This has been tested on iOS.
 */
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { ReactNode, useEffect } from 'react';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 export default function GoogleProvider({
   children

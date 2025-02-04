@@ -2,8 +2,8 @@
   Sudoku
   Andrew Mainella
 */
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ReactNode } from 'react';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 export default function GoogleProvider({
   children

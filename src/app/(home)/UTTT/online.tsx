@@ -11,7 +11,7 @@ import { RootState } from '@redux/store';
 
 
 export default function index() {
-  const {height, width} = useSelector((state: RootState) => state.dimensions)
+  const {height, width} = useSelector((state: RootState) => state.dimensions);
   return (
     <View style={{width, height, alignContent: 'center', alignItems: 'center', justifyContent: 'center', position: 'absolute'}} pointerEvents='box-none'>
       <SelectOnlineGame onClose={() => {router.push("/")}}/>

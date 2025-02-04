@@ -6,5 +6,5 @@
 */
 
 export default function DefaultWelcomePage() {
-  return null
+  return null;
 }

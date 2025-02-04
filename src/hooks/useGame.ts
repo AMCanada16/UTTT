@@ -2,15 +2,15 @@
   UTTT
   Andrew Mainella
 */
-import { doc, onSnapshot } from "firebase/firestore"
-import { useEffect, useState } from "react"
-import { auth, db } from "@functions/firebase"
-import { joinGame } from "@functions/online"
-import { useSelector } from "react-redux"
-import store, { RootState } from "@redux/store"
-import { loadStorageGame, updateStorageGame } from "@functions/storageFunctions"
-import { gameSlice } from "@redux/reducers/gameReducer"
-import { getUsername } from "@functions/UserFunctions"
+import { doc, onSnapshot } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { auth, db } from "@functions/firebase";
+import { joinGame } from "@functions/online";
+import { loadStorageGame, updateStorageGame } from "@functions/storageFunctions";
+import { getUsername } from "@functions/UserFunctions";
+import { gameSlice } from "@redux/reducers/gameReducer";
+import store, { RootState } from "@redux/store";
 
 /**
  * A hook
