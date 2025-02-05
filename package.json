@@ -18,6 +18,7 @@
     "@react-native-segmented-control/segmented-control": "2.5.4",
     "@react-oauth/google": "^0.12.1",
     "@reduxjs/toolkit": "^1.9.7",
+    "@sentry/react-native": "~6.3.0",
     "@tensorflow/tfjs": "^4.8.0",
     "@tensorflow/tfjs-react-native": "^1.0.0",
     "expo": "^52.0.25",

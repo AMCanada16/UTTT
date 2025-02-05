@@ -3,7 +3,7 @@
     "name": "UTTT",
     "slug": "UTTT",
     "scheme": "Archimedes4.UTTT",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -56,6 +56,16 @@
             "useFrameworks":"static"
           }
         }
+      ],
+      [
+        "@sentry/react-native/expo",
+        {
+          "organization": "andrew-mainella",
+          "project": "ultimate-tic-tac-toe",
+          // If you are using a self-hosted instance, update the value of the url property
+          // to point towards your self-hosted instance. For example, https://self-hosted.example.com/.
+          "url": "https://sentry.io/"
+        }
       ]
     ],
     "ios": {
@@ -76,8 +86,7 @@
               "NSExceptionAllowsInsecureHTTPLoads": true
             }
           }
-        },
-        "LSMinimumSystemVersion": "17"
+        }
       },
       "googleServicesFile": "./GoogleService-Info.plist",
       "buildNumber": "13",

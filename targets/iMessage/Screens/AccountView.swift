@@ -13,6 +13,7 @@ import FirebaseAuth
 
 struct SignOutButtonView: View {
   @State var geometry: GeometryProxy
+  @State var signOutState: loadingState = loadingState.notStarted
   
   init (for metrics: GeometryProxy) {
     self.geometry = metrics
@@ -20,11 +21,17 @@ struct SignOutButtonView: View {
   
   func signOut() {
     Task {
+      if (signOutState != loadingState.notStarted) {
+        return
+      }
+      signOutState = loadingState.loading
       do {
         guard let idToken = try await Auth.auth().currentUser?.getIDToken() else {
+          signOutState = loadingState.failed
           return
         }
         guard let url = URL(string: "https://us-central1-archimedes4-games.cloudfunctions.net/revokeTokens") else {
+          signOutState = loadingState.failed
             return
         }
         // Parameters for x-www-form-urlencoded body
@@ -35,7 +42,8 @@ struct SignOutButtonView: View {
         // Convert parameters to x-www-form-urlencoded string
         let bodyString = parameters.map { "\($0.key)=\($0.value)" }.joined(separator: "&")
         guard let bodyData = bodyString.data(using: .utf8) else {
-            return
+          signOutState = loadingState.failed
+          return
         }
 
         // Create a URLRequest and set its properties
@@ -48,11 +56,13 @@ struct SignOutButtonView: View {
         let result = try JSONDecoder().decode(RevokerApiResponse.self, from: data)
         print(result)
         if (result.response != "success") {
+          signOutState = loadingState.failed
           return
         }
         try Auth.auth().signOut()
+        signOutState = loadingState.success
       } catch {
-        print("something went wrong")
+        signOutState = loadingState.failed
       }
     }
   }
@@ -60,15 +70,21 @@ struct SignOutButtonView: View {
   var body: some View {
     Button(action: signOut) {
       HStack {
-        Image(systemName: "rectangle.portrait.and.arrow.right")
-          .resizable()
-          .foregroundStyle(.black)
-          .aspectRatio(contentMode: .fit)
-          .frame(maxHeight: 25)
-        Text("Sign Out")
-          .foregroundStyle(.black)
-          .lineLimit(1)
-          .minimumScaleFactor(0.5)
+        if (signOutState == loadingState.loading) {
+          ProgressView()
+          Text("Signing out...")
+            .foregroundStyle(.black)
+        } else {
+          Image(systemName: "rectangle.portrait.and.arrow.right")
+            .resizable()
+            .foregroundStyle(.black)
+            .aspectRatio(contentMode: .fit)
+            .frame(maxHeight: 25)
+          Text("Sign Out")
+            .foregroundStyle(.black)
+            .lineLimit(1)
+            .minimumScaleFactor(0.5)
+        }
       }
       .padding()
       .frame(width: geometry.size.width - 50, height: 50)
