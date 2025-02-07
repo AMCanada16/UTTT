@@ -58,6 +58,10 @@ struct ViewController: View {
       } else if (currentMode.mode == ViewType.info) {
         InfoView()
           .environmentObject(currentMode)
+      } else if (currentMode.mode == ViewType.join) {
+        JoinView()
+          .environmentObject(useGame)
+          .environmentObject(currentMode)
       }
     }.onAppear() {
       Task {

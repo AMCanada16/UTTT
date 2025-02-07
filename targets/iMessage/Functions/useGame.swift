@@ -75,6 +75,8 @@ let emptyGame = [gridStateMode.open,gridStateMode.open,gridStateMode.open,
 class UseGame: ObservableObject {
   @Published var currentGame: gameState = gameState.loading
   @Published var previousGameState: GameType? = nil // If this is null no move has been made
+  @Published var joinId: String = ""
+  @Published var currentJoinGameState: joinGameState = joinGameState.notStarted;
   private var gameId: String = ""
   
   func followGame() {

@@ -16,7 +16,6 @@ class CurrentMode: ObservableObject {
   @Published var previousMode = ViewType.login
 }
 
-
 class MessagesViewController: MSMessagesAppViewController {
   var currentMode = CurrentMode()
   var useGame =  UseGame()
@@ -58,13 +57,14 @@ class MessagesViewController: MSMessagesAppViewController {
   
   override func didSelect(_ message: MSMessage, conversation: MSConversation) {
     print("did select")
-    print(message.url)
-    print(message.summaryText)
-    print(conversation.selectedMessage)
-  }
-  
-  override func willSelect(_ message: MSMessage, conversation: MSConversation) {
-    print("will select")
+    guard let url = message.url else {
+      return
+    }
+    let pathComps = url.pathComponents
+    if pathComps.count >= 2 && pathComps[0] == "join" {
+      useGame.joinId = pathComps[1]
+      currentMode.mode = ViewType.join
+    }
     print(message.url)
     print(message.summaryText)
     print(conversation.selectedMessage)
@@ -77,9 +77,8 @@ class MessagesViewController: MSMessagesAppViewController {
     removeAllChildViewControllers()
     
     let controller: UIViewController
-    controller = UIHostingController(rootView: ViewController(currentMode: currentMode, useGame: useGame, addMessage: { message in
-      print("url \(self.composeMessage(session: conversation.selectedMessage?.session, caption: message).url)")
-      conversation.send(self.composeMessage(session: conversation.selectedMessage?.session, caption: message))
+    controller = UIHostingController(rootView: ViewController(currentMode: currentMode, useGame: useGame, addMessage: { message, url in
+      conversation.send(self.composeMessage(session: conversation.selectedMessage?.session, caption: message, url: url))
     }))
     
     addChild(controller)
@@ -107,20 +106,17 @@ class MessagesViewController: MSMessagesAppViewController {
       }
   }
 
-  fileprivate func composeMessage(session: MSSession? = nil, caption: String) -> MSMessage {
+  fileprivate func composeMessage(session: MSSession? = nil, caption: String, url: String) -> MSMessage {
     
     let layout = MSMessageTemplateLayout()
     layout.caption = caption
     
+    let url = URL(string: url)
+    
     let message = MSMessage(session: session ?? MSSession())
     message.layout = layout
-    guard let url = URL(string: "Archimedes4.UTTT.iMessage://join/3548367") else {
-      print("This sent an invalid url")
-      return message;
-    }
-    print(url);
+    message.summaryText = caption;
     message.url = url;
-    message.
     
     return message
   }

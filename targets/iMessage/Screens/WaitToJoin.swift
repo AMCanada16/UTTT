@@ -22,7 +22,7 @@ struct WaitToJoin: View {
   }
   
   func sendMessage() {
-    addMessage("Let's Play Ultimate Tic Tac Toe!")
+    addMessage("Let's play Ultimate Tic Tac Toe!", "data://join/\(Game().getGame(state: useGame.currentGame)?.gameId ?? "No Game")")
   }
   
   func goBack() {

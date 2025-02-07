@@ -23,6 +23,7 @@ struct UTTTHeader: View {
             .foregroundColor(Color(UIColor(hex: "#fffc00ff")!)) //Yellow
           Text("Ultimate")
             .font(.custom("Ultimate", size: 55))
+            .foregroundStyle(.black)
         }
         HStack (spacing: 0) {
           Text("Tic")
