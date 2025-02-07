@@ -183,7 +183,7 @@ class Game {
             added = joinGameState.gameFull
           }
         } else {
-          added = joinGameState.notStarted
+          added = joinGameState.noGame
         }
         return
       })

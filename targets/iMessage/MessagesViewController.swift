@@ -23,17 +23,21 @@ class MessagesViewController: MSMessagesAppViewController {
   // MARK: Properties
   
   override func willBecomeActive(with conversation: MSConversation) {
-      super.willBecomeActive(with: conversation)
-      FirebaseApp.configure()
-      
-      do {
-        try Auth.auth().useUserAccessGroup("SYV2CK2N9N.Archimedes4.UTTT.iMessage")
-      } catch let error as NSError {
-        print("Error changing user access group: %@", error)
-      }
-      
-      // Present the view controller appropriate for the conversation and presentation style.
-      presentViewController(for: conversation, with: presentationStyle)
+    super.willBecomeActive(with: conversation)
+    FirebaseApp.configure()
+    
+    do {
+      try Auth.auth().useUserAccessGroup("SYV2CK2N9N.Archimedes4.UTTT.iMessage")
+    } catch let error as NSError {
+      print("Error changing user access group: %@", error)
+    }
+    
+    // Present the view controller appropriate for the conversation and presentation style.
+    presentViewController(for: conversation, with: presentationStyle)
+    
+    if let pathComps = conversation.selectedMessage?.url?.toPathComponents() {
+      handleMessageSelection(components: pathComps)
+    }
   }
   
   // MARK: MSMessagesAppViewController overrides
@@ -55,24 +59,16 @@ class MessagesViewController: MSMessagesAppViewController {
   
   // MARK: Child view controller presentation
   
-  override func didSelect(_ message: MSMessage, conversation: MSConversation) {
-    print("did select")
+  override func willSelect(_ message: MSMessage, conversation: MSConversation) {
     guard let url = message.url else {
       return
     }
-    let pathComps = url.pathComponents
-    if pathComps.count >= 2 && pathComps[0] == "join" {
-      useGame.joinId = pathComps[1]
-      currentMode.mode = ViewType.join
-    }
-    print(message.url)
-    print(message.summaryText)
-    print(conversation.selectedMessage)
+    let pathComps = url.toPathComponents()
+    handleMessageSelection(components: pathComps)
   }
   
   /// - Tag: PresentViewController
   private func presentViewController(for conversation: MSConversation, with presentationStyle: MSMessagesAppPresentationStyle) {
-    print(conversation.selectedMessage?.session)
     // Remove any child view controllers that have been presented.
     removeAllChildViewControllers()
     
@@ -119,6 +115,15 @@ class MessagesViewController: MSMessagesAppViewController {
     message.url = url;
     
     return message
+  }
+  
+  private func handleMessageSelection(components: [String]) {
+    if (components.count >= 1) {
+      if (components[0] == "join" && components.count == 2) {
+        useGame.joinId = components[1]
+        currentMode.mode = ViewType.join
+      }
+    }
   }
 }
 

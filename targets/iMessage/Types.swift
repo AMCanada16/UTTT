@@ -63,7 +63,7 @@ struct GameType {
 }
 
 enum joinGameState {
-  case notStarted, success, failed, noGame, loading, gameFull
+  case success, failed, noGame, loading, gameFull, accept
 }
 
 enum loadingState {

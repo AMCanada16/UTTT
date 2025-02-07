@@ -12,13 +12,8 @@ struct HomeView: View {
   @EnvironmentObject var currentMode: CurrentMode
   @EnvironmentObject var currentGame: UseGame
   @State var input: String = ""
-  @State var cJoinGameState: joinGameState = joinGameState.notStarted
   @State var createGameState: loadingState = loadingState.notStarted
   @Environment(\.openURL) var openURL
-  
-  func clearJoinGameState() {
-    cJoinGameState = joinGameState.notStarted
-  }
   
   func goToInformation() {
     currentMode.mode = ViewType.info
@@ -58,11 +53,13 @@ struct HomeView: View {
   }
   
   func joinGame() {
-    Task {
+    Task { @MainActor in
       if (input == "") {
         return
       }
-      cJoinGameState = joinGameState.loading
+      currentMode.mode = ViewType.join
+      currentGame.joinId = input
+      currentGame.currentJoinGameState = joinGameState.loading
       currentGame.currentGame = gameState.loading
       currentGame.updateGameId(gameId: input)
       guard let uid = Auth.auth().currentUser?.uid else {
@@ -70,7 +67,7 @@ struct HomeView: View {
         return
       }
       let result = await Game().joinGame(gameId: input, uid: uid)
-      cJoinGameState = result
+      currentGame.currentJoinGameState = result
       if (result == joinGameState.success) {
         currentMode.mode = ViewType.game
       }
@@ -78,47 +75,7 @@ struct HomeView: View {
   }
   
   var body: some View {
-    if (cJoinGameState == joinGameState.failed) {
-      ZStack {
-        VStack {
-          UTTTHeader()
-          HStack {
-            Text("Something went wrong!")
-              .foregroundStyle(.white)
-          }.padding(.top, 5)
-        }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
-        BackButton(goBack: {
-          cJoinGameState = joinGameState.notStarted
-        })
-      }
-    } else if (cJoinGameState == joinGameState.loading) {
-      VStack {
-        UTTTHeader()
-        HStack {
-          ProgressView()
-            .tint(.white)
-          Text("Joining Game")
-            .foregroundStyle(.white)
-        }.padding(.top, 5)
-      }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
-    } else if (cJoinGameState == joinGameState.success) {
-      VStack {
-        Text("Successfully joined the game.")
-          .foregroundStyle(.white)
-      }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
-    } else if (cJoinGameState == joinGameState.gameFull) {
-      ZStack {
-        VStack {
-          UTTTHeader()
-          Text("The Game is full!")
-            .foregroundStyle(.white)
-            .padding(.top, 5)
-        }.frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.primary)
-        BackButton(goBack: {
-          cJoinGameState = joinGameState.notStarted
-        })
-      }
-    } else if (createGameState == loadingState.loading) {
+    if (createGameState == loadingState.loading) {
       VStack {
         UTTTHeader()
         HStack {
