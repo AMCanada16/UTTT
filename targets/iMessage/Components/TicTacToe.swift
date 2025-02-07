@@ -33,11 +33,11 @@ struct TicTacToeTile: View {
 	 */
 	
 	func getIndex(tileIndex: Int) -> Int {
-		let upperCount: Int = Int(floor(Double((gridIndex/3))) * 27)
-		let yCount: Int = Int(floor(Double(tileIndex)/3)) * 9
-		let xCount: Int = Int(tileIndex % 3)
-		let xOffset: Int = Int((gridIndex % 3) * 3)
-		return upperCount + yCount + xOffset + xCount
+    let upperCount: Int = Int(floor(Double((gridIndex/3))) * 27);
+    let yCount: Int = Int(floor(Double(tileIndex)/3)) * 9;
+    let xCount: Int = Int(tileIndex % 3);
+    let xOffset: Int = Int((gridIndex % 3) * 3);
+    return upperCount + yCount + xOffset + xCount;
 	}
 	
 	func buttonPress(tileIndex: Int) {

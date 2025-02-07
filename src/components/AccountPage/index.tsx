@@ -166,47 +166,47 @@ function ConfirmingDelete({
 }
 
 export default function AccountPage() {
-  const {height, width} = useSelector((state: RootState) => state.dimensions)
-  const [editingUsername, setEditingUsername] = useState<string>("")
-  const username = useUsername()
-  const [isUpdatingUsername, setIsUpdatingUsername] = useState<boolean>(false)
-  const [usernameState, setUsernameState] = useState<loadingState>(loadingState.loading)
+  const {height, width} = useSelector((state: RootState) => state.dimensions);
+  const [editingUsername, setEditingUsername] = useState<string>("");
+  const username = useUsername();
+  const [isUpdatingUsername, setIsUpdatingUsername] = useState<boolean>(false);
+  const [usernameState, setUsernameState] = useState<loadingState>(loadingState.loading);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState<boolean>(false);
   const isConnected = useIsConnected()
   const [pageHeight, setPageHeight] = useState<number>(0)
-  const router = useRouter()
-  const {isAuth, isLoading} = useIsAuth()
+  const router = useRouter();
+  const {isAuth, isLoading} = useIsAuth();
 
   async function loadUpdateUsername() {
-    let uid = auth.currentUser?.uid
+    let uid = auth.currentUser?.uid;
     if (uid !== undefined) {
-      setUsernameState(loadingState.loading)
-      const result = await updateUsername(uid, editingUsername)
+      setUsernameState(loadingState.loading);
+      const result = await updateUsername(uid, editingUsername);
       if (result === true) {
-        setUsernameState(loadingState.success)
+        setUsernameState(loadingState.success);
       } else {
-        setUsernameState(loadingState.failed)
+        setUsernameState(loadingState.failed);
       }
     }
   }
 
   async function check() {
-    setUsernameState(loadingState.loading)
+    setUsernameState(loadingState.loading);
     if (editingUsername.length > 2) {
-      setUsernameState(await checkIfUsernameValid(editingUsername))
+      setUsernameState(await checkIfUsernameValid(editingUsername));
     } else {
-      setUsernameState(loadingState.loading)
+      setUsernameState(loadingState.loading);
     }
   }
 
   useEffect(() => {
     if (isAuth) {
-      check()
+      check();
     }
-  }, [editingUsername, isAuth])
+  }, [editingUsername, isAuth]);
 
   useEffect(() => {
-    setEditingUsername(username.username)
+    setEditingUsername(username.username);
   }, [username.username])
 
   if (isLoading) {

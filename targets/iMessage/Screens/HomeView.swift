@@ -135,10 +135,12 @@ struct HomeView: View {
           HStack(spacing: 0) {
             VStack {
               HStack {
-                TextField("Game ID", text: $input)
+                TextField("", text: $input, prompt: Text("Game ID").foregroundColor(.gray))
                   .lineLimit(1)
                   .disableAutocorrection(true)
                   .frame(height: 30)
+                  .foregroundStyle(.black)
+                  
                 if (input != "") {
                   Button(action: clearInput) {
                     Image(systemName: "xmark.circle.fill")

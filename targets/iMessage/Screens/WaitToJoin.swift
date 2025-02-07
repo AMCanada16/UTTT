@@ -22,7 +22,7 @@ struct WaitToJoin: View {
   }
   
   func sendMessage() {
-    addMessage("Do you want to join the game?")
+    addMessage("Let's Play Ultimate Tic Tac Toe!")
   }
   
   func goBack() {
@@ -47,9 +47,9 @@ struct WaitToJoin: View {
           HStack(spacing: 0) {
             VStack{}.frame(width: geometry.size.width * 0.1 + 25)
             Spacer()
-            VStack {
-              HStack{
+            HStack {
                 Text("Game ID:")
+                  .foregroundStyle(.black)
                 Button(action: copyGameId) {
                   Image(systemName: isCopied ? "document.on.document.fill":"document.on.document")
                     .resizable()
@@ -60,7 +60,7 @@ struct WaitToJoin: View {
                 }
                 Text(Game().getGame(state: useGame.currentGame)?.gameId ?? "No Game")
                   .font(.headline)
-              }
+                  .foregroundStyle(.black)
             }
             .padding()
             .frame(width: geometry.size.width * 0.6)

@@ -28,7 +28,7 @@ class MessagesViewController: MSMessagesAppViewController {
       FirebaseApp.configure()
       
       do {
-        try Auth.auth().useUserAccessGroup("SYV2CK2N9N.com.Archimedes4.UTTT")
+        try Auth.auth().useUserAccessGroup("SYV2CK2N9N.Archimedes4.UTTT.iMessage")
       } catch let error as NSError {
         print("Error changing user access group: %@", error)
       }
@@ -56,13 +56,29 @@ class MessagesViewController: MSMessagesAppViewController {
   
   // MARK: Child view controller presentation
   
+  override func didSelect(_ message: MSMessage, conversation: MSConversation) {
+    print("did select")
+    print(message.url)
+    print(message.summaryText)
+    print(conversation.selectedMessage)
+  }
+  
+  override func willSelect(_ message: MSMessage, conversation: MSConversation) {
+    print("will select")
+    print(message.url)
+    print(message.summaryText)
+    print(conversation.selectedMessage)
+  }
+  
   /// - Tag: PresentViewController
   private func presentViewController(for conversation: MSConversation, with presentationStyle: MSMessagesAppPresentationStyle) {
+    print(conversation.selectedMessage?.session)
     // Remove any child view controllers that have been presented.
     removeAllChildViewControllers()
     
     let controller: UIViewController
     controller = UIHostingController(rootView: ViewController(currentMode: currentMode, useGame: useGame, addMessage: { message in
+      print("url \(self.composeMessage(session: conversation.selectedMessage?.session, caption: message).url)")
       conversation.send(self.composeMessage(session: conversation.selectedMessage?.session, caption: message))
     }))
     
@@ -98,6 +114,13 @@ class MessagesViewController: MSMessagesAppViewController {
     
     let message = MSMessage(session: session ?? MSSession())
     message.layout = layout
+    guard let url = URL(string: "Archimedes4.UTTT.iMessage://join/3548367") else {
+      print("This sent an invalid url")
+      return message;
+    }
+    print(url);
+    message.url = url;
+    message.
     
     return message
   }

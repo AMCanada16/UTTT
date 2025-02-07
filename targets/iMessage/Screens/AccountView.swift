@@ -206,6 +206,7 @@ struct AccountView: View {
                   .padding(.leading, 5)
                   .padding(.vertical)
                   .font(.custom("Ultimate", size: 25))
+                  .foregroundStyle(.black)
               }
             }.frame(width: (geometry.size.width-55)/2, height: containerHeight)
             .background(Color.white)
@@ -226,6 +227,7 @@ struct AccountView: View {
                   .padding(.leading, 5)
                   .padding(.vertical)
                   .font(.custom("Ultimate", size: 25))
+                  .foregroundStyle(.black)
               }
             }.frame(width: (geometry.size.width-55)/2, height: containerHeight)
             .background(Color.white)
@@ -249,6 +251,7 @@ struct AccountView: View {
                   .padding(.leading, 5)
                   .padding(.vertical)
                   .font(.custom("Ultimate", size: 25))
+                  .foregroundStyle(.black)
               }
             }.frame(width: (geometry.size.width-55)/2, height: containerHeight)
             .background(Color.white)
@@ -269,6 +272,7 @@ struct AccountView: View {
                   .padding(.leading, 5)
                   .padding(.vertical)
                   .font(.custom("Ultimate", size: 25))
+                  .foregroundStyle(.black)
               }
             }.frame(width: (geometry.size.width-55)/2, height: containerHeight)
             .background(Color.white)
