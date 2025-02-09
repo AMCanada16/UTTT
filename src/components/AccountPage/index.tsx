@@ -11,7 +11,7 @@ import DefaultButton from '@components/DefaultButton';
 import OnlineAuthenticationComponent from '@components/OnlineAuthenticationComponent';
 import UsernameComponent from '@components/AddUserComponent';
 import { ChevronLeft, CloseIcon, FriendIcon, OfflineIcon, OnlineIcon, PencilIcon, TrashIcon } from '@components/Icons';
-import OnlineStatics from '@components/OnlineStatics';
+import OnlineStatistics from '@components/OnlineStatics';
 import SignOutButton from '@components/AccountPage/SignOutButton';
 import { deleteUser } from '@functions/auth';
 import { checkIfUsernameValid, updateUsername } from '@functions/UserFunctions';
@@ -346,7 +346,7 @@ export default function AccountPage() {
             fontSize: 16, marginTop: 2
           }}>Online Stats</Text>
         </View>
-        <OnlineStatics />
+        <OnlineStatistics />
         <DefaultButton onPress={() => {
           if (Platform.OS === "web") {
             router.push("/UTTT/friends")

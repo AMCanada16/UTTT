@@ -24,12 +24,12 @@ const styles = StyleSheet.create({
   }
 })
 
-export default function OnlineStatics() {
+export default function OnlineStatistics() {
   const {height, width} = useSelector((state: RootState) => state.dimensions);
   const [onlineStats, setOnlineStats] = useState<undefined | OnlineStatsType>(undefined);
   const [onlineStatsState, setOnlineStatsState] = useState<loadingState>(loadingState.loading);
 
-  async function loadStatics() {
+  async function loadStatistics() {
     const result = await getOnlineGameStats();
     if (result !== loadingState.failed) {
       setOnlineStats(result);
@@ -40,7 +40,7 @@ export default function OnlineStatics() {
   }
 
   useEffect(() => {
-    loadStatics();
+    loadStatistics();
   }, []);
 
   if (onlineStatsState === loadingState.loading) {

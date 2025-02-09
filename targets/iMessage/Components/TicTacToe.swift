@@ -112,7 +112,7 @@ struct TicTacToeTile: View {
             .padding(3)
         } else if (showingXTile(currentGame: useGame.currentGame, previousGameState: useGame.previousGameState)) {
           Rectangle()
-            .foregroundStyle(Color(UIColor(hex: "#ff9c9cff")!))
+            .foregroundStyle(Color(UIColor(hex: "#a0f4f7ff")!))
             .padding(3)
         }
 			}.frame(width: length, height: length).background(Color.primary)

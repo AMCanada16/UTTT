@@ -207,7 +207,6 @@ func TileButtonPress(
 			if (newGame.data.inner[rlBaseIndex] == newGame.data.inner[rlBaseIndex + 8] && newGame.data.inner[rlBaseIndex + 8] == newGame.data.inner[rlBaseIndex + 16] && newGame.data.inner[rlBaseIndex] != gridStateMode.open) {
 				change = true
 				newGame.data.value[gridIndex] = currentTurn
-				print("Set value right left")
 				newGame.data.active.append(
 					ActiveType(
 						xOne: 2,
@@ -239,7 +238,6 @@ func TileButtonPress(
 				}
 			}
 			if (change) {
-				print("Running game over check")
 				var isGameOver = false
 				/*
 					GridIndex
@@ -252,43 +250,35 @@ func TileButtonPress(
 				 
 				*/
 				let rowIndex = Int(floor(Double(gridIndex)/3.0))
-				print("This is row \(rowIndex)")
 				let columnIndex = gridIndex % 3
 				
 				// Check full game horizontal
         for x in 1...2 {
-          print(newGame.data.value[(rowIndex * 3) + x])
-          print(newGame.data.value[(rowIndex * 3)])
 					if (newGame.data.value[(rowIndex * 3) + x] != newGame.data.value[(rowIndex * 3)]) {
 						break
 					}
 					if x == 2 {
-						print("Setting game over hor")
 						isGameOver = true
 					}
 				}
 				
 				// Check full game vert
         for y in 1...2 {
-          print(columnIndex)
           if newGame.data.value[(y * 3) + columnIndex] != newGame.data.value[columnIndex] {
 						break
 					}
 					if y == 2 {
-						print("Setting game over vert")
 						isGameOver = true
 					}
 				}
 				
 				// Check full game left right
 				if newGame.data.value[0] == newGame.data.value[4] && newGame.data.value[4] == newGame.data.value[8] && newGame.data.value[8] != gridStateMode.open {
-					print("Setting game over lr")
 					isGameOver = true
 				}
 				
 				// Check full game right left
 				if newGame.data.value[2] == newGame.data.value[4] && newGame.data.value[4] == newGame.data.value[6] && newGame.data.value[6] != gridStateMode.open {
-					print("Setting game over rl")
 					isGameOver = true
 				}
 				

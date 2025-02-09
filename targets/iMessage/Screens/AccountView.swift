@@ -115,7 +115,6 @@ struct AccountView: View {
       if document.exists {
         let data = document.data()
         username = (data?["username"] as? String) ?? ""
-        print("Document data: \(username)")
       } else {
         print("Document does not exist")
       }
@@ -152,31 +151,32 @@ struct AccountView: View {
               .padding([.trailing], 5)
             ZStack {
               Text("Ultimate")
-                .font(.custom("Ultimate", size: 35))
+                .font(.custom("Ultimate", size: 25))
                 .offset(x: -2, y: -1)
                 .foregroundColor(Color(UIColor(hex: "#00fffcff")!))
               Text("Ultimate")
-                .font(.custom("Ultimate", size: 35))
+                .font(.custom("Ultimate", size: 25))
                 .offset(x: -2, y: 2)
                 .foregroundColor(Color(UIColor(hex: "#fc00ffff")!))//Pink
               Text("Ultimate")
-                .font(.custom("Ultimate", size: 35))
+                .font(.custom("Ultimate", size: 25))
                 .offset(x: 1, y: 2)
                 .foregroundColor(Color(UIColor(hex: "#fffc00ff")!)) //Yello
               Text("Ultimate")
-                .font(.custom("Ultimate", size: 35))
+                .font(.custom("Ultimate", size: 25))
+                .foregroundStyle(.black)
               Spacer()
             }
             Text("Tic")
-              .font(.custom("RussoOne", size: 30))
+              .font(.custom("RussoOne", size: 20))
               .shadow(color: Color(UIColor(hex: "#FF5757ff")!), radius: 25)
               .foregroundColor(Color(UIColor(hex: "#ff9c9cff")!))
             Text("Tac")
-              .font(Font.custom("RussoOne", size: 30))
+              .font(Font.custom("RussoOne", size: 20))
               .shadow(color: Color(UIColor(hex: "#5CE1E6ff")!), radius: 25)
               .foregroundColor(Color(UIColor(hex: "#a0f4f7ff")!))
             Text("Toe")
-              .font(Font.custom("RussoOne", size: 30))
+              .font(Font.custom("RussoOne", size: 20))
               .shadow(color: Color(UIColor(hex: "#FF5757ff")!), radius: 25)
               .foregroundColor(Color(UIColor(hex: "#ff9c9cff")!))
             Spacer()

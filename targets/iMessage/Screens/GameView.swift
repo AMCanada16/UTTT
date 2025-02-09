@@ -18,6 +18,7 @@ func getLength(width: CGFloat, height: CGFloat) -> CGFloat {
 struct MainGame: View {
   @EnvironmentObject var currentMode: CurrentMode
   @EnvironmentObject var useGame: UseGame
+  let addMessage: AddMessageType
   
   func goToAccount() {
     currentMode.previousMode = ViewType.game
@@ -43,6 +44,18 @@ struct MainGame: View {
     default:
       return
     }
+  }
+  
+  func sendMessage() {
+    guard let gameId = Game().getGame(state: useGame.currentGame)?.gameId else {
+      return
+    }
+    addMessage("Archimedes4 has moved. Your turn!", "data://game/\(gameId)")
+  }
+  
+  func makeMoveAndSendMessage() {
+    makeMove()
+    sendMessage()
   }
   
   func goBack() {
@@ -115,6 +128,13 @@ struct MainGame: View {
                   .foregroundColor(.white)
                   .aspectRatio(contentMode: .fit)
               }
+              Button(action: makeMoveAndSendMessage) {
+                Image(systemName: "arrow.up.message")
+                  .resizable()
+                  .frame(width: 50, height: 50)
+                  .foregroundColor(.white)
+                  .aspectRatio(contentMode: .fit)
+              }
             } else {
               Button(action: goToAccount) {
                 Image(systemName: "person.crop.circle")
@@ -132,6 +152,13 @@ struct MainGame: View {
               }
               Button(action: goToHome) {
                 Image(systemName: "chevron.left.circle.fill")
+                  .resizable()
+                  .aspectRatio(contentMode: .fit)
+                  .frame(width: 50, height: 50)
+                  .foregroundColor(.white)
+              }
+              Button(action: sendMessage) {
+                Image(systemName: "message")
                   .resizable()
                   .aspectRatio(contentMode: .fit)
                   .frame(width: 50, height: 50)
@@ -185,36 +212,37 @@ struct LoadingView: View {
         }
       }.frame(maxWidth: .infinity, maxHeight: .infinity)
       .background(Color.primary)
-      VStack {
-        HStack {
-          Button(action: goBack) {
-            Image(systemName: "arrowshape.backward.circle")
-              .resizable()
-              .frame(width: 40, height: 40)
-              .foregroundStyle(.white)
-          }
-          .padding(.leading, 15)
-          .padding(.top, 15)
-          Spacer()
-        }
-        Spacer()
-      }
+      BackButton(goBack: goBack)
     }
   }
 }
 
 struct GameView: View {
+  @EnvironmentObject var currentMode: CurrentMode
   @EnvironmentObject var useGame: UseGame
   let addMessage: AddMessageType
+  
+  func goBack() {
+    currentMode.mode = ViewType.home
+  }
   
 	var body: some View {
     switch useGame.currentGame {
     case .error:
-      Text("Something went wrong")
+      ZStack {
+        VStack() {
+          HStack {
+            Text("Something went wrong!")
+              .foregroundStyle(.white)
+          }
+        }.frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.primary)
+        BackButton(goBack: goBack)
+      }
     case .loading:
       LoadingView()
     case .game(let currentGame):
-      MainGame()
+      MainGame(addMessage: addMessage)
     }
 	}
 }

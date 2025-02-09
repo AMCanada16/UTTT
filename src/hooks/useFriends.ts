@@ -8,7 +8,7 @@ import { auth, db } from "@functions/firebase";
 import { loadingState } from "@types";
 
 /*
-  TO DO
+  TODO
   Docs
   Pagination
   Fail

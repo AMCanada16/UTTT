@@ -48,6 +48,7 @@ struct GameStatsView: View {
             VStack {
               HStack{
                 Text("Game ID:")
+                  .foregroundStyle(.black)
                 Button(action: copyGameId) {
                   Image(systemName: isCopied ? "document.on.document.fill":"document.on.document")
                     .resizable()
@@ -58,6 +59,7 @@ struct GameStatsView: View {
                 }
                 Text(Game().getGame(state: useGame.currentGame)?.gameId ?? "No Game")
                   .font(.headline)
+                  .foregroundStyle(.black)
               }
             }
             .padding()

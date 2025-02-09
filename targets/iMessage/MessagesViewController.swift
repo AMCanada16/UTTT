@@ -103,7 +103,6 @@ class MessagesViewController: MSMessagesAppViewController {
   }
 
   fileprivate func composeMessage(session: MSSession? = nil, caption: String, url: String) -> MSMessage {
-    
     let layout = MSMessageTemplateLayout()
     layout.caption = caption
     
@@ -122,6 +121,9 @@ class MessagesViewController: MSMessagesAppViewController {
       if (components[0] == "join" && components.count == 2) {
         useGame.joinId = components[1]
         currentMode.mode = ViewType.join
+      } else if (components[0] == "game" && components.count == 2) {
+        useGame.updateGameId(gameId: components[1])
+        currentMode.mode = ViewType.game
       }
     }
   }

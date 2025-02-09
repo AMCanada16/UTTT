@@ -97,6 +97,7 @@ struct HomeView: View {
                   .disableAutocorrection(true)
                   .frame(height: 30)
                   .foregroundStyle(.black)
+                  .keyboardType(.numberPad)
                   
                 if (input != "") {
                   Button(action: clearInput) {

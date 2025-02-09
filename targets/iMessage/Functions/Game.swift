@@ -108,12 +108,10 @@ class Game {
       active.append(ActiveType(xOne: x["xOne"] as! Int, xTwo: x["xTwo"] as! Int, yOne: x["yOne"] as! Int, yTwo: x["yTwo"] as! Int, gridIndex: x["gridIndex"] as! Int))
     }
     guard let rawInner = json["inner"] as? [Int] else {
-      print("inner Error")
       throw GeneralError.main("Inner is not present")
     }
     let inner: [gridStateMode] = rawInner.map({return gridStateMode(rawValue: $0)!})
     guard let rawValue = json["value"] as? [Int] else {
-      print("value Error")
       throw GeneralError.main("Value is not present")
     }
     let value: [gridStateMode] = rawValue.map({return gridStateMode(rawValue: $0)!})
@@ -254,7 +252,6 @@ class Game {
               "owner": uid
             ], forDocument: db.collection("Games").document(randomId.description))
           }
-          print("Game created")
           return
         } catch {
           return
